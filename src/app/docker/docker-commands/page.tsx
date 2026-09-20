@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import DockerCommandSearch from "./DockerCommandSearch";
+
 export const metadata: Metadata = {
   title: "Docker Commands Cheat Sheet | Docker CLI Reference",
   description:
-    "Practical Docker commands for containers, images, Dockerfiles, volumes, networks, Docker Compose, registries, troubleshooting and system management.",
+    "Practical Docker commands for containers, images, Dockerfiles, volumes, networks, Docker Compose, registries, BuildKit, troubleshooting and production container management.",
 };
 
 const commandSections = [
@@ -28,6 +29,21 @@ const commandSections = [
         command: "docker help",
         description:
           "Displays help for Docker commands and available options.",
+      },
+      {
+        command: "docker system info",
+        description:
+          "Displays Docker system information using the system command group.",
+      },
+      {
+        command: "docker context ls",
+        description:
+          "Lists Docker contexts available to the current CLI.",
+      },
+      {
+        command: "docker context show",
+        description:
+          "Displays the currently selected Docker context.",
       },
     ],
   },
@@ -75,6 +91,16 @@ const commandSections = [
         command: "docker rmi -f <image>",
         description:
           "Force removes an image when normal removal is blocked.",
+      },
+      {
+        command: "docker image prune",
+        description:
+          "Removes dangling images that are no longer referenced.",
+      },
+      {
+        command: "docker image prune -a",
+        description:
+          "Removes unused images that are not referenced by containers.",
       },
     ],
   },
@@ -127,6 +153,24 @@ const commandSections = [
         description:
           "Mounts a host directory or volume into the container.",
       },
+      {
+        command:
+          "docker run --env-file .env nginx",
+        description:
+          "Loads environment variables from a file.",
+      },
+      {
+        command:
+          "docker run --network mynetwork nginx",
+        description:
+          "Starts a container attached to a specific Docker network.",
+      },
+      {
+        command:
+          "docker run --memory 512m --cpus 1 nginx",
+        description:
+          "Limits container memory and CPU resources.",
+      },
     ],
   },
   {
@@ -140,6 +184,11 @@ const commandSections = [
         command: "docker ps -a",
         description:
           "Lists all containers, including stopped containers.",
+      },
+      {
+        command: "docker ps --format '{{.Names}}'",
+        description:
+          "Displays container names using a custom output format.",
       },
       {
         command: "docker start <container>",
@@ -181,6 +230,11 @@ const commandSections = [
         description:
           "Force removes a running or stopped container.",
       },
+      {
+        command: "docker rename <old> <new>",
+        description:
+          "Renames an existing container.",
+      },
     ],
   },
   {
@@ -212,6 +266,11 @@ const commandSections = [
           "Displays detailed container configuration and runtime information.",
       },
       {
+        command: "docker inspect -f '{{.State.Status}}' <container>",
+        description:
+          "Displays the current state of a container.",
+      },
+      {
         command: "docker stats",
         description:
           "Continuously monitors CPU, memory, network and block I/O usage.",
@@ -225,6 +284,11 @@ const commandSections = [
         command: "docker top <container>",
         description:
           "Displays processes running inside a container.",
+      },
+      {
+        command: "docker port <container>",
+        description:
+          "Displays port mappings configured for a container.",
       },
     ],
   },
@@ -257,10 +321,16 @@ const commandSections = [
         description:
           "Starts an interactive shell using sh.",
       },
+      {
+        command:
+          "docker exec -u root -it <container> sh",
+        description:
+          "Opens a shell inside the container as root.",
+      },
     ],
   },
   {
-    title: "7. Copy Files",
+    title: "7. Copy and Transfer Files",
     commands: [
       {
         command:
@@ -279,6 +349,12 @@ const commandSections = [
           "docker cp ./directory <container>:/app/",
         description:
           "Copies a directory from the host into a container.",
+      },
+      {
+        command:
+          "docker cp <container>:/app/logs ./logs",
+        description:
+          "Copies application logs from a container to the host.",
       },
     ],
   },
@@ -310,9 +386,27 @@ const commandSections = [
       },
       {
         command:
+          "docker build --pull -t myapp .",
+        description:
+          "Attempts to pull newer versions of base images before building.",
+      },
+      {
+        command:
           "docker build --build-arg APP_ENV=production -t myapp .",
         description:
           "Passes a build argument to the Docker build process.",
+      },
+      {
+        command:
+          "docker build --target production -t myapp:prod .",
+        description:
+          "Builds a specific target from a multi-stage Dockerfile.",
+      },
+      {
+        command:
+          "docker build --progress=plain -t myapp .",
+        description:
+          "Displays detailed build output useful for troubleshooting.",
       },
     ],
   },
@@ -335,6 +429,11 @@ const commandSections = [
           "Copies files from the build context into the image.",
       },
       {
+        command: "ADD archive.tar.gz /app/",
+        description:
+          "Adds files or supported archives to the image.",
+      },
+      {
         command: "RUN npm install",
         description:
           "Executes a command while building the image.",
@@ -343,6 +442,11 @@ const commandSections = [
         command: "ENV NODE_ENV=production",
         description:
           "Defines an environment variable in the image.",
+      },
+      {
+        command: "ARG APP_VERSION=1.0",
+        description:
+          "Defines a build-time argument.",
       },
       {
         command: "EXPOSE 3000",
@@ -358,6 +462,23 @@ const commandSections = [
         command: 'ENTRYPOINT ["node"]',
         description:
           "Defines the main executable for the container.",
+      },
+      {
+        command: "USER node",
+        description:
+          "Sets the default user used when running the container.",
+      },
+      {
+        command:
+          "HEALTHCHECK CMD curl --fail http://localhost:3000/ || exit 1",
+        description:
+          "Defines a container health check.",
+      },
+      {
+        command:
+          "VOLUME [\"/data\"]",
+        description:
+          "Declares a mount point intended for persistent data.",
       },
     ],
   },
@@ -381,6 +502,12 @@ const commandSections = [
       },
       {
         command:
+          "docker network create --driver bridge mynetwork",
+        description:
+          "Creates a bridge network explicitly.",
+      },
+      {
+        command:
           "docker network connect mynetwork <container>",
         description:
           "Connects an existing container to a network.",
@@ -395,6 +522,11 @@ const commandSections = [
         command: "docker network rm <network>",
         description:
           "Removes a Docker network.",
+      },
+      {
+        command: "docker network prune",
+        description:
+          "Removes unused Docker networks.",
       },
     ],
   },
@@ -421,6 +553,12 @@ const commandSections = [
           "docker run -v myvolume:/data nginx",
         description:
           "Mounts a named volume at /data inside the container.",
+      },
+      {
+        command:
+          "docker run --mount source=myvolume,target=/data nginx",
+        description:
+          "Mounts a volume using the explicit --mount syntax.",
       },
       {
         command: "docker volume rm myvolume",
@@ -483,6 +621,30 @@ const commandSections = [
         description:
           "Executes an interactive shell inside a Compose service container.",
       },
+      {
+        command:
+          "docker compose restart <service>",
+        description:
+          "Restarts a specific Compose service.",
+      },
+      {
+        command:
+          "docker compose stop <service>",
+        description:
+          "Stops a specific Compose service.",
+      },
+      {
+        command:
+          "docker compose config",
+        description:
+          "Validates and renders the final Compose configuration.",
+      },
+      {
+        command:
+          "docker compose up -d --build",
+        description:
+          "Rebuilds required images and starts Compose services.",
+      },
     ],
   },
   {
@@ -516,10 +678,80 @@ const commandSections = [
         description:
           "Downloads an image from a container registry.",
       },
+      {
+        command:
+          "docker image inspect username/myapp:latest",
+        description:
+          "Inspects metadata for a registry image after pulling it.",
+      },
     ],
   },
   {
-    title: "14. Docker System Management",
+    title: "14. Save, Load, Export and Import",
+    commands: [
+      {
+        command:
+          "docker save -o myapp.tar myapp:latest",
+        description:
+          "Exports a Docker image and its layers to a tar archive.",
+      },
+      {
+        command:
+          "docker load -i myapp.tar",
+        description:
+          "Loads Docker images from a tar archive.",
+      },
+      {
+        command:
+          "docker export -o container.tar <container>",
+        description:
+          "Exports a container filesystem to a tar archive.",
+      },
+      {
+        command:
+          "docker import container.tar myimage:latest",
+        description:
+          "Creates a Docker image from a filesystem tar archive.",
+      },
+    ],
+  },
+  {
+    title: "15. Container Resources and Health",
+    commands: [
+      {
+        command:
+          "docker stats <container>",
+        description:
+          "Monitors live CPU, memory, network and block I/O usage.",
+      },
+      {
+        command:
+          "docker inspect <container>",
+        description:
+          "Inspects resource limits, mounts, networking and runtime configuration.",
+      },
+      {
+        command:
+          "docker update --memory 512m <container>",
+        description:
+          "Updates the memory limit of an existing container.",
+      },
+      {
+        command:
+          "docker update --cpus 1 <container>",
+        description:
+          "Updates the CPU limit of an existing container.",
+      },
+      {
+        command:
+          "docker inspect --format '{{.State.Health.Status}}' <container>",
+        description:
+          "Displays the health status of a container with a health check.",
+      },
+    ],
+  },
+  {
+    title: "16. Docker System Management",
     commands: [
       {
         command: "docker system df",
@@ -552,10 +784,105 @@ const commandSections = [
         description:
           "Removes unused Docker networks.",
       },
+      {
+        command: "docker volume prune",
+        description:
+          "Removes unused Docker volumes.",
+      },
+      {
+        command:
+          "docker builder prune",
+        description:
+          "Removes unused build cache.",
+      },
+      {
+        command:
+          "docker builder prune -a",
+        description:
+          "Removes all unused build cache.",
+      },
     ],
   },
   {
-    title: "15. Troubleshooting",
+    title: "17. Docker Buildx and BuildKit",
+    commands: [
+      {
+        command: "docker buildx version",
+        description:
+          "Displays the installed Docker Buildx version.",
+      },
+      {
+        command: "docker buildx ls",
+        description:
+          "Lists available Buildx builders.",
+      },
+      {
+        command:
+          "docker buildx create --name mybuilder --use",
+        description:
+          "Creates a Buildx builder and switches the CLI to it.",
+      },
+      {
+        command:
+          "docker buildx inspect",
+        description:
+          "Displays information about the active Buildx builder.",
+      },
+      {
+        command:
+          "docker buildx build -t myapp:latest .",
+        description:
+          "Builds an image using Buildx.",
+      },
+      {
+        command:
+          "docker buildx build --platform linux/amd64,linux/arm64 -t myapp:latest --push .",
+        description:
+          "Builds and pushes a multi-platform image.",
+      },
+      {
+        command:
+          "docker buildx prune",
+        description:
+          "Removes unused Buildx build cache.",
+      },
+    ],
+  },
+  {
+    title: "18. Docker Contexts",
+    commands: [
+      {
+        command: "docker context ls",
+        description:
+          "Lists available Docker contexts.",
+      },
+      {
+        command: "docker context show",
+        description:
+          "Shows the active Docker context.",
+      },
+      {
+        command:
+          "docker context inspect <context>",
+        description:
+          "Displays configuration details for a Docker context.",
+      },
+      {
+        command:
+          "docker context use <context>",
+        description:
+          "Switches the Docker CLI to another context.",
+      },
+      {
+        command:
+          "docker context create <context> --docker host=ssh://user@host",
+        description:
+          "Creates a Docker context that connects to a remote Docker host over SSH.",
+      },
+    ],
+  },
+  {
+    title: "19. Docker Troubleshooting",
     commands: [
       {
         command: "docker ps -a",
@@ -578,7 +905,8 @@ const commandSections = [
           "Check whether containers are consuming excessive CPU or memory.",
       },
       {
-        command: "docker network inspect <network>",
+        command:
+          "docker network inspect <network>",
         description:
           "Investigate container network configuration and connected containers.",
       },
@@ -586,6 +914,59 @@ const commandSections = [
         command: "docker system df",
         description:
           "Check whether Docker is consuming excessive disk space.",
+      },
+      {
+        command:
+          "docker events",
+        description:
+          "Streams Docker daemon events useful for troubleshooting container lifecycle problems.",
+      },
+      {
+        command:
+          "docker inspect --format '{{.State.ExitCode}}' <container>",
+        description:
+          "Checks the exit code of a container.",
+      },
+    ],
+  },
+  {
+    title: "20. Production Docker Workflow",
+    commands: [
+      {
+        command:
+          "docker build -t myapp:1.0 .",
+        description:
+          "Builds a versioned application image.",
+      },
+      {
+        command:
+          "docker image inspect myapp:1.0",
+        description:
+          "Inspects the built image before deployment.",
+      },
+      {
+        command:
+          "docker run -d --name myapp -p 8080:3000 --restart unless-stopped myapp:1.0",
+        description:
+          "Runs a production-style container with port mapping and restart policy.",
+      },
+      {
+        command:
+          "docker logs --tail 100 myapp",
+        description:
+          "Checks the latest application logs after deployment.",
+      },
+      {
+        command:
+          "docker stats myapp",
+        description:
+          "Monitors the running application container.",
+      },
+      {
+        command:
+          "docker exec -it myapp sh",
+        description:
+          "Opens a shell for application troubleshooting.",
       },
     ],
   },
@@ -613,8 +994,8 @@ export default function DockerCommands() {
 
           <p className="mt-4 max-w-3xl text-lg leading-8 text-slate-400">
             A practical Docker CLI reference for containers, images,
-            Dockerfiles, volumes, networks, Compose, registries and
-            troubleshooting.
+            Dockerfiles, volumes, networks, Compose, registries, BuildKit,
+            troubleshooting and production container workflows.
           </p>
         </header>
 
@@ -629,8 +1010,9 @@ export default function DockerCommands() {
 
           <p className="mt-4 leading-7 text-slate-400">
             Docker CLI commands are used to build images, create and manage
-            containers, configure networks and volumes, and operate
-            containerized applications.
+            containers, configure networks and volumes, run Compose
+            applications, publish images and troubleshoot containerized
+            workloads.
           </p>
         </section>
 
@@ -648,11 +1030,15 @@ export default function DockerCommands() {
               "docker run -d -p 8080:80 nginx",
               "docker logs <container>",
               "docker exec -it <container> /bin/bash",
+              "docker inspect <container>",
               "docker build -t myapp .",
               "docker network ls",
               "docker volume ls",
               "docker compose up -d",
+              "docker compose config",
               "docker system df",
+              "docker buildx ls",
+              "docker stats",
             ].map((command) => (
               <div
                 key={command}
@@ -675,7 +1061,13 @@ export default function DockerCommands() {
 
           <div className="mt-5 overflow-x-auto rounded-xl bg-slate-950 p-6">
             <pre className="text-sm leading-8 text-slate-300">
-{`# Check running containers
+{`# Check Docker installation
+docker --version
+
+# Check Docker daemon
+docker info
+
+# Check running containers
 docker ps
 
 # Check all containers
@@ -696,19 +1088,42 @@ docker top <container>
 # Check resource usage
 docker stats
 
+# Check port mappings
+docker port <container>
+
 # Check networks
 docker network ls
 
+# Inspect a network
+docker network inspect <network>
+
 # Check Docker disk usage
-docker system df`}
+docker system df
+
+# Check build cache
+docker builder prune
+
+# Check image layers
+docker image history <image>
+
+# Check image metadata
+docker image inspect <image>
+
+# Check Docker events
+docker events`}
             </pre>
           </div>
 
           <p className="mt-5 leading-7 text-slate-400">
-            Start with the container state, then inspect logs and
-            configuration. If the application is running but unreachable,
-            check port mappings and networks. For performance problems,
-            inspect CPU and memory usage with
+            Start with
+            <code className="mx-1 text-cyan-400">docker ps -a</code>
+            to determine the container state, then check
+            <code className="mx-1 text-cyan-400">docker logs</code>
+            and
+            <code className="mx-1 text-cyan-400">docker inspect</code>.
+            If the application is running but unreachable, verify port
+            mappings and Docker networks. For performance problems, inspect
+            CPU and memory usage with
             <code className="mx-1 text-cyan-400">docker stats</code>.
           </p>
         </section>
@@ -725,8 +1140,9 @@ docker system df`}
             <code className="mx-1 text-cyan-400">docker logs</code>
             and
             <code className="mx-1 text-cyan-400">docker inspect</code>.
-            These commands provide useful information before removing or
-            recreating the container.
+            For production deployments, use versioned image tags, health
+            checks, restart policies, resource limits and a controlled
+            cleanup strategy.
           </p>
         </section>
 
