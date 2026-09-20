@@ -3,44 +3,45 @@ import type { MetadataRoute } from "next";
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: "https://YOUR-DOMAIN.com",
+      url: "https://www.devopscommands.com",
       lastModified: new Date(),
     },
     {
-      url: "https://YOUR-DOMAIN.com/kubernetes/kubectl-commands",
+      url: "https://www.devopscommands.com/kubernetes/kubectl-commands",
       lastModified: new Date(),
     },
     {
-      url: "https://YOUR-DOMAIN.com/linux/linux-commands",
+      url: "https://www.devopscommands.com/linux/linux-commands",
       lastModified: new Date(),
     },
     {
-      url: "https://YOUR-DOMAIN.com/docker/docker-commands",
+      url: "https://www.devopscommands.com/docker/docker-commands",
       lastModified: new Date(),
     },
     {
-      url: "https://YOUR-DOMAIN.com/ansible/ansible-commands",
+      url: "https://www.devopscommands.com/ansible/ansible-commands",
       lastModified: new Date(),
     },
     {
-      url: "https://YOUR-DOMAIN.com/sre/sre-troubleshooting",
+      url: "https://www.devopscommands.com/sre/sre-troubleshooting",
       lastModified: new Date(),
     },
     {
-      url: "https://YOUR-DOMAIN.com/tools/yaml-validator",
+      url: "https://www.devopscommands.com/tools/yaml-validator",
       lastModified: new Date(),
     },
     {
-      url: "https://YOUR-DOMAIN.com/tools/json-formatter",
+      url: "https://www.devopscommands.com/tools/json-formatter",
       lastModified: new Date(),
     },
     {
-      url: "https://YOUR-DOMAIN.com/tools/cron-generator",
+      url: "https://www.devopscommands.com/tools/cron-generator",
       lastModified: new Date(),
     },
     {
-      url: "https://YOUR-DOMAIN.com/tools/cidr-calculator",
+      url: "https://www.devopscommands.com/tools/cidr-calculator",
       lastModified: new Date(),
     },
   ];
 }
+
