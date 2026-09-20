@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import KubectlCommandSearch from "./KubectlCommandSearch";
 
 export const metadata: Metadata = {
   title: "kubectl Commands Cheat Sheet | Kubernetes CLI Reference",
@@ -44,7 +45,8 @@ const commandSections = [
       },
       {
         command: "kubectl get pods -o wide",
-        description: "Shows additional pod information including IP and node.",
+        description:
+          "Shows additional pod information including IP and node.",
       },
       {
         command: "kubectl get all",
@@ -82,10 +84,12 @@ const commandSections = [
       },
       {
         command: "kubectl get all -n <namespace>",
-        description: "Lists common resources inside a specific namespace.",
+        description:
+          "Lists common resources inside a specific namespace.",
       },
       {
-        command: "kubectl config set-context --current --namespace=<namespace>",
+        command:
+          "kubectl config set-context --current --namespace=<namespace>",
         description:
           "Sets the default namespace for the current kubectl context.",
       },
@@ -158,7 +162,8 @@ const commandSections = [
       },
       {
         command: "kubectl exec <pod-name> -- env",
-        description: "Displays environment variables inside the container.",
+        description:
+          "Displays environment variables inside the container.",
       },
       {
         command: "kubectl exec <pod-name> -- ls -la",
@@ -181,7 +186,8 @@ const commandSections = [
       },
       {
         command: "kubectl create deployment nginx --image=nginx",
-        description: "Creates a Deployment from the command line.",
+        description:
+          "Creates a Deployment from the command line.",
       },
       {
         command: "kubectl create namespace <namespace>",
@@ -198,7 +204,8 @@ const commandSections = [
       },
       {
         command: "kubectl delete deployment <deployment-name>",
-        description: "Deletes a Deployment and its managed resources.",
+        description:
+          "Deletes a Deployment and its managed resources.",
       },
       {
         command: "kubectl delete svc <service-name>",
@@ -224,19 +231,26 @@ const commandSections = [
         description: "Lists Deployments.",
       },
       {
-        command: "kubectl rollout status deployment/<deployment-name>",
-        description: "Checks the rollout status of a Deployment.",
+        command:
+          "kubectl rollout status deployment/<deployment-name>",
+        description:
+          "Checks the rollout status of a Deployment.",
       },
       {
-        command: "kubectl rollout history deployment/<deployment-name>",
-        description: "Displays Deployment rollout history.",
+        command:
+          "kubectl rollout history deployment/<deployment-name>",
+        description:
+          "Displays Deployment rollout history.",
       },
       {
-        command: "kubectl rollout undo deployment/<deployment-name>",
-        description: "Rolls a Deployment back to its previous revision.",
+        command:
+          "kubectl rollout undo deployment/<deployment-name>",
+        description:
+          "Rolls a Deployment back to its previous revision.",
       },
       {
-        command: "kubectl rollout restart deployment/<deployment-name>",
+        command:
+          "kubectl rollout restart deployment/<deployment-name>",
         description:
           "Triggers a rolling restart of a Deployment.",
       },
@@ -246,7 +260,8 @@ const commandSections = [
     title: "10. Scale Applications",
     commands: [
       {
-        command: "kubectl scale deployment <deployment-name> --replicas=3",
+        command:
+          "kubectl scale deployment <deployment-name> --replicas=3",
         description:
           "Changes the desired number of replicas for a Deployment.",
       },
@@ -315,11 +330,13 @@ const commandSections = [
     commands: [
       {
         command: "kubectl get events",
-        description: "Lists events in the current namespace.",
+        description:
+          "Lists events in the current namespace.",
       },
       {
         command: "kubectl get events -A",
-        description: "Lists events across all namespaces.",
+        description:
+          "Lists events across all namespaces.",
       },
       {
         command:
@@ -354,7 +371,8 @@ const commandSections = [
     commands: [
       {
         command: "kubectl get pods --show-labels",
-        description: "Displays pod labels.",
+        description:
+          "Displays pod labels.",
       },
       {
         command: "kubectl get pods -l app=nginx",
@@ -364,7 +382,8 @@ const commandSections = [
       {
         command:
           "kubectl label pod <pod-name> environment=production",
-        description: "Adds or updates a label on a pod.",
+        description:
+          "Adds or updates a label on a pod.",
       },
     ],
   },
@@ -373,19 +392,24 @@ const commandSections = [
     commands: [
       {
         command: "kubectl config get-contexts",
-        description: "Lists available kubectl contexts.",
+        description:
+          "Lists available kubectl contexts.",
       },
       {
         command: "kubectl config current-context",
-        description: "Displays the currently selected context.",
+        description:
+          "Displays the currently selected context.",
       },
       {
-        command: "kubectl config use-context <context-name>",
-        description: "Switches to another Kubernetes context.",
+        command:
+          "kubectl config use-context <context-name>",
+        description:
+          "Switches to another Kubernetes context.",
       },
       {
         command: "kubectl config view",
-        description: "Displays the current kubeconfig configuration.",
+        description:
+          "Displays the current kubeconfig configuration.",
       },
     ],
   },
@@ -408,7 +432,8 @@ const commandSections = [
           "Inspect application output from the container.",
       },
       {
-        command: "kubectl get events --sort-by=.lastTimestamp",
+        command:
+          "kubectl get events --sort-by=.lastTimestamp",
         description:
           "Review recent Kubernetes events for failures and warnings.",
       },
@@ -494,32 +519,7 @@ export default function KubectlCommands() {
           </div>
         </section>
 
-        {commandSections.map((section) => (
-          <section key={section.title} className="mt-12">
-            <h2 className="text-2xl font-bold">
-              {section.title}
-            </h2>
-
-            <div className="mt-5 space-y-4">
-              {section.commands.map((item) => (
-                <div
-                  key={item.command}
-                  className="rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:border-cyan-500/30"
-                >
-                  <div className="overflow-x-auto rounded-lg bg-slate-950 p-4">
-                    <code className="whitespace-nowrap text-sm text-cyan-400">
-                      {item.command}
-                    </code>
-                  </div>
-
-                  <p className="mt-4 leading-7 text-slate-400">
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        ))}
+        <KubectlCommandSearch sections={commandSections} />
 
         <section className="mt-12">
           <h2 className="text-2xl font-bold">
