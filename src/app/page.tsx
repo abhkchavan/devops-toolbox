@@ -57,6 +57,105 @@ export default function Home() {
     }
   };
 
+  const topics = [
+    {
+      title: "Linux",
+      description:
+        "Commands, troubleshooting and system administration.",
+      href: "/linux/linux-commands",
+    },
+    {
+      title: "Docker",
+      description:
+        "Containers, images, networking and troubleshooting.",
+      href: "/docker/docker-commands",
+    },
+    {
+      title: "Kubernetes",
+      description:
+        "kubectl commands, deployments and production issues.",
+      href: "/kubernetes/kubectl-commands",
+    },
+    {
+      title: "Helm",
+      description:
+        "Kubernetes package management, charts, releases, upgrades, rollbacks and CI/CD deployments.",
+      href: "/helm/helm-commands",
+    },
+    {
+      title: "Ansible",
+      description:
+        "Automation, playbooks, inventory and configuration.",
+      href: "/ansible/ansible-commands",
+    },
+    {
+      title: "Git",
+      description:
+        "Branches, commits, merge, rebase, stash and troubleshooting.",
+      href: "/git/git-commands",
+    },
+    {
+      title: "Terraform",
+      description:
+        "Infrastructure as code, state, modules and deployments.",
+      href: "/terraform/terraform-commands",
+    },
+    {
+      title: "Jenkins",
+      description:
+        "Jobs, builds, pipelines, agents and CI/CD automation.",
+      href: "/jenkins/jenkins-commands",
+    },
+    {
+      title: "Prometheus",
+      description:
+        "Monitoring, PromQL, alerting, recording rules, targets and SRE troubleshooting.",
+      href: "/prometheus/prometheus-commands",
+    },
+    {
+      title: "AWS CLI",
+      description:
+        "AWS cloud administration, EC2, S3, IAM, VPC and DevOps workflows.",
+      href: "/aws/aws-cli",
+    },
+    {
+      title: "Azure CLI",
+      description:
+        "Azure cloud administration, VMs, Storage, AKS, ACR, networking and DevOps workflows.",
+      href: "/azure/azure-cli",
+    },
+    {
+      title: "Google Cloud CLI",
+      description:
+        "Google Cloud administration, Compute Engine, Storage, GKE, Cloud Run, IAM and DevOps workflows.",
+      href: "/gcp/gcloud-commands",
+    },
+    {
+      title: "Oracle Cloud CLI",
+      description:
+        "Oracle Cloud Infrastructure administration, Compute, Object Storage, VCN, OKE, IAM, Vault and DevOps workflows.",
+      href: "/oci/oci-cli",
+    },
+    {
+      title: "IBM Cloud CLI",
+      description:
+        "IBM Cloud administration, IAM, VPC, Kubernetes, Code Engine, Container Registry, Object Storage and DevOps workflows.",
+      href: "/ibm/ibm-cli",
+    },
+    {
+      title: "SRE",
+      description:
+        "SLIs, SLOs, monitoring, incidents and reliability.",
+      href: "/sre/sre-troubleshooting",
+    },
+    {
+      title: "AutoSys",
+      description:
+        "Jobs, dependencies, scheduling and troubleshooting.",
+      href: "#guides",
+    },
+  ];
+
   return (
     <main className="min-h-screen bg-slate-950 text-white">
       {/* Navigation */}
@@ -95,8 +194,8 @@ export default function Home() {
         <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
           Learn Linux, Docker, Kubernetes, Helm, Ansible, Git, Terraform,
           Jenkins, Prometheus, AWS CLI, Azure CLI, Google Cloud CLI, OCI CLI,
-          IBM Cloud CLI and SRE through practical examples,
-          troubleshooting guides and free tools.
+          IBM Cloud CLI and SRE through practical examples, troubleshooting
+          guides and free tools.
         </p>
 
         {/* Search */}
@@ -129,82 +228,24 @@ export default function Home() {
         <h3 className="mb-8 text-2xl font-bold">Explore Topics</h3>
 
         <div className="grid gap-5 md:grid-cols-3">
-          {[
-            [
-              "Linux",
-              "Commands, troubleshooting and system administration.",
-            ],
-            [
-              "Docker",
-              "Containers, images, networking and troubleshooting.",
-            ],
-            [
-              "Kubernetes",
-              "kubectl commands, deployments and production issues.",
-            ],
-            [
-              "Helm",
-              "Kubernetes package management, charts, releases, upgrades, rollbacks and CI/CD deployments.",
-            ],
-            [
-              "Ansible",
-              "Automation, playbooks, inventory and configuration.",
-            ],
-            [
-              "Git",
-              "Branches, commits, merge, rebase, stash and troubleshooting.",
-            ],
-            [
-              "Terraform",
-              "Infrastructure as code, state, modules and deployments.",
-            ],
-            [
-              "Jenkins",
-              "Jobs, builds, pipelines, agents and CI/CD automation.",
-            ],
-            [
-              "Prometheus",
-              "Monitoring, PromQL, alerting, recording rules, targets and SRE troubleshooting.",
-            ],
-            [
-              "AWS CLI",
-              "AWS cloud administration, EC2, S3, IAM, VPC and DevOps workflows.",
-            ],
-            [
-              "Azure CLI",
-              "Azure cloud administration, VMs, Storage, AKS, ACR, networking and DevOps workflows.",
-            ],
-            [
-              "Google Cloud CLI",
-              "Google Cloud administration, Compute Engine, Storage, GKE, Cloud Run, IAM and DevOps workflows.",
-            ],
-            [
-              "Oracle Cloud CLI",
-              "Oracle Cloud Infrastructure administration, Compute, Object Storage, VCN, OKE, IAM, Vault and DevOps workflows.",
-            ],
-            [
-              "IBM Cloud CLI",
-              "IBM Cloud administration, IAM, VPC, Kubernetes, Code Engine, Container Registry, Object Storage and DevOps workflows.",
-            ],
-            [
-              "SRE",
-              "SLIs, SLOs, monitoring, incidents and reliability.",
-            ],
-            [
-              "AutoSys",
-              "Jobs, dependencies, scheduling and troubleshooting.",
-            ],
-          ].map(([title, description]) => (
-            <div
-              key={title}
-              className="rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500"
+          {topics.map((topic) => (
+            <a
+              key={topic.title}
+              href={topic.href}
+              className="group block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
             >
-              <h4 className="text-xl font-semibold">{title}</h4>
+              <h4 className="text-xl font-semibold text-white group-hover:text-cyan-400">
+                {topic.title}
+              </h4>
 
               <p className="mt-3 text-sm leading-6 text-slate-400">
-                {description}
+                {topic.description}
               </p>
-            </div>
+
+              <p className="mt-4 text-sm font-semibold text-cyan-400">
+                Explore commands →
+              </p>
+            </a>
           ))}
         </div>
       </section>
