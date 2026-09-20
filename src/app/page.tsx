@@ -328,6 +328,18 @@ const topics = [
     description: "Compute Engine, Storage, GKE, Cloud Run and IAM.",
     href: "/gcp/gcloud-commands",
   },
+  {
+    title: "DevOps Troubleshooting",
+    description:
+      "Production troubleshooting for common DevOps and SRE issues.",
+    href: "/troubleshooting/devops-troubleshooting",
+  },
+  {
+    title: "DevOps Interview",
+    description:
+      "Practical DevOps, cloud, Kubernetes and SRE interview questions.",
+    href: "/interview/devops-interview",
+  },
 ];
 
 const troubleshooting = [
