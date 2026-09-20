@@ -705,7 +705,7 @@ description:
 },
 {
 command:
-"kubectl patch deployment <deployment-name> -p '{"spec":{"replicas":3}}'",
+command: `kubectl patch deployment <deployment-name> -p '{"spec":{"replicas":3}}'`,
 description:
 "Applies a targeted patch to a Kubernetes resource.",
 },
