@@ -33,7 +33,7 @@ const commandSections: CommandSection[] = [
       {
         command: "aws configure list",
         description:
-          "Show the credentials and configuration currently being used.",
+          "Show the credentials, profile and region currently being used.",
       },
       {
         command: "aws configure get region",
@@ -42,11 +42,11 @@ const commandSections: CommandSection[] = [
       {
         command: "aws configure set region ap-south-1",
         description:
-          "Set the default AWS region, for example Mumbai.",
+          "Set the default AWS region to Mumbai (ap-south-1).",
       },
       {
         command: "aws configure list-profiles",
-        description: "List configured AWS CLI profiles.",
+        description: "List all configured AWS CLI profiles.",
       },
       {
         command: "aws sts get-caller-identity",
@@ -56,7 +56,15 @@ const commandSections: CommandSection[] = [
       {
         command: "aws sts get-caller-identity --profile dev",
         description:
-          "Check the identity associated with a specific AWS CLI profile.",
+          "Check the AWS identity associated with a specific profile.",
+      },
+      {
+        command: "aws help",
+        description: "Display general AWS CLI help.",
+      },
+      {
+        command: "aws ec2 help",
+        description: "Display help for the EC2 service.",
       },
     ],
   },
@@ -70,7 +78,8 @@ const commandSections: CommandSection[] = [
           "Run an AWS command using a specific CLI profile.",
       },
       {
-        command: "aws ec2 describe-instances --region ap-south-1",
+        command:
+          "aws ec2 describe-instances --region ap-south-1",
         description:
           "Run an EC2 command against a specific AWS region.",
       },
@@ -82,7 +91,7 @@ const commandSections: CommandSection[] = [
         command:
           "aws ec2 describe-availability-zones --region ap-south-1",
         description:
-          "List Availability Zones in the selected AWS region.",
+          "List Availability Zones in the selected region.",
       },
     ],
   },
@@ -99,6 +108,18 @@ const commandSections: CommandSection[] = [
           "aws ec2 describe-instances --instance-ids i-0123456789abcdef0",
         description:
           "Retrieve information about a specific EC2 instance.",
+      },
+      {
+        command:
+          "aws ec2 describe-instances --filters Name=instance-state-name,Values=running",
+        description:
+          "List only EC2 instances that are currently running.",
+      },
+      {
+        command:
+          "aws ec2 describe-instances --filters Name=instance-state-name,Values=stopped",
+        description:
+          "List stopped EC2 instances.",
       },
       {
         command:
@@ -124,13 +145,13 @@ const commandSections: CommandSection[] = [
         command:
           "aws ec2 describe-instance-status --instance-ids i-0123456789abcdef0",
         description:
-          "Check the current system and instance status checks.",
+          "Check EC2 system and instance status checks.",
       },
     ],
   },
 
   {
-    title: "EC2 AMIs",
+    title: "EC2 AMIs and Snapshots",
     commands: [
       {
         command: "aws ec2 describe-images --owners self",
@@ -138,10 +159,9 @@ const commandSections: CommandSection[] = [
           "List AMIs owned by the current AWS account.",
       },
       {
-        command:
-          "aws ec2 describe-images --owners amazon",
+        command: "aws ec2 describe-images --owners amazon",
         description:
-          "List Amazon-owned AMIs that are visible to the account.",
+          "List Amazon-owned AMIs visible to the account.",
       },
       {
         command:
@@ -153,6 +173,51 @@ const commandSections: CommandSection[] = [
         command:
           "aws ec2 deregister-image --image-id ami-0123456789abcdef0",
         description: "Deregister an AMI.",
+      },
+      {
+        command: "aws ec2 describe-snapshots --owner-ids self",
+        description:
+          "List EBS snapshots owned by the current account.",
+      },
+      {
+        command:
+          "aws ec2 create-snapshot --volume-id vol-0123456789abcdef0 --description \"Application backup\"",
+        description:
+          "Create an EBS snapshot from a volume.",
+      },
+      {
+        command:
+          "aws ec2 delete-snapshot --snapshot-id snap-0123456789abcdef0",
+        description:
+          "Delete an EBS snapshot.",
+      },
+    ],
+  },
+
+  {
+    title: "EC2 Key Pairs",
+    commands: [
+      {
+        command: "aws ec2 describe-key-pairs",
+        description: "List EC2 key pairs.",
+      },
+      {
+        command:
+          "aws ec2 describe-key-pairs --key-names my-key",
+        description:
+          "Display information about a specific key pair.",
+      },
+      {
+        command:
+          "aws ec2 create-key-pair --key-name my-key",
+        description:
+          "Create an EC2 key pair and return the private key material.",
+      },
+      {
+        command:
+          "aws ec2 delete-key-pair --key-name my-key",
+        description:
+          "Delete an EC2 key pair from AWS.",
       },
     ],
   },
@@ -182,6 +247,75 @@ const commandSections: CommandSection[] = [
         description:
           "Remove an inbound security group rule.",
       },
+      {
+        command:
+          "aws ec2 authorize-security-group-egress --group-id sg-0123456789abcdef0 --protocol tcp --port 443 --cidr 0.0.0.0/0",
+        description:
+          "Add an outbound TCP rule to a security group.",
+      },
+    ],
+  },
+
+  {
+    title: "EBS Volumes",
+    commands: [
+      {
+        command: "aws ec2 describe-volumes",
+        description: "List EBS volumes.",
+      },
+      {
+        command:
+          "aws ec2 describe-volumes --volume-ids vol-0123456789abcdef0",
+        description:
+          "Display details about a specific EBS volume.",
+      },
+      {
+        command:
+          "aws ec2 create-volume --availability-zone ap-south-1a --size 20 --volume-type gp3",
+        description:
+          "Create a 20 GiB gp3 EBS volume.",
+      },
+      {
+        command:
+          "aws ec2 modify-volume --volume-id vol-0123456789abcdef0 --size 40",
+        description:
+          "Modify the size of an EBS volume.",
+      },
+      {
+        command:
+          "aws ec2 delete-volume --volume-id vol-0123456789abcdef0",
+        description:
+          "Delete an EBS volume that is no longer required.",
+      },
+    ],
+  },
+
+  {
+    title: "Elastic IP Addresses",
+    commands: [
+      {
+        command: "aws ec2 describe-addresses",
+        description:
+          "List Elastic IP addresses allocated to the account.",
+      },
+      {
+        command:
+          "aws ec2 allocate-address --domain vpc",
+        description:
+          "Allocate a new Elastic IP address for use with a VPC.",
+      },
+      {
+        command:
+          "aws ec2 associate-address --instance-id i-0123456789abcdef0 --allocation-id eipalloc-0123456789abcdef0",
+        description:
+          "Associate an Elastic IP address with an EC2 instance.",
+      },
+      {
+        command:
+          "aws ec2 release-address --allocation-id eipalloc-0123456789abcdef0",
+        description:
+          "Release an Elastic IP address.",
+      },
     ],
   },
 
@@ -210,6 +344,18 @@ const commandSections: CommandSection[] = [
           "aws s3 rb s3://my-bucket --force",
         description:
           "Remove an S3 bucket and its objects. Use with caution.",
+      },
+      {
+        command:
+          "aws s3api get-bucket-location --bucket my-bucket",
+        description:
+          "Check the AWS region associated with an S3 bucket.",
+      },
+      {
+        command:
+          "aws s3api get-bucket-versioning --bucket my-bucket",
+        description:
+          "Check whether S3 versioning is enabled.",
       },
     ],
   },
@@ -259,6 +405,12 @@ const commandSections: CommandSection[] = [
         description:
           "Delete objects under an S3 prefix.",
       },
+      {
+        command:
+          "aws s3 cp file.txt s3://my-bucket/ --storage-class STANDARD_IA",
+        description:
+          "Upload an object using a specified S3 storage class.",
+      },
     ],
   },
 
@@ -289,6 +441,12 @@ const commandSections: CommandSection[] = [
           "aws iam list-attached-role-policies --role-name MyRole",
         description:
           "List managed policies attached to an IAM role.",
+      },
+      {
+        command:
+          "aws iam list-role-policies --role-name MyRole",
+        description:
+          "List inline policies attached to an IAM role.",
       },
       {
         command:
@@ -325,6 +483,42 @@ const commandSections: CommandSection[] = [
         description:
           "Retrieve the document for a specific IAM policy version.",
       },
+      {
+        command:
+          "aws iam simulate-principal-policy --policy-source-arn arn:aws:iam::123456789012:role/MyRole --action-names s3:GetObject --resource-arns arn:aws:s3:::my-bucket/*",
+        description:
+          "Simulate whether a principal is allowed to perform a specific action.",
+      },
+    ],
+  },
+
+  {
+    title: "IAM Access Keys",
+    commands: [
+      {
+        command:
+          "aws iam list-access-keys --user-name my-user",
+        description:
+          "List access keys associated with an IAM user.",
+      },
+      {
+        command:
+          "aws iam create-access-key --user-name my-user",
+        description:
+          "Create an access key for an IAM user. Handle credentials securely.",
+      },
+      {
+        command:
+          "aws iam update-access-key --user-name my-user --access-key-id AKIAEXAMPLE --status Inactive",
+        description:
+          "Deactivate an IAM access key.",
+      },
+      {
+        command:
+          "aws iam delete-access-key --user-name my-user --access-key-id AKIAEXAMPLE",
+        description:
+          "Delete an IAM access key.",
+      },
     ],
   },
 
@@ -356,33 +550,11 @@ const commandSections: CommandSection[] = [
         description:
           "List Elastic Network Interfaces.",
       },
-    ],
-  },
-
-  {
-    title: "EBS Volumes",
-    commands: [
-      {
-        command: "aws ec2 describe-volumes",
-        description: "List EBS volumes.",
-      },
       {
         command:
-          "aws ec2 describe-volumes --volume-ids vol-0123456789abcdef0",
+          "aws ec2 describe-network-acls",
         description:
-          "Display details about a specific EBS volume.",
-      },
-      {
-        command:
-          "aws ec2 create-volume --availability-zone ap-south-1a --size 20 --volume-type gp3",
-        description:
-          "Create a new gp3 EBS volume.",
-      },
-      {
-        command:
-          "aws ec2 delete-volume --volume-id vol-0123456789abcdef0",
-        description:
-          "Delete an EBS volume that is no longer required.",
+          "List network ACLs configured in the VPC.",
       },
     ],
   },
@@ -466,6 +638,12 @@ const commandSections: CommandSection[] = [
       },
       {
         command:
+          "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com",
+        description:
+          "Authenticate Docker with an Amazon ECR registry.",
+      },
+      {
+        command:
           "aws ecr list-images --repository-name myapp",
         description:
           "List images stored in an ECR repository.",
@@ -522,6 +700,12 @@ const commandSections: CommandSection[] = [
         description:
           "Display detailed information about an ECS task.",
       },
+      {
+        command:
+          "aws ecs update-service --cluster my-cluster --service my-service --force-new-deployment",
+        description:
+          "Force a new ECS service deployment using the current task definition.",
+      },
     ],
   },
 
@@ -556,6 +740,12 @@ const commandSections: CommandSection[] = [
         description:
           "Configure kubectl to connect to an EKS cluster.",
       },
+      {
+        command:
+          "aws eks update-kubeconfig --region ap-south-1 --name my-cluster --alias production-eks",
+        description:
+          "Add an EKS cluster to kubeconfig using a custom context alias.",
+      },
     ],
   },
 
@@ -584,6 +774,18 @@ const commandSections: CommandSection[] = [
           "aws lambda update-function-code --function-name my-function --zip-file fileb://function.zip",
         description:
           "Update Lambda function code from a ZIP package.",
+      },
+      {
+        command:
+          "aws lambda publish-version --function-name my-function",
+        description:
+          "Publish a new immutable version of a Lambda function.",
+      },
+      {
+        command:
+          "aws lambda list-versions-by-function --function-name my-function",
+        description:
+          "List published versions of a Lambda function.",
       },
       {
         command:
@@ -624,13 +826,25 @@ const commandSections: CommandSection[] = [
         command:
           "aws rds stop-db-instance --db-instance-identifier mydb",
         description:
-          "Stop an RDS database instance when the configuration supports stopping.",
+          "Stop an RDS database instance when supported by its configuration.",
+      },
+      {
+        command:
+          "aws rds create-db-snapshot --db-instance-identifier mydb --db-snapshot-identifier mydb-backup",
+        description:
+          "Create a manual RDS database snapshot.",
+      },
+      {
+        command:
+          "aws rds describe-db-snapshots --db-instance-identifier mydb",
+        description:
+          "List snapshots associated with an RDS instance.",
       },
     ],
   },
 
   {
-    title: "CloudWatch",
+    title: "CloudWatch Metrics",
     commands: [
       {
         command: "aws cloudwatch list-metrics",
@@ -654,6 +868,12 @@ const commandSections: CommandSection[] = [
           "aws cloudwatch describe-alarms",
         description:
           "List CloudWatch alarms.",
+      },
+      {
+        command:
+          "aws cloudwatch describe-alarms-for-metric --metric-name CPUUtilization --namespace AWS/EC2 --dimensions Name=InstanceId,Value=i-0123456789abcdef0",
+        description:
+          "Find alarms associated with a specific CloudWatch metric.",
       },
     ],
   },
@@ -708,6 +928,12 @@ const commandSections: CommandSection[] = [
         description:
           "List Route 53 health checks.",
       },
+      {
+        command:
+          "aws route53 get-health-check-status --health-check-id HEALTH_CHECK_ID",
+        description:
+          "Check the status of a Route 53 health check.",
+      },
     ],
   },
 
@@ -737,6 +963,12 @@ const commandSections: CommandSection[] = [
           "aws ssm get-command-invocation --command-id COMMAND_ID --instance-id i-0123456789abcdef0",
         description:
           "Retrieve the output and status of a Systems Manager command.",
+      },
+      {
+        command:
+          "aws ssm start-session --target i-0123456789abcdef0",
+        description:
+          "Start an interactive Systems Manager session with a managed EC2 instance.",
       },
     ],
   },
@@ -871,6 +1103,12 @@ const commandSections: CommandSection[] = [
       },
       {
         command:
+          "aws ec2 describe-instances --output text",
+        description:
+          "Return AWS CLI output as tab-separated text.",
+      },
+      {
+        command:
           "aws ec2 describe-instances --query 'Reservations[].Instances[].InstanceId'",
         description:
           "Use JMESPath to extract specific fields from AWS CLI output.",
@@ -941,6 +1179,12 @@ const commandSections: CommandSection[] = [
       },
       {
         command:
+          "docker tag myapp:$BUILD_NUMBER ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/myapp:$BUILD_NUMBER",
+        description:
+          "Tag the Docker image for the ECR repository.",
+      },
+      {
+        command:
           "docker push ACCOUNT_ID.dkr.ecr.ap-south-1.amazonaws.com/myapp:$BUILD_NUMBER",
         description:
           "Push a CI-built Docker image to Amazon ECR.",
@@ -950,6 +1194,18 @@ const commandSections: CommandSection[] = [
           "aws eks update-kubeconfig --region ap-south-1 --name production",
         description:
           "Configure kubectl access to an EKS cluster in a deployment pipeline.",
+      },
+      {
+        command:
+          "kubectl apply -f k8s/",
+        description:
+          "Deploy Kubernetes manifests after configuring EKS access.",
+      },
+      {
+        command:
+          "kubectl rollout status deployment/myapp",
+        description:
+          "Wait for the Kubernetes deployment rollout to complete.",
       },
     ],
   },
@@ -982,7 +1238,8 @@ export default function AwsCliCommands() {
 
           <p className="mt-4 max-w-3xl text-slate-400">
             Practical AWS CLI commands for EC2, S3, IAM, VPC, ECR, ECS, EKS,
-            Lambda, RDS, CloudWatch, Route 53, Systems Manager and CI/CD.
+            Lambda, RDS, CloudWatch, Route 53, Systems Manager, security,
+            troubleshooting and CI/CD automation.
           </p>
 
           <div className="mt-5 flex flex-wrap gap-3 text-sm text-slate-400">
@@ -1026,8 +1283,10 @@ aws eks update-kubeconfig --region ap-south-1 --name production
 kubectl apply -f k8s/
 
 # Check deployment
-kubectl get pods`}
-          </pre>
+kubectl get pods
+
+# Check rollout
+kubectl rollout status deployment/myapp`}</pre>
         </section>
 
         <section className="mt-8 rounded-xl border border-slate-800 bg-slate-900 p-6">

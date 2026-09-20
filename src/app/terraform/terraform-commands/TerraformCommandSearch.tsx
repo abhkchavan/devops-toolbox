@@ -19,7 +19,7 @@ type Props = {
 export default function TerraformCommandSearch({ sections }: Props) {
   const [search, setSearch] = useState("");
 
-  const filteredSections = useMemo(() => {
+  const filteredSections = useMemo<TerraformSection[]>(() => {
     const query = search.trim().toLowerCase();
 
     if (!query) {

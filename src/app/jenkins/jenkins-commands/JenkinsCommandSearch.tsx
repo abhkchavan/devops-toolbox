@@ -19,7 +19,7 @@ type Props = {
 export default function JenkinsCommandSearch({ sections }: Props) {
   const [search, setSearch] = useState("");
 
-  const filteredSections = useMemo(() => {
+  const filteredSections = useMemo<JenkinsSection[]>(() => {
     const query = search.trim().toLowerCase();
 
     if (!query) {
