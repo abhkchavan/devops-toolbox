@@ -13,6 +13,8 @@ export default function Home() {
     const routes: Record<string, string> = {
       kubernetes: "/kubernetes/kubectl-commands",
       kubectl: "/kubernetes/kubectl-commands",
+      helm: "/helm/helm-commands",
+      "helm commands": "/helm/helm-commands",
       linux: "/linux/linux-commands",
       docker: "/docker/docker-commands",
       ansible: "/ansible/ansible-commands",
@@ -87,16 +89,17 @@ export default function Home() {
         </h2>
 
         <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
-          Learn Linux, Docker, Kubernetes, Ansible, Git, Terraform, Jenkins,
-          AWS CLI, Azure CLI, Google Cloud CLI, OCI CLI, IBM Cloud CLI and SRE
-          through practical examples, troubleshooting guides and free tools.
+          Learn Linux, Docker, Kubernetes, Helm, Ansible, Git, Terraform,
+          Jenkins, AWS CLI, Azure CLI, Google Cloud CLI, OCI CLI, IBM Cloud
+          CLI and SRE through practical examples, troubleshooting guides and
+          free tools.
         </p>
 
         {/* Search */}
         <div className="mx-auto mt-10 flex max-w-2xl">
           <input
             type="text"
-            placeholder="Search Kubernetes, Linux, Docker, Git, Terraform, Jenkins, AWS, Azure, GCP, OCI, IBM..."
+            placeholder="Search Kubernetes, Helm, Linux, Docker, Git, Terraform, Jenkins, AWS, Azure, GCP, OCI, IBM..."
             className="w-full rounded-l-lg border border-slate-700 bg-slate-900 px-5 py-4 text-white outline-none focus:border-cyan-500"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -134,6 +137,10 @@ export default function Home() {
             [
               "Kubernetes",
               "kubectl commands, deployments and production issues.",
+            ],
+            [
+              "Helm",
+              "Kubernetes package management, charts, releases, upgrades, rollbacks and CI/CD deployments.",
             ],
             [
               "Ansible",
@@ -196,7 +203,9 @@ export default function Home() {
 
       {/* Guides */}
       <section id="guides" className="mx-auto max-w-6xl px-6 py-16">
-        <h3 className="mb-8 text-2xl font-bold">DevOps Command Guides</h3>
+        <h3 className="mb-8 text-2xl font-bold">
+          DevOps Command Guides
+        </h3>
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {/* Kubernetes */}
@@ -353,6 +362,29 @@ export default function Home() {
             <p className="mt-3 text-sm leading-6 text-slate-400">
               Jobs, builds, pipelines, agents, plugins, credentials, logs and
               CI/CD troubleshooting.
+            </p>
+
+            <p className="mt-5 text-sm font-semibold text-cyan-400">
+              Read guide →
+            </p>
+          </a>
+
+          {/* Helm */}
+          <a
+            href="/helm/helm-commands"
+            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
+          >
+            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+              Helm
+            </p>
+
+            <h4 className="mt-3 text-xl font-semibold">
+              Helm Commands Cheat Sheet
+            </h4>
+
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Helm commands for Kubernetes charts, repositories, releases,
+              upgrades, rollbacks, values, templates and CI/CD.
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
