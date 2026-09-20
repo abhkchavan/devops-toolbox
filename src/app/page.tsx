@@ -76,15 +76,15 @@ export default function Home() {
 
         <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
           Learn Linux, Docker, Kubernetes, Ansible, Git, Terraform, Jenkins,
-          AWS CLI and SRE through practical examples, troubleshooting guides
-          and free tools.
+          AWS CLI, Azure CLI and SRE through practical examples,
+          troubleshooting guides and free tools.
         </p>
 
         {/* Search */}
         <div className="mx-auto mt-10 flex max-w-2xl">
           <input
             type="text"
-            placeholder="Search Kubernetes, Linux, Docker, Git, Terraform, Jenkins, AWS..."
+            placeholder="Search Kubernetes, Linux, Docker, Git, Terraform, Jenkins, AWS, Azure..."
             className="w-full rounded-l-lg border border-slate-700 bg-slate-900 px-5 py-4 text-white outline-none focus:border-cyan-500"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -142,6 +142,10 @@ export default function Home() {
             [
               "AWS CLI",
               "AWS cloud administration, EC2, S3, IAM, VPC and DevOps workflows.",
+            ],
+            [
+              "Azure CLI",
+              "Azure cloud administration, VMs, Storage, AKS, ACR, networking and DevOps workflows.",
             ],
             [
               "SRE",
@@ -348,6 +352,29 @@ export default function Home() {
             <p className="mt-3 text-sm leading-6 text-slate-400">
               AWS CLI commands for EC2, S3, IAM, VPC, ECR, ECS, EKS, Lambda,
               RDS, CloudWatch and DevOps workflows.
+            </p>
+
+            <p className="mt-5 text-sm font-semibold text-cyan-400">
+              Read guide →
+            </p>
+          </a>
+
+          {/* Azure */}
+          <a
+            href="/azure/azure-cli"
+            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
+          >
+            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+              Azure CLI
+            </p>
+
+            <h4 className="mt-3 text-xl font-semibold">
+              Azure CLI Commands Cheat Sheet
+            </h4>
+
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Azure CLI commands for VMs, Storage, VNet, NSG, ACR, AKS,
+              App Service, Functions, SQL, Monitor, Key Vault and DevOps.
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
