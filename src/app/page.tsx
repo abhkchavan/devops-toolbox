@@ -19,16 +19,17 @@ export default function Home() {
       git: "/git/git-commands",
       terraform: "/terraform/terraform-commands",
       jenkins: "/jenkins/jenkins-commands",
+      aws: "/aws/aws-cli",
+      "aws cli": "/aws/aws-cli",
       sre: "/sre/sre-troubleshooting",
       yaml: "/tools/yaml-validator",
       json: "/tools/json-formatter",
       cron: "/tools/cron-generator",
       cidr: "/tools/cidr-calculator",
-      aws: "/aws/aws-cli",
     };
 
     const route = Object.entries(routes).find(([keyword]) =>
-      query.includes(keyword)
+      query.includes(keyword),
     );
 
     if (route) {
@@ -72,16 +73,16 @@ export default function Home() {
         </h2>
 
         <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
-          Learn Linux, Docker, Kubernetes, Ansible, Git, Terraform, Jenkins
-          and SRE through practical examples, troubleshooting guides and free
-          tools.
+          Learn Linux, Docker, Kubernetes, Ansible, Git, Terraform, Jenkins,
+          AWS CLI and SRE through practical examples, troubleshooting guides
+          and free tools.
         </p>
 
         {/* Search */}
         <div className="mx-auto mt-10 flex max-w-2xl">
           <input
             type="text"
-            placeholder="Search Kubernetes, Linux, Docker, Git, Terraform, Jenkins..."
+            placeholder="Search Kubernetes, Linux, Docker, Git, Terraform, Jenkins, AWS..."
             className="w-full rounded-l-lg border border-slate-700 bg-slate-900 px-5 py-4 text-white outline-none focus:border-cyan-500"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -103,13 +104,8 @@ export default function Home() {
       </section>
 
       {/* Topics */}
-      <section
-        id="topics"
-        className="mx-auto max-w-6xl px-6 py-12"
-      >
-        <h3 className="mb-8 text-2xl font-bold">
-          Explore Topics
-        </h3>
+      <section id="topics" className="mx-auto max-w-6xl px-6 py-12">
+        <h3 className="mb-8 text-2xl font-bold">Explore Topics</h3>
 
         <div className="grid gap-5 md:grid-cols-3">
           {[
@@ -142,6 +138,10 @@ export default function Home() {
               "Jobs, builds, pipelines, agents and CI/CD automation.",
             ],
             [
+              "AWS CLI",
+              "AWS cloud administration, EC2, S3, IAM, VPC and DevOps workflows.",
+            ],
+            [
               "SRE",
               "SLIs, SLOs, monitoring, incidents and reliability.",
             ],
@@ -154,9 +154,7 @@ export default function Home() {
               key={title}
               className="rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500"
             >
-              <h4 className="text-xl font-semibold">
-                {title}
-              </h4>
+              <h4 className="text-xl font-semibold">{title}</h4>
 
               <p className="mt-3 text-sm leading-6 text-slate-400">
                 {description}
@@ -167,13 +165,8 @@ export default function Home() {
       </section>
 
       {/* Guides */}
-      <section
-        id="guides"
-        className="mx-auto max-w-6xl px-6 py-16"
-      >
-        <h3 className="mb-8 text-2xl font-bold">
-          DevOps Command Guides
-        </h3>
+      <section id="guides" className="mx-auto max-w-6xl px-6 py-16">
+        <h3 className="mb-8 text-2xl font-bold">DevOps Command Guides</h3>
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {/* Kubernetes */}
@@ -337,6 +330,29 @@ export default function Home() {
             </p>
           </a>
 
+          {/* AWS */}
+          <a
+            href="/aws/aws-cli"
+            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
+          >
+            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+              AWS CLI
+            </p>
+
+            <h4 className="mt-3 text-xl font-semibold">
+              AWS CLI Commands Cheat Sheet
+            </h4>
+
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              AWS CLI commands for EC2, S3, IAM, VPC, ECR, ECS, EKS, Lambda,
+              RDS, CloudWatch and DevOps workflows.
+            </p>
+
+            <p className="mt-5 text-sm font-semibold text-cyan-400">
+              Read guide →
+            </p>
+          </a>
+
           {/* SRE */}
           <a
             href="/sre/sre-troubleshooting"
@@ -363,13 +379,8 @@ export default function Home() {
       </section>
 
       {/* Tools */}
-      <section
-        id="tools"
-        className="mx-auto max-w-6xl px-6 py-16"
-      >
-        <h3 className="mb-8 text-2xl font-bold">
-          Free DevOps Tools
-        </h3>
+      <section id="tools" className="mx-auto max-w-6xl px-6 py-16">
+        <h3 className="mb-8 text-2xl font-bold">Free DevOps Tools</h3>
 
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {/* YAML */}
@@ -377,9 +388,7 @@ export default function Home() {
             href="/tools/yaml-validator"
             className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
           >
-            <h4 className="font-semibold">
-              YAML Validator
-            </h4>
+            <h4 className="font-semibold">YAML Validator</h4>
 
             <p className="mt-2 text-sm text-slate-400">
               Validate YAML syntax instantly.
@@ -395,9 +404,7 @@ export default function Home() {
             href="/tools/json-formatter"
             className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
           >
-            <h4 className="font-semibold">
-              JSON Formatter
-            </h4>
+            <h4 className="font-semibold">JSON Formatter</h4>
 
             <p className="mt-2 text-sm text-slate-400">
               Format, validate and minify JSON instantly.
@@ -413,9 +420,7 @@ export default function Home() {
             href="/tools/cron-generator"
             className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
           >
-            <h4 className="font-semibold">
-              Cron Generator
-            </h4>
+            <h4 className="font-semibold">Cron Generator</h4>
 
             <p className="mt-2 text-sm text-slate-400">
               Create cron expressions easily.
@@ -431,9 +436,7 @@ export default function Home() {
             href="/tools/cidr-calculator"
             className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
           >
-            <h4 className="font-semibold">
-              CIDR Calculator
-            </h4>
+            <h4 className="font-semibold">CIDR Calculator</h4>
 
             <p className="mt-2 text-sm text-slate-400">
               Calculate IP ranges and subnets.
@@ -454,31 +457,19 @@ export default function Home() {
           </p>
 
           <nav className="flex flex-wrap justify-center gap-5 text-sm">
-            <a
-              href="/about"
-              className="hover:text-cyan-400"
-            >
+            <a href="/about" className="hover:text-cyan-400">
               About
             </a>
 
-            <a
-              href="/contact"
-              className="hover:text-cyan-400"
-            >
+            <a href="/contact" className="hover:text-cyan-400">
               Contact
             </a>
 
-            <a
-              href="/privacy"
-              className="hover:text-cyan-400"
-            >
+            <a href="/privacy" className="hover:text-cyan-400">
               Privacy
             </a>
 
-            <a
-              href="/terms"
-              className="hover:text-cyan-400"
-            >
+            <a href="/terms" className="hover:text-cyan-400">
               Terms
             </a>
           </nav>
