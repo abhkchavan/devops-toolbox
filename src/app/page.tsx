@@ -1,4 +1,4 @@
-"use client";
+"use client"; // DevOpsToolbox homepage
 
 import { useEffect, useRef, useState } from "react";
 
@@ -9,374 +9,481 @@ type SearchItem = {
   category: "Topic" | "Guide" | "Tool";
 };
 
+const searchItems: SearchItem[] = [
+  {
+    title: "Kubernetes",
+    description:
+      "kubectl commands, deployments, services, pods and production troubleshooting.",
+    href: "/kubernetes/kubectl-commands",
+    category: "Topic",
+  },
+  {
+    title: "kubectl Commands",
+    description:
+      "Practical kubectl commands for pods, deployments, services and troubleshooting.",
+    href: "/kubernetes/kubectl-commands",
+    category: "Guide",
+  },
+  {
+    title: "Linux",
+    description:
+      "Linux commands, system administration, networking, processes, storage and troubleshooting.",
+    href: "/linux/linux-commands",
+    category: "Topic",
+  },
+  {
+    title: "Linux Commands",
+    description:
+      "Essential Linux commands for system administration and troubleshooting.",
+    href: "/linux/linux-commands",
+    category: "Guide",
+  },
+  {
+    title: "Docker",
+    description:
+      "Containers, images, networking, volumes, logs and troubleshooting.",
+    href: "/docker/docker-commands",
+    category: "Topic",
+  },
+  {
+    title: "Docker Commands",
+    description:
+      "Essential Docker commands for containers, images, logs and troubleshooting.",
+    href: "/docker/docker-commands",
+    category: "Guide",
+  },
+  {
+    title: "Ansible",
+    description:
+      "Automation, playbooks, inventory, modules and configuration management.",
+    href: "/ansible/ansible-commands",
+    category: "Topic",
+  },
+  {
+    title: "Ansible Commands",
+    description:
+      "Practical commands for inventory, connectivity, playbooks and troubleshooting.",
+    href: "/ansible/ansible-commands",
+    category: "Guide",
+  },
+  {
+    title: "Git",
+    description:
+      "Branches, commits, merge, rebase, stash, remotes, tags and troubleshooting.",
+    href: "/git/git-commands",
+    category: "Topic",
+  },
+  {
+    title: "Git Commands",
+    description:
+      "Git commands for branches, commits, merge, rebase, stash and troubleshooting.",
+    href: "/git/git-commands",
+    category: "Guide",
+  },
+  {
+    title: "Terraform",
+    description:
+      "Infrastructure as code, providers, state, modules, workspaces and deployments.",
+    href: "/terraform/terraform-commands",
+    category: "Topic",
+  },
+  {
+    title: "Terraform Commands",
+    description:
+      "Terraform commands for infrastructure as code, state, modules and deployment.",
+    href: "/terraform/terraform-commands",
+    category: "Guide",
+  },
+  {
+    title: "Jenkins",
+    description:
+      "Jobs, builds, pipelines, agents, plugins, credentials and CI/CD.",
+    href: "/jenkins/jenkins-commands",
+    category: "Topic",
+  },
+  {
+    title: "Jenkins Commands",
+    description:
+      "Jenkins commands for jobs, builds, pipelines, agents and CI/CD automation.",
+    href: "/jenkins/jenkins-commands",
+    category: "Guide",
+  },
+  {
+    title: "Helm",
+    description:
+      "Kubernetes package management, charts, releases, upgrades and rollbacks.",
+    href: "/helm/helm-commands",
+    category: "Topic",
+  },
+  {
+    title: "Helm Commands",
+    description:
+      "Helm commands for charts, repositories, releases, upgrades, rollbacks and CI/CD.",
+    href: "/helm/helm-commands",
+    category: "Guide",
+  },
+  {
+    title: "Prometheus",
+    description:
+      "Monitoring, PromQL, alerting, recording rules, targets and SRE troubleshooting.",
+    href: "/prometheus/prometheus-commands",
+    category: "Topic",
+  },
+  {
+    title: "Prometheus & PromQL",
+    description:
+      "Prometheus commands, promtool, PromQL, monitoring, alerting and recording rules.",
+    href: "/prometheus/prometheus-commands",
+    category: "Guide",
+  },
+  {
+    title: "AWS CLI",
+    description:
+      "AWS cloud administration, EC2, S3, IAM, VPC and DevOps workflows.",
+    href: "/aws/aws-cli",
+    category: "Topic",
+  },
+  {
+    title: "AWS CLI Commands",
+    description:
+      "AWS CLI commands for EC2, S3, IAM, VPC, ECR, ECS, EKS, Lambda, RDS and CloudWatch.",
+    href: "/aws/aws-cli",
+    category: "Guide",
+  },
+  {
+    title: "Azure CLI",
+    description:
+      "Azure cloud administration, VMs, Storage, AKS, ACR, networking and DevOps.",
+    href: "/azure/azure-cli",
+    category: "Topic",
+  },
+  {
+    title: "Azure CLI Commands",
+    description:
+      "Azure CLI commands for VMs, Storage, VNet, NSG, ACR, AKS, App Service and Key Vault.",
+    href: "/azure/azure-cli",
+    category: "Guide",
+  },
+  {
+    title: "Google Cloud CLI",
+    description:
+      "Google Cloud administration, Compute Engine, Storage, GKE, Cloud Run and IAM.",
+    href: "/gcp/gcloud-commands",
+    category: "Topic",
+  },
+  {
+    title: "gcloud Commands",
+    description:
+      "Google Cloud CLI commands for Compute Engine, Storage, GKE, Cloud Run and Cloud SQL.",
+    href: "/gcp/gcloud-commands",
+    category: "Guide",
+  },
+  {
+    title: "Oracle Cloud CLI",
+    description:
+      "OCI administration, Compute, Object Storage, VCN, OKE, IAM, Vault and databases.",
+    href: "/oci/oci-cli",
+    category: "Topic",
+  },
+  {
+    title: "OCI CLI Commands",
+    description:
+      "OCI CLI commands for Compute, Object Storage, VCN, OKE, IAM, Vault and monitoring.",
+    href: "/oci/oci-cli",
+    category: "Guide",
+  },
+  {
+    title: "IBM Cloud CLI",
+    description:
+      "IBM Cloud administration, IAM, VPC, Kubernetes, Code Engine and Object Storage.",
+    href: "/ibm/ibm-cli",
+    category: "Topic",
+  },
+  {
+    title: "IBM Cloud CLI Commands",
+    description:
+      "IBM Cloud CLI commands for IAM, VPC, Kubernetes, Code Engine, Container Registry and storage.",
+    href: "/ibm/ibm-cli",
+    category: "Guide",
+  },
+  {
+    title: "SRE",
+    description:
+      "SLIs, SLOs, monitoring, incidents, reliability and server troubleshooting.",
+    href: "/sre/sre-troubleshooting",
+    category: "Topic",
+  },
+  {
+    title: "SRE Server Troubleshooting",
+    description:
+      "Practical troubleshooting for CPU, memory, disk, processes, services, logs and networking.",
+    href: "/sre/sre-troubleshooting",
+    category: "Guide",
+  },
+  {
+    title: "DevOps Troubleshooting",
+    description:
+      "Practical troubleshooting for Linux, Docker, Kubernetes, Jenkins, Terraform and monitoring.",
+    href: "/troubleshooting/devops-troubleshooting",
+    category: "Guide",
+  },
+  {
+    title: "DevOps Interview",
+    description:
+      "Practical DevOps interview questions covering Linux, Git, Docker, Kubernetes, cloud and SRE.",
+    href: "/interview/devops-interview",
+    category: "Guide",
+  },
+  {
+    title: "YAML Validator",
+    description: "Validate YAML syntax instantly.",
+    href: "/tools/yaml-validator",
+    category: "Tool",
+  },
+  {
+    title: "JSON Formatter",
+    description: "Format, validate and minify JSON instantly.",
+    href: "/tools/json-formatter",
+    category: "Tool",
+  },
+  {
+    title: "Cron Generator",
+    description: "Create cron expressions easily.",
+    href: "/tools/cron-generator",
+    category: "Tool",
+  },
+  {
+    title: "CIDR Calculator",
+    description: "Calculate IP ranges and subnets.",
+    href: "/tools/cidr-calculator",
+    category: "Tool",
+  },
+];
+
+const topics = [
+  {
+    title: "Linux",
+    description: "Commands, troubleshooting and system administration.",
+    href: "/linux/linux-commands",
+  },
+  {
+    title: "Kubernetes",
+    description: "kubectl commands, deployments and production issues.",
+    href: "/kubernetes/kubectl-commands",
+  },
+  {
+    title: "Docker",
+    description: "Containers, images, networking and troubleshooting.",
+    href: "/docker/docker-commands",
+  },
+  {
+    title: "AWS CLI",
+    description: "EC2, S3, IAM, VPC and cloud administration.",
+    href: "/aws/aws-cli",
+  },
+  {
+    title: "Git",
+    description: "Branches, commits, merge, rebase and troubleshooting.",
+    href: "/git/git-commands",
+  },
+  {
+    title: "Terraform",
+    description: "Infrastructure as code, state, modules and deployments.",
+    href: "/terraform/terraform-commands",
+  },
+  {
+    title: "Ansible",
+    description: "Automation, playbooks, inventory and configuration.",
+    href: "/ansible/ansible-commands",
+  },
+  {
+    title: "Jenkins",
+    description: "Jobs, builds, pipelines, agents and CI/CD automation.",
+    href: "/jenkins/jenkins-commands",
+  },
+  {
+    title: "Helm",
+    description: "Kubernetes charts, releases, upgrades and rollbacks.",
+    href: "/helm/helm-commands",
+  },
+  {
+    title: "Prometheus",
+    description: "Monitoring, PromQL, alerting and SRE troubleshooting.",
+    href: "/prometheus/prometheus-commands",
+  },
+  {
+    title: "Azure CLI",
+    description: "Azure VMs, Storage, AKS, networking and DevOps.",
+    href: "/azure/azure-cli",
+  },
+  {
+    title: "Google Cloud CLI",
+    description: "Compute Engine, Storage, GKE, Cloud Run and IAM.",
+    href: "/gcp/gcloud-commands",
+  },
+];
+
+const troubleshooting = [
+  {
+    title: "Kubernetes Pod CrashLoopBackOff",
+    description:
+      "Check pod status, events, logs, probes, configuration and resource issues.",
+    href: "/troubleshooting/devops-troubleshooting",
+    tag: "Kubernetes",
+  },
+  {
+    title: "Kubernetes Pod Pending",
+    description:
+      "Investigate scheduling, resources, taints, node availability and events.",
+    href: "/troubleshooting/devops-troubleshooting",
+    tag: "Kubernetes",
+  },
+  {
+    title: "Linux Disk Full",
+    description:
+      "Find large files, full filesystems, deleted-open files and storage issues.",
+    href: "/sre/sre-troubleshooting",
+    tag: "Linux",
+  },
+  {
+    title: "Linux High CPU",
+    description:
+      "Identify CPU-consuming processes and investigate application behaviour.",
+    href: "/sre/sre-troubleshooting",
+    tag: "SRE",
+  },
+  {
+    title: "Docker Container Not Starting",
+    description:
+      "Inspect containers, images, logs, ports, volumes and runtime errors.",
+    href: "/docker/docker-commands",
+    tag: "Docker",
+  },
+  {
+    title: "Jenkins Build Failed",
+    description:
+      "Check console output, workspace, agents, credentials and pipeline errors.",
+    href: "/jenkins/jenkins-commands",
+    tag: "Jenkins",
+  },
+  {
+    title: "Terraform State Locked",
+    description:
+      "Understand state locking, inspect state and safely recover from lock issues.",
+    href: "/terraform/terraform-commands",
+    tag: "Terraform",
+  },
+  {
+    title: "Application Port Not Responding",
+    description:
+      "Check listening ports, processes, firewall rules and network connectivity.",
+    href: "/sre/sre-troubleshooting",
+    tag: "Production",
+  },
+];
+
+const guides = [
+  {
+    category: "Kubernetes",
+    title: "kubectl Commands Cheat Sheet",
+    description:
+      "Practical kubectl commands for pods, deployments, services and troubleshooting.",
+    href: "/kubernetes/kubectl-commands",
+  },
+  {
+    category: "Linux",
+    title: "Linux Commands Cheat Sheet",
+    description:
+      "Essential Linux commands for system administration and troubleshooting.",
+    href: "/linux/linux-commands",
+  },
+  {
+    category: "Docker",
+    title: "Docker Commands Cheat Sheet",
+    description:
+      "Essential Docker commands for containers, images, logs and troubleshooting.",
+    href: "/docker/docker-commands",
+  },
+  {
+    category: "AWS",
+    title: "AWS CLI Commands Cheat Sheet",
+    description:
+      "AWS CLI commands for EC2, S3, IAM, VPC, ECR, ECS, EKS, Lambda and CloudWatch.",
+    href: "/aws/aws-cli",
+  },
+  {
+    category: "Terraform",
+    title: "Terraform Commands Cheat Sheet",
+    description:
+      "Infrastructure as code, providers, state, modules, workspaces and deployment.",
+    href: "/terraform/terraform-commands",
+  },
+  {
+    category: "Ansible",
+    title: "Ansible Commands Cheat Sheet",
+    description:
+      "Practical commands for inventory, connectivity, playbooks and automation.",
+    href: "/ansible/ansible-commands",
+  },
+  {
+    category: "Jenkins",
+    title: "Jenkins Commands Cheat Sheet",
+    description:
+      "Jobs, builds, pipelines, agents, credentials, logs and CI/CD troubleshooting.",
+    href: "/jenkins/jenkins-commands",
+  },
+  {
+    category: "Helm",
+    title: "Helm Commands Cheat Sheet",
+    description:
+      "Charts, repositories, releases, upgrades, rollbacks, values and templates.",
+    href: "/helm/helm-commands",
+  },
+  {
+    category: "Prometheus",
+    title: "Prometheus & PromQL Cheat Sheet",
+    description:
+      "PromQL, promtool, monitoring, alerting, recording rules and troubleshooting.",
+    href: "/prometheus/prometheus-commands",
+  },
+  {
+    category: "SRE",
+    title: "SRE Server Troubleshooting Guide",
+    description:
+      "A practical workflow for CPU, memory, disk, processes, services, logs and networking.",
+    href: "/sre/sre-troubleshooting",
+  },
+];
+
+const tools = [
+  {
+    title: "YAML Validator",
+    description: "Validate YAML syntax instantly.",
+    href: "/tools/yaml-validator",
+  },
+  {
+    title: "JSON Formatter",
+    description: "Format, validate and minify JSON instantly.",
+    href: "/tools/json-formatter",
+  },
+  {
+    title: "Cron Generator",
+    description: "Create cron expressions easily.",
+    href: "/tools/cron-generator",
+  },
+  {
+    title: "CIDR Calculator",
+    description: "Calculate IP ranges and subnets.",
+    href: "/tools/cidr-calculator",
+  },
+];
+
 export default function Home() {
   const [search, setSearch] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const searchRef = useRef<HTMLDivElement>(null);
-
-  const searchItems: SearchItem[] = [
-    {
-      title: "Kubernetes",
-      description:
-        "kubectl commands, deployments, services, pods and production troubleshooting.",
-      href: "/kubernetes/kubectl-commands",
-      category: "Topic",
-    },
-    {
-      title: "kubectl Commands",
-      description:
-        "Practical kubectl commands for pods, deployments, services and troubleshooting.",
-      href: "/kubernetes/kubectl-commands",
-      category: "Guide",
-    },
-    {
-      title: "Linux",
-      description:
-        "Linux commands, system administration, networking, processes, storage and troubleshooting.",
-      href: "/linux/linux-commands",
-      category: "Topic",
-    },
-    {
-      title: "Linux Commands",
-      description:
-        "Essential Linux commands for system administration and troubleshooting.",
-      href: "/linux/linux-commands",
-      category: "Guide",
-    },
-    {
-      title: "Docker",
-      description:
-        "Containers, images, networking, volumes, logs and troubleshooting.",
-      href: "/docker/docker-commands",
-      category: "Topic",
-    },
-    {
-      title: "Docker Commands",
-      description:
-        "Essential Docker commands for containers, images, logs and troubleshooting.",
-      href: "/docker/docker-commands",
-      category: "Guide",
-    },
-    {
-      title: "Ansible",
-      description:
-        "Automation, playbooks, inventory, modules and configuration management.",
-      href: "/ansible/ansible-commands",
-      category: "Topic",
-    },
-    {
-      title: "Ansible Commands",
-      description:
-        "Practical commands for inventory, connectivity, playbooks and troubleshooting.",
-      href: "/ansible/ansible-commands",
-      category: "Guide",
-    },
-    {
-      title: "Git",
-      description:
-        "Branches, commits, merge, rebase, stash, remotes, tags and troubleshooting.",
-      href: "/git/git-commands",
-      category: "Topic",
-    },
-    {
-      title: "Git Commands",
-      description:
-        "Git commands for branches, commits, merge, rebase, stash and troubleshooting.",
-      href: "/git/git-commands",
-      category: "Guide",
-    },
-    {
-      title: "Terraform",
-      description:
-        "Infrastructure as code, providers, state, modules, workspaces and deployments.",
-      href: "/terraform/terraform-commands",
-      category: "Topic",
-    },
-    {
-      title: "Terraform Commands",
-      description:
-        "Terraform commands for infrastructure as code, state, modules and deployment.",
-      href: "/terraform/terraform-commands",
-      category: "Guide",
-    },
-    {
-      title: "Jenkins",
-      description:
-        "Jobs, builds, pipelines, agents, plugins, credentials and CI/CD.",
-      href: "/jenkins/jenkins-commands",
-      category: "Topic",
-    },
-    {
-      title: "Jenkins Commands",
-      description:
-        "Jenkins commands for jobs, builds, pipelines, agents and CI/CD automation.",
-      href: "/jenkins/jenkins-commands",
-      category: "Guide",
-    },
-    {
-      title: "Helm",
-      description:
-        "Kubernetes package management, charts, releases, upgrades and rollbacks.",
-      href: "/helm/helm-commands",
-      category: "Topic",
-    },
-    {
-      title: "Helm Commands",
-      description:
-        "Helm commands for charts, repositories, releases, upgrades, rollbacks and CI/CD.",
-      href: "/helm/helm-commands",
-      category: "Guide",
-    },
-    {
-      title: "Prometheus",
-      description:
-        "Monitoring, PromQL, alerting, recording rules, targets and SRE troubleshooting.",
-      href: "/prometheus/prometheus-commands",
-      category: "Topic",
-    },
-    {
-      title: "Prometheus & PromQL",
-      description:
-        "Prometheus commands, promtool, PromQL, monitoring, alerting and recording rules.",
-      href: "/prometheus/prometheus-commands",
-      category: "Guide",
-    },
-    {
-      title: "AWS CLI",
-      description:
-        "AWS cloud administration, EC2, S3, IAM, VPC and DevOps workflows.",
-      href: "/aws/aws-cli",
-      category: "Topic",
-    },
-    {
-      title: "AWS CLI Commands",
-      description:
-        "AWS CLI commands for EC2, S3, IAM, VPC, ECR, ECS, EKS, Lambda, RDS and CloudWatch.",
-      href: "/aws/aws-cli",
-      category: "Guide",
-    },
-    {
-      title: "Azure CLI",
-      description:
-        "Azure cloud administration, VMs, Storage, AKS, ACR, networking and DevOps.",
-      href: "/azure/azure-cli",
-      category: "Topic",
-    },
-    {
-      title: "Azure CLI Commands",
-      description:
-        "Azure CLI commands for VMs, Storage, VNet, NSG, ACR, AKS, App Service and Key Vault.",
-      href: "/azure/azure-cli",
-      category: "Guide",
-    },
-    {
-      title: "Google Cloud CLI",
-      description:
-        "Google Cloud administration, Compute Engine, Storage, GKE, Cloud Run and IAM.",
-      href: "/gcp/gcloud-commands",
-      category: "Topic",
-    },
-    {
-      title: "gcloud Commands",
-      description:
-        "Google Cloud CLI commands for Compute Engine, Storage, GKE, Cloud Run and Cloud SQL.",
-      href: "/gcp/gcloud-commands",
-      category: "Guide",
-    },
-    {
-      title: "Oracle Cloud CLI",
-      description:
-        "OCI administration, Compute, Object Storage, VCN, OKE, IAM, Vault and databases.",
-      href: "/oci/oci-cli",
-      category: "Topic",
-    },
-    {
-      title: "OCI CLI Commands",
-      description:
-        "OCI CLI commands for Compute, Object Storage, VCN, OKE, IAM, Vault and monitoring.",
-      href: "/oci/oci-cli",
-      category: "Guide",
-    },
-    {
-      title: "IBM Cloud CLI",
-      description:
-        "IBM Cloud administration, IAM, VPC, Kubernetes, Code Engine and Object Storage.",
-      href: "/ibm/ibm-cli",
-      category: "Topic",
-    },
-    {
-      title: "IBM Cloud CLI Commands",
-      description:
-        "IBM Cloud CLI commands for IAM, VPC, Kubernetes, Code Engine, Container Registry and storage.",
-      href: "/ibm/ibm-cli",
-      category: "Guide",
-    },
-    {
-      title: "SRE",
-      description:
-        "SLIs, SLOs, monitoring, incidents, reliability and server troubleshooting.",
-      href: "/sre/sre-troubleshooting",
-      category: "Topic",
-    },
-    {
-      title: "SRE Server Troubleshooting",
-      description:
-        "Practical troubleshooting for CPU, memory, disk, processes, services, logs and networking.",
-      href: "/sre/sre-troubleshooting",
-      category: "Guide",
-    },
-    {
-      title: "DevOps Troubleshooting",
-      description:
-        "Practical troubleshooting for Linux, Docker, Kubernetes, Jenkins, Terraform and monitoring.",
-      href: "/troubleshooting/devops-troubleshooting",
-      category: "Guide",
-    },
-    {
-      title: "DevOps Interview",
-      description:
-        "Practical DevOps interview questions covering Linux, Git, Docker, Kubernetes, cloud and SRE.",
-      href: "/interview/devops-interview",
-      category: "Guide",
-    },
-    {
-      title: "YAML Validator",
-      description: "Validate YAML syntax instantly.",
-      href: "/tools/yaml-validator",
-      category: "Tool",
-    },
-    {
-      title: "JSON Formatter",
-      description: "Format, validate and minify JSON instantly.",
-      href: "/tools/json-formatter",
-      category: "Tool",
-    },
-    {
-      title: "Cron Generator",
-      description: "Create cron expressions easily.",
-      href: "/tools/cron-generator",
-      category: "Tool",
-    },
-    {
-      title: "CIDR Calculator",
-      description: "Calculate IP ranges and subnets.",
-      href: "/tools/cidr-calculator",
-      category: "Tool",
-    },
-  ];
-
-  const topics = [
-    {
-      title: "Linux",
-      description:
-        "Commands, troubleshooting and system administration.",
-      href: "/linux/linux-commands",
-    },
-    {
-      title: "Docker",
-      description:
-        "Containers, images, networking and troubleshooting.",
-      href: "/docker/docker-commands",
-    },
-    {
-      title: "Kubernetes",
-      description:
-        "kubectl commands, deployments and production issues.",
-      href: "/kubernetes/kubectl-commands",
-    },
-    {
-      title: "Helm",
-      description:
-        "Kubernetes package management, charts, releases, upgrades, rollbacks and CI/CD deployments.",
-      href: "/helm/helm-commands",
-    },
-    {
-      title: "Ansible",
-      description:
-        "Automation, playbooks, inventory and configuration.",
-      href: "/ansible/ansible-commands",
-    },
-    {
-      title: "Git",
-      description:
-        "Branches, commits, merge, rebase, stash and troubleshooting.",
-      href: "/git/git-commands",
-    },
-    {
-      title: "Terraform",
-      description:
-        "Infrastructure as code, state, modules and deployments.",
-      href: "/terraform/terraform-commands",
-    },
-    {
-      title: "Jenkins",
-      description:
-        "Jobs, builds, pipelines, agents and CI/CD automation.",
-      href: "/jenkins/jenkins-commands",
-    },
-    {
-      title: "Prometheus",
-      description:
-        "Monitoring, PromQL, alerting, recording rules, targets and SRE troubleshooting.",
-      href: "/prometheus/prometheus-commands",
-    },
-    {
-      title: "AWS CLI",
-      description:
-        "AWS cloud administration, EC2, S3, IAM, VPC and DevOps workflows.",
-      href: "/aws/aws-cli",
-    },
-    {
-      title: "Azure CLI",
-      description:
-        "Azure cloud administration, VMs, Storage, AKS, ACR, networking and DevOps workflows.",
-      href: "/azure/azure-cli",
-    },
-    {
-      title: "Google Cloud CLI",
-      description:
-        "Google Cloud administration, Compute Engine, Storage, GKE, Cloud Run, IAM and DevOps workflows.",
-      href: "/gcp/gcloud-commands",
-    },
-    {
-      title: "Oracle Cloud CLI",
-      description:
-        "Oracle Cloud Infrastructure administration, Compute, Object Storage, VCN, OKE, IAM, Vault and DevOps workflows.",
-      href: "/oci/oci-cli",
-    },
-    {
-      title: "IBM Cloud CLI",
-      description:
-        "IBM Cloud administration, IAM, VPC, Kubernetes, Code Engine, Container Registry, Object Storage and DevOps workflows.",
-      href: "/ibm/ibm-cli",
-    },
-    {
-      title: "SRE",
-      description:
-        "SLIs, SLOs, monitoring, incidents and reliability.",
-      href: "/sre/sre-troubleshooting",
-    },
-    {
-      title: "AutoSys",
-      description:
-        "Jobs, dependencies, scheduling and troubleshooting.",
-      href: "/autosys/autosys-commands",
-    },
-    {
-      title: "DevOps Troubleshooting",
-      description:
-        "Troubleshoot Linux, Docker, Kubernetes, Jenkins, Terraform and monitoring issues.",
-      href: "/troubleshooting/devops-troubleshooting",
-    },
-    {
-      title: "DevOps Interview",
-      description:
-        "Practical DevOps interview questions covering Linux, Git, Docker, Kubernetes, cloud and SRE.",
-      href: "/interview/devops-interview",
-    },
-  ];
 
   const filteredSuggestions = search.trim()
     ? searchItems
@@ -421,13 +528,10 @@ export default function Home() {
 
     if (e.key === "ArrowDown") {
       e.preventDefault();
-
       setShowSuggestions(true);
 
       setSelectedIndex((current) => {
-        if (filteredSuggestions.length === 0) {
-          return -1;
-        }
+        if (filteredSuggestions.length === 0) return -1;
 
         return current < filteredSuggestions.length - 1
           ? current + 1
@@ -439,13 +543,10 @@ export default function Home() {
 
     if (e.key === "ArrowUp") {
       e.preventDefault();
-
       setShowSuggestions(true);
 
       setSelectedIndex((current) => {
-        if (filteredSuggestions.length === 0) {
-          return -1;
-        }
+        if (filteredSuggestions.length === 0) return -1;
 
         return current > 0
           ? current - 1
@@ -487,11 +588,7 @@ export default function Home() {
     setSearch(value);
     setSelectedIndex(-1);
 
-    if (value.trim()) {
-      setShowSuggestions(true);
-    } else {
-      setShowSuggestions(false);
-    }
+    setShowSuggestions(Boolean(value.trim()));
   };
 
   const clearSearch = () => {
@@ -501,752 +598,552 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 text-white">
+    <main
+  id="top"
+  className="min-h-screen bg-slate-950 text-white"
+>
       {/* Navigation */}
-      <nav className="border-b border-slate-800">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-          <h1 className="text-xl font-bold">
+      <nav className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/95 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6">
+          <a href="/" className="text-xl font-bold tracking-tight">
             DevOps<span className="text-cyan-400">Toolbox</span>
-          </h1>
+          </a>
 
-          <div className="hidden gap-6 text-sm text-slate-300 md:flex">
-            <a
-              href="#guides"
-              className="hover:text-cyan-400"
-            >
-              Guides
+          <div className="hidden items-center gap-6 text-sm text-slate-300 md:flex">
+            <a href="#topics" className="transition hover:text-cyan-400">
+              Topics
             </a>
-
             <a
-              href="#tools"
-              className="hover:text-cyan-400"
+              href="#troubleshooting"
+              className="transition hover:text-cyan-400"
             >
+              Troubleshooting
+            </a>
+            <a href="#guides" className="transition hover:text-cyan-400">
+              Commands
+            </a>
+            <a href="#tools" className="transition hover:text-cyan-400">
               Tools
             </a>
-
-            <a
-              href="#topics"
-              className="hover:text-cyan-400"
-            >
-              Topics
+            <a href="#interview" className="transition hover:text-cyan-400">
+              Interview
             </a>
           </div>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="mx-auto max-w-6xl px-6 py-24 text-center">
-        <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-cyan-400">
-          DevOps {"\u2022"} SRE {"\u2022"} Cloud
-        </p>
-
-        <h2 className="mx-auto max-w-4xl text-4xl font-bold tracking-tight md:text-6xl">
-          Practical DevOps tools, commands and guides.
-        </h2>
-
-        <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
-          Learn Linux, Docker, Kubernetes, Helm, Ansible, Git, Terraform,
-          Jenkins, Prometheus, AWS CLI, Azure CLI, Google Cloud CLI, OCI CLI,
-          IBM Cloud CLI, AutoSys and SRE through practical examples,
-          troubleshooting guides and free tools.
-        </p>
-
-        {/* Search */}
-        <div
-          ref={searchRef}
-          className="relative mx-auto mt-10 max-w-2xl"
-        >
-          <div className="flex">
-            <input
-              type="text"
-              placeholder="Search Kubernetes, Linux, Docker, Git, AWS, Terraform, AutoSys..."
-              className="w-full rounded-l-lg border border-slate-700 bg-slate-900 px-5 py-4 text-white outline-none focus:border-cyan-500"
-              value={search}
-              onChange={handleSearchChange}
-              onFocus={() => {
-                if (search.trim()) {
-                  setShowSuggestions(true);
-                }
-              }}
-              onKeyDown={handleSearchKeyDown}
-              role="combobox"
-              aria-expanded={showSuggestions}
-              aria-autocomplete="list"
-            />
-
-            {search && (
-              <button
-                type="button"
-                onClick={clearSearch}
-                className="border-y border-slate-700 bg-slate-900 px-4 text-slate-400 transition hover:text-white"
-                aria-label="Clear search"
-              >
-                {"\u00D7"}
-              </button>
-            )}
-
-            <button
-              type="button"
-              onClick={() => {
-                if (filteredSuggestions.length > 0) {
-                  openSearchResult(
-                    filteredSuggestions[selectedIndex] ??
-                      filteredSuggestions[0],
-                  );
-                }
-              }}
-              className="rounded-r-lg bg-cyan-500 px-6 font-semibold text-slate-950 transition hover:bg-cyan-400"
-            >
-              Search
-            </button>
+      <section className="relative overflow-visible border-b border-slate-800">
+        <div className="mx-auto max-w-7xl px-5 py-20 text-center sm:px-6 md:py-28">
+          <div className="mx-auto mb-5 inline-flex rounded-full border border-cyan-500/20 bg-cyan-500/10 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-cyan-400">
+            DevOps • SRE • Cloud • Production Support
           </div>
 
-          {/* Suggestions */}
-          {showSuggestions && search.trim() && (
-            <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-slate-700 bg-slate-900 text-left shadow-2xl">
-              {filteredSuggestions.length > 0 ? (
-                <div className="max-h-[420px] overflow-y-auto py-2">
-                  {filteredSuggestions.map((item, index) => (
-                    <button
-                      key={`${item.category}-${item.title}`}
-                      type="button"
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        openSearchResult(item);
-                      }}
-                      onMouseEnter={() =>
-                        setSelectedIndex(index)
-                      }
-                      className={`block w-full px-5 py-4 text-left transition ${
-                        selectedIndex === index
-                          ? "bg-slate-800"
-                          : "hover:bg-slate-800"
-                      }`}
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <p
-                            className={`font-semibold ${
-                              selectedIndex === index
-                                ? "text-cyan-400"
-                                : "text-white"
-                            }`}
-                          >
-                            {item.title}
-                          </p>
+          <h1 className="mx-auto max-w-5xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl">
+            DevOps Commands, Tools &
+            <span className="block text-cyan-400">
+              Troubleshooting Guides
+            </span>
+          </h1>
 
-                          <p className="mt-1 text-sm leading-5 text-slate-400">
-                            {item.description}
-                          </p>
-                        </div>
+          <p className="mx-auto mt-6 max-w-3xl text-base leading-7 text-slate-400 sm:text-lg">
+            Find practical commands, solve production problems, use free
+            DevOps tools and prepare for technical interviews — all in one
+            place.
+          </p>
 
-                        <span className="shrink-0 rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-400">
-                          {item.category}
-                        </span>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <div className="px-5 py-6">
-                  <p className="font-semibold text-white">
-                    No results found
-                  </p>
+          {/* Search */}
+          <div
+            ref={searchRef}
+            className="relative mx-auto mt-10 max-w-3xl"
+          >
+            <div className="flex rounded-xl shadow-2xl shadow-cyan-950/20">
+              <input
+                type="text"
+                placeholder="Search Kubernetes, Linux, Docker, AWS, Terraform..."
+                className="min-w-0 flex-1 rounded-l-xl border border-slate-700 bg-slate-900 px-5 py-4 text-sm text-white outline-none placeholder:text-slate-500 focus:border-cyan-500 sm:text-base"
+                value={search}
+                onChange={handleSearchChange}
+                onFocus={() => {
+                  if (search.trim()) {
+                    setShowSuggestions(true);
+                  }
+                }}
+                onKeyDown={handleSearchKeyDown}
+                role="combobox"
+                aria-expanded={showSuggestions}
+                aria-autocomplete="list"
+              />
 
-                  <p className="mt-2 text-sm text-slate-400">
-                    Try Kubernetes, Linux, Docker, Git, Terraform, AutoSys,
-                    Jenkins, Helm, Prometheus, AWS, Azure, GCP, OCI,
-                    IBM, SRE, YAML, JSON, Cron or CIDR.
-                  </p>
-                </div>
+              {search && (
+                <button
+                  type="button"
+                  onClick={clearSearch}
+                  className="border-y border-slate-700 bg-slate-900 px-4 text-slate-400 transition hover:text-white"
+                  aria-label="Clear search"
+                >
+                  ×
+                </button>
               )}
-            </div>
-          )}
-        </div>
 
-        <p className="mt-4 text-sm text-slate-500">
-          Start typing to see commands, guides and tools.
-        </p>
+              <button
+                type="button"
+                onClick={() => {
+                  if (filteredSuggestions.length > 0) {
+                    openSearchResult(
+                      filteredSuggestions[selectedIndex] ??
+                        filteredSuggestions[0],
+                    );
+                  }
+                }}
+                className="rounded-r-xl bg-cyan-500 px-5 font-semibold text-slate-950 transition hover:bg-cyan-400 sm:px-7"
+              >
+                Search
+              </button>
+            </div>
+
+            {/* Suggestions */}
+            {showSuggestions && search.trim() && (
+              <div className="absolute left-0 right-0 top-full z-50 mt-2 overflow-hidden rounded-xl border border-slate-700 bg-slate-900 text-left shadow-2xl">
+                {filteredSuggestions.length > 0 ? (
+                  <div className="max-h-[420px] overflow-y-auto py-2">
+                    {filteredSuggestions.map((item, index) => (
+                      <button
+                        key={`${item.category}-${item.title}`}
+                        type="button"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          openSearchResult(item);
+                        }}
+                        onMouseEnter={() => setSelectedIndex(index)}
+                        className={`block w-full px-5 py-4 text-left transition ${
+                          selectedIndex === index
+                            ? "bg-slate-800"
+                            : "hover:bg-slate-800"
+                        }`}
+                      >
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <p
+                              className={`font-semibold ${
+                                selectedIndex === index
+                                  ? "text-cyan-400"
+                                  : "text-white"
+                              }`}
+                            >
+                              {item.title}
+                            </p>
+
+                            <p className="mt-1 text-sm leading-5 text-slate-400">
+                              {item.description}
+                            </p>
+                          </div>
+
+                          <span className="shrink-0 rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-400">
+                            {item.category}
+                          </span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="px-5 py-6">
+                    <p className="font-semibold text-white">
+                      No results found
+                    </p>
+
+                    <p className="mt-2 text-sm text-slate-400">
+                      Try Kubernetes, Linux, Docker, Git, Terraform,
+                      Jenkins, Helm, AWS, Azure, GCP, SRE, YAML or JSON.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className="mt-5 flex flex-wrap justify-center gap-2">
+            {[
+              "Kubernetes",
+              "Linux",
+              "Docker",
+              "AWS",
+              "Terraform",
+              "Ansible",
+            ].map((item) => (
+              <a
+                key={item}
+                href={
+                  item === "Kubernetes"
+                    ? "/kubernetes/kubectl-commands"
+                    : item === "Linux"
+                      ? "/linux/linux-commands"
+                      : item === "Docker"
+                        ? "/docker/docker-commands"
+                        : item === "AWS"
+                          ? "/aws/aws-cli"
+                          : item === "Terraform"
+                            ? "/terraform/terraform-commands"
+                            : "/ansible/ansible-commands"
+                }
+                className="rounded-full border border-slate-800 bg-slate-900 px-3 py-1.5 text-xs text-slate-400 transition hover:border-cyan-500 hover:text-cyan-400"
+              >
+                {item}
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Three Main Paths */}
+      <section className="mx-auto max-w-7xl px-5 py-12 sm:px-6">
+        <div className="grid gap-5 md:grid-cols-3">
+          <a
+            href="#guides"
+            className="group rounded-2xl border border-slate-800 bg-slate-900 p-7 transition hover:-translate-y-1 hover:border-cyan-500"
+          >
+            <div className="text-3xl">⚡</div>
+            <h2 className="mt-5 text-xl font-bold group-hover:text-cyan-400">
+              Find Commands
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Quickly find practical commands for Linux, Kubernetes, Docker,
+              cloud, CI/CD and infrastructure automation.
+            </p>
+            <p className="mt-5 text-sm font-semibold text-cyan-400">
+              Browse commands →
+            </p>
+          </a>
+
+          <a
+            href="#troubleshooting"
+            className="group rounded-2xl border border-slate-800 bg-slate-900 p-7 transition hover:-translate-y-1 hover:border-cyan-500"
+          >
+            <div className="text-3xl">🚨</div>
+            <h2 className="mt-5 text-xl font-bold group-hover:text-cyan-400">
+              Solve Problems
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Follow practical troubleshooting workflows for common production
+              and infrastructure issues.
+            </p>
+            <p className="mt-5 text-sm font-semibold text-cyan-400">
+              Troubleshoot now →
+            </p>
+          </a>
+
+          <a
+            href="#interview"
+            className="group rounded-2xl border border-slate-800 bg-slate-900 p-7 transition hover:-translate-y-1 hover:border-cyan-500"
+          >
+            <div className="text-3xl">🎯</div>
+            <h2 className="mt-5 text-xl font-bold group-hover:text-cyan-400">
+              Prepare for Interviews
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Practice practical DevOps, SRE, cloud and production-support
+              interview questions.
+            </p>
+            <p className="mt-5 text-sm font-semibold text-cyan-400">
+              Start preparation →
+            </p>
+          </a>
+        </div>
       </section>
 
       {/* Topics */}
       <section
         id="topics"
-        className="mx-auto max-w-6xl px-6 py-12"
+        className="mx-auto max-w-7xl scroll-mt-20 px-5 py-16 sm:px-6"
       >
-        <h3 className="mb-8 text-2xl font-bold">
-          Explore Topics
-        </h3>
+        <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400">
+              Explore
+            </p>
+            <h2 className="mt-2 text-3xl font-bold">
+              Popular DevOps Topics
+            </h2>
+            <p className="mt-3 max-w-2xl text-slate-400">
+              Practical references for the technologies used across DevOps,
+              cloud engineering and SRE.
+            </p>
+          </div>
+        </div>
 
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {topics.map((topic) => (
             <a
               key={topic.title}
               href={topic.href}
-              className="group block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
+              className="group rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:-translate-y-1 hover:border-cyan-500 hover:bg-slate-800"
             >
-              <h4 className="text-xl font-semibold text-white group-hover:text-cyan-400">
+              <h3 className="text-lg font-semibold group-hover:text-cyan-400">
                 {topic.title}
-              </h4>
+              </h3>
 
-              <p className="mt-3 text-sm leading-6 text-slate-400">
+              <p className="mt-2 text-sm leading-6 text-slate-400">
                 {topic.description}
               </p>
 
               <p className="mt-4 text-sm font-semibold text-cyan-400">
-                Explore commands {"\u2192"}
+                Explore →
               </p>
             </a>
           ))}
         </div>
       </section>
 
+      {/* Troubleshooting */}
+      <section
+        id="troubleshooting"
+        className="scroll-mt-20 border-y border-slate-800 bg-slate-900/40"
+      >
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-6">
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400">
+              Production Support
+            </p>
+
+            <h2 className="mt-2 text-3xl font-bold">
+              🚨 Production problem? Start here.
+            </h2>
+
+            <p className="mt-4 text-slate-400">
+              Practical troubleshooting paths for the problems DevOps,
+              application support and SRE teams commonly investigate.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {troubleshooting.map((item) => (
+              <a
+                key={item.title}
+                href={item.href}
+                className="group rounded-xl border border-slate-800 bg-slate-950 p-5 transition hover:-translate-y-1 hover:border-cyan-500"
+              >
+                <span className="inline-flex rounded-full border border-slate-700 px-2.5 py-1 text-xs text-slate-400">
+                  {item.tag}
+                </span>
+
+                <h3 className="mt-4 font-semibold leading-6 group-hover:text-cyan-400">
+                  {item.title}
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-slate-400">
+                  {item.description}
+                </p>
+
+                <p className="mt-4 text-sm font-semibold text-cyan-400">
+                  Troubleshoot →
+                </p>
+              </a>
+            ))}
+          </div>
+
+          <div className="mt-8 text-center">
+            <a
+              href="/troubleshooting/devops-troubleshooting"
+              className="inline-flex rounded-lg border border-cyan-500/40 px-5 py-3 text-sm font-semibold text-cyan-400 transition hover:bg-cyan-500/10"
+            >
+              View DevOps Troubleshooting Guide →
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Guides */}
       <section
         id="guides"
-        className="mx-auto max-w-6xl px-6 py-16"
+        className="mx-auto max-w-7xl scroll-mt-20 px-5 py-16 sm:px-6"
       >
-        <h3 className="mb-8 text-2xl font-bold">
-          DevOps Command Guides
-        </h3>
-
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {/* Kubernetes */}
-          <a
-            href="/kubernetes/kubectl-commands"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Kubernetes
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              kubectl Commands Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              Practical kubectl commands for pods, deployments, services and
-              troubleshooting.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* Linux */}
-          <a
-            href="/linux/linux-commands"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Linux
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              Linux Commands Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              Essential Linux commands for system administration and
-              troubleshooting.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* Docker */}
-          <a
-            href="/docker/docker-commands"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Docker
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              Docker Commands Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              Essential Docker commands for containers, images, logs and
-              troubleshooting.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* Ansible */}
-          <a
-            href="/ansible/ansible-commands"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Ansible
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              Ansible Commands Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              Practical commands for inventory, connectivity, playbooks and
-              troubleshooting.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* Git */}
-          <a
-            href="/git/git-commands"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Git
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              Git Commands Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              Branches, commits, merge, rebase, stash, remotes, tags and Git
-              troubleshooting.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* Terraform */}
-          <a
-            href="/terraform/terraform-commands"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Terraform
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              Terraform Commands Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              Infrastructure as code, providers, state, modules, workspaces,
-              planning and deployment.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* Jenkins */}
-          <a
-            href="/jenkins/jenkins-commands"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Jenkins
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              Jenkins Commands Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              Jobs, builds, pipelines, agents, plugins, credentials, logs and
-              CI/CD troubleshooting.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* Helm */}
-          <a
-            href="/helm/helm-commands"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Helm
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              Helm Commands Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              Helm commands for Kubernetes charts, repositories, releases,
-              upgrades, rollbacks, values, templates and CI/CD.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* Prometheus */}
-          <a
-            href="/prometheus/prometheus-commands"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Prometheus
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              Prometheus & PromQL Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              Prometheus commands, promtool, PromQL, monitoring, alerting,
-              recording rules, targets and troubleshooting.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* AWS */}
-          <a
-            href="/aws/aws-cli"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              AWS CLI
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              AWS CLI Commands Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              AWS CLI commands for EC2, S3, IAM, VPC, ECR, ECS, EKS, Lambda,
-              RDS, CloudWatch and DevOps workflows.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* Azure */}
-          <a
-            href="/azure/azure-cli"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Azure CLI
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              Azure CLI Commands Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              Azure CLI commands for VMs, Storage, VNet, NSG, ACR, AKS,
-              App Service, Functions, SQL, Monitor, Key Vault and DevOps.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* Google Cloud */}
-          <a
-            href="/gcp/gcloud-commands"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Google Cloud CLI
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              Google Cloud CLI Commands Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              gcloud commands for Compute Engine, Cloud Storage, GKE,
-              Artifact Registry, Cloud Run, Cloud SQL, IAM, networking,
-              logging and DevOps workflows.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* Oracle Cloud */}
-          <a
-            href="/oci/oci-cli"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Oracle Cloud CLI
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              OCI CLI Commands Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              OCI CLI commands for Compute, Object Storage, VCN, OKE,
-              Container Registry, IAM, Vault, Load Balancer, databases,
-              monitoring and DevOps workflows.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* IBM Cloud */}
-          <a
-            href="/ibm/ibm-cli"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              IBM Cloud CLI
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              IBM Cloud CLI Commands Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              IBM Cloud CLI commands for IAM, VPC, Kubernetes, Code Engine,
-              Container Registry, Object Storage, Compute, databases and
-              DevOps workflows.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* AutoSys */}
-          <a
-            href="/autosys/autosys-commands"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              AutoSys
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              AutoSys Commands Cheat Sheet
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              AutoSys commands for jobs, boxes, dependencies, calendars,
-              autorep, sendevent, JIL and production troubleshooting.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* SRE */}
-          <a
-            href="/sre/sre-troubleshooting"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              SRE
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              SRE Server Troubleshooting Guide
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              A practical workflow for CPU, memory, disk, processes, services,
-              logs and network problems.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* DevOps Troubleshooting */}
-          <a
-            href="/troubleshooting/devops-troubleshooting"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              DevOps Troubleshooting
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              DevOps Troubleshooting Guide
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              Practical troubleshooting for Linux, Docker, Kubernetes, Jenkins,
-              Terraform, monitoring and common DevOps production issues.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
-
-          {/* DevOps Interview */}
-          <a
-            href="/interview/devops-interview"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              DevOps Interview
-            </p>
-
-            <h4 className="mt-3 text-xl font-semibold">
-              DevOps Interview Guide
-            </h4>
-
-            <p className="mt-3 text-sm leading-6 text-slate-400">
-              Practical DevOps interview questions covering Linux, Git, Docker,
-              Kubernetes, cloud, CI/CD and SRE.
-            </p>
-
-            <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide {"\u2192"}
-            </p>
-          </a>
+        <div className="max-w-3xl">
+          <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400">
+            Command Reference
+          </p>
+
+          <h2 className="mt-2 text-3xl font-bold">
+            ⚡ DevOps Command Guides
+          </h2>
+
+          <p className="mt-4 text-slate-400">
+            Searchable command references with practical examples,
+            troubleshooting commands and production-focused workflows.
+          </p>
+        </div>
+
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {guides.map((guide) => (
+            <a
+              key={guide.title}
+              href={guide.href}
+              className="group rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:-translate-y-1 hover:border-cyan-500 hover:bg-slate-800"
+            >
+              <p className="text-xs font-semibold uppercase tracking-widest text-cyan-400">
+                {guide.category}
+              </p>
+
+              <h3 className="mt-3 text-xl font-semibold group-hover:text-cyan-400">
+                {guide.title}
+              </h3>
+
+              <p className="mt-3 text-sm leading-6 text-slate-400">
+                {guide.description}
+              </p>
+
+              <p className="mt-5 text-sm font-semibold text-cyan-400">
+                Read guide →
+              </p>
+            </a>
+          ))}
         </div>
       </section>
 
       {/* Tools */}
       <section
         id="tools"
-        className="mx-auto max-w-6xl px-6 py-16"
+        className="scroll-mt-20 border-y border-slate-800 bg-slate-900/40"
       >
-        <h3 className="mb-8 text-2xl font-bold">
-          Free DevOps Tools
-        </h3>
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-6">
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400">
+              Free Utilities
+            </p>
 
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-          {/* YAML */}
+            <h2 className="mt-2 text-3xl font-bold">
+              🛠 Free DevOps Tools
+            </h2>
+
+            <p className="mt-4 text-slate-400">
+              Useful browser-based tools for developers, DevOps engineers,
+              cloud engineers and SREs.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {tools.map((tool) => (
+              <a
+                key={tool.title}
+                href={tool.href}
+                className="group rounded-xl border border-slate-800 bg-slate-950 p-6 transition hover:-translate-y-1 hover:border-cyan-500"
+              >
+                <h3 className="font-semibold group-hover:text-cyan-400">
+                  {tool.title}
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-slate-400">
+                  {tool.description}
+                </p>
+
+                <p className="mt-4 text-sm font-semibold text-cyan-400">
+                  Open tool →
+                </p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Interview */}
+      <section
+        id="interview"
+        className="mx-auto max-w-7xl scroll-mt-20 px-5 py-16 sm:px-6"
+      >
+        <div className="overflow-hidden rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-cyan-500/10 via-slate-900 to-slate-900 p-8 sm:p-10">
+          <div className="grid gap-8 md:grid-cols-[1.5fr_1fr] md:items-center">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400">
+                Career Preparation
+              </p>
+
+              <h2 className="mt-3 text-3xl font-bold">
+                🎯 Preparing for a DevOps interview?
+              </h2>
+
+              <p className="mt-4 max-w-2xl leading-7 text-slate-400">
+                Practice practical questions across Linux, Git, Docker,
+                Kubernetes, cloud, CI/CD, Terraform, Ansible and SRE.
+              </p>
+
+              <a
+                href="/interview/devops-interview"
+                className="mt-7 inline-flex rounded-lg bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
+              >
+                Start Interview Preparation →
+              </a>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              {[
+                "Linux",
+                "Docker",
+                "Kubernetes",
+                "AWS",
+                "Terraform",
+                "Ansible",
+                "Jenkins",
+                "SRE",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="rounded-lg border border-slate-800 bg-slate-950/70 px-4 py-3 text-slate-300"
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Bottom CTA */}
+      <section className="border-t border-slate-800">
+        <div className="mx-auto max-w-4xl px-5 py-16 text-center sm:px-6">
+          <h2 className="text-3xl font-bold">
+            Your DevOps command reference starts here.
+          </h2>
+
+          <p className="mx-auto mt-4 max-w-2xl text-slate-400">
+            Search commands, troubleshoot production issues, use free tools
+            and build your DevOps knowledge.
+          </p>
+
           <a
-            href="/tools/yaml-validator"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
+            href="#top"
+            className="mt-7 inline-flex rounded-lg border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-300 transition hover:border-cyan-500 hover:text-cyan-400"
           >
-            <h4 className="font-semibold">
-              YAML Validator
-            </h4>
-
-            <p className="mt-2 text-sm text-slate-400">
-              Validate YAML syntax instantly.
-            </p>
-
-            <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool {"\u2192"}
-            </p>
-          </a>
-
-          {/* JSON */}
-          <a
-            href="/tools/json-formatter"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <h4 className="font-semibold">
-              JSON Formatter
-            </h4>
-
-            <p className="mt-2 text-sm text-slate-400">
-              Format, validate and minify JSON instantly.
-            </p>
-
-            <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool {"\u2192"}
-            </p>
-          </a>
-
-          {/* Cron */}
-          <a
-            href="/tools/cron-generator"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <h4 className="font-semibold">
-              Cron Generator
-            </h4>
-
-            <p className="mt-2 text-sm text-slate-400">
-              Create cron expressions easily.
-            </p>
-
-            <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool {"\u2192"}
-            </p>
-          </a>
-
-          {/* CIDR */}
-          <a
-            href="/tools/cidr-calculator"
-            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
-          >
-            <h4 className="font-semibold">
-              CIDR Calculator
-            </h4>
-
-            <p className="mt-2 text-sm text-slate-400">
-              Calculate IP ranges and subnets.
-            </p>
-
-            <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool {"\u2192"}
-            </p>
+            Back to top ↑
           </a>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800 px-6 py-10 text-slate-400">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 md:flex-row">
-          <p className="text-sm">
-            {"\u00A9"} 2026 DevOpsToolbox. Practical DevOps & SRE resources.
-          </p>
+      <footer className="border-t border-slate-800 px-5 py-10 text-slate-400 sm:px-6">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 md:flex-row">
+          <div>
+            <p className="font-semibold text-white">
+              DevOps<span className="text-cyan-400">Toolbox</span>
+            </p>
+
+            <p className="mt-2 text-sm">
+              © 2026 DevOpsToolbox. Practical DevOps & SRE resources.
+            </p>
+          </div>
 
           <nav className="flex flex-wrap justify-center gap-5 text-sm">
-            <a
-              href="/about"
-              className="hover:text-cyan-400"
-            >
+            <a href="/about" className="hover:text-cyan-400">
               About
             </a>
 
-            <a
-              href="/contact"
-              className="hover:text-cyan-400"
-            >
+            <a href="/contact" className="hover:text-cyan-400">
               Contact
             </a>
 
-            <a
-              href="/privacy"
-              className="hover:text-cyan-400"
-            >
+            <a href="/privacy" className="hover:text-cyan-400">
               Privacy
             </a>
 
-            <a
-              href="/terms"
-              className="hover:text-cyan-400"
-            >
+            <a href="/terms" className="hover:text-cyan-400">
               Terms
             </a>
           </nav>
