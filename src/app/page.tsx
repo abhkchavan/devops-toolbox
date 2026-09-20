@@ -656,7 +656,7 @@ export default function Home() {
               </p>
 
               <p className="mt-4 text-sm font-semibold text-cyan-400">
-                Explore commands â†’
+                Explore commands →
               </p>
             </a>
           ))}
@@ -689,7 +689,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
 
@@ -712,7 +712,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
 
@@ -735,7 +735,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
 
@@ -758,7 +758,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
 
@@ -781,7 +781,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
 
@@ -804,7 +804,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
 
@@ -827,7 +827,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
 
@@ -850,7 +850,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
 
@@ -873,7 +873,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
 
@@ -896,7 +896,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
 
@@ -919,7 +919,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
 
@@ -943,7 +943,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
 
@@ -967,7 +967,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
 
@@ -991,7 +991,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
 
@@ -1036,7 +1036,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide →
             </p>
           </a>
         </div>
@@ -1061,7 +1061,7 @@ export default function Home() {
             </p>
 
             <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool â†’
+              Open tool →
             </p>
           </a>
 
@@ -1077,7 +1077,7 @@ export default function Home() {
             </p>
 
             <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool â†’
+              Open tool →
             </p>
           </a>
 
@@ -1093,7 +1093,7 @@ export default function Home() {
             </p>
 
             <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool â†’
+              Open tool →
             </p>
           </a>
 
@@ -1109,7 +1109,7 @@ export default function Home() {
             </p>
 
             <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool â†’
+              Open tool →
             </p>
           </a>
         </div>
@@ -1144,3 +1144,4 @@ export default function Home() {
     </main>
   );
 }
+
