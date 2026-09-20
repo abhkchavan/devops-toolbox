@@ -1,9 +1,10 @@
 ﻿import DevopsTroubleshootingSearch from "./DevopsTroubleshootingSearch";
 
 export const metadata = {
-  title: "DevOps Troubleshooting Guide | Linux, Docker, Kubernetes, Jenkins & SRE",
+  title:
+    "DevOps Troubleshooting Guide | Linux, Kubernetes, Docker, Jenkins & SRE",
   description:
-    "Practical DevOps troubleshooting guide for Linux, Docker, Kubernetes, Jenkins, Terraform, networking, DNS, monitoring and production incidents.",
+    "Solve common DevOps and production issues with practical troubleshooting workflows for Linux, Kubernetes, Docker, Jenkins, Terraform, networking, monitoring and SRE.",
 };
 
 const sections = [
@@ -251,7 +252,8 @@ const sections = [
       },
       {
         command: "kubectl get pod <pod> -o yaml",
-        description: "Inspect the pod image and imagePullSecrets configuration.",
+        description:
+          "Inspect the pod image and imagePullSecrets configuration.",
       },
       {
         command: "kubectl get events --sort-by=.lastTimestamp",
@@ -327,7 +329,8 @@ const sections = [
     commands: [
       {
         command: "docker logs <jenkins-container>",
-        description: "Inspect Jenkins container logs when Jenkins runs in Docker.",
+        description:
+          "Inspect Jenkins container logs when Jenkins runs in Docker.",
       },
       {
         command: "java -version",
@@ -356,11 +359,13 @@ const sections = [
       },
       {
         command: "terraform plan",
-        description: "Compare configuration against current state and infrastructure.",
+        description:
+          "Compare configuration against current state and infrastructure.",
       },
       {
         command: "terraform refresh",
-        description: "Refresh state from infrastructure when supported by the workflow.",
+        description:
+          "Refresh state from infrastructure when supported by the workflow.",
       },
     ],
   },
@@ -390,7 +395,8 @@ const sections = [
     commands: [
       {
         command: "date",
-        description: "Record the current time when beginning incident investigation.",
+        description:
+          "Record the current time when beginning incident investigation.",
       },
       {
         command: "uptime",
@@ -416,28 +422,338 @@ const sections = [
   },
 ];
 
+const categories = [
+  {
+    name: "Kubernetes",
+    description:
+      "Pods, scheduling, services, nodes, images and cluster failures.",
+    problems: "5 troubleshooting areas",
+  },
+  {
+    name: "Linux",
+    description:
+      "CPU, memory, disk, services, ports, SSH and system problems.",
+    problems: "6 troubleshooting areas",
+  },
+  {
+    name: "Docker",
+    description:
+      "Containers, images, logs, resources and runtime problems.",
+    problems: "2 troubleshooting areas",
+  },
+  {
+    name: "Jenkins",
+    description:
+      "Build failures, agents, Java, disk and CI/CD problems.",
+    problems: "1 troubleshooting area",
+  },
+  {
+    name: "Terraform",
+    description:
+      "State, planning, infrastructure drift and deployment issues.",
+    problems: "1 troubleshooting area",
+  },
+  {
+    name: "Networking",
+    description:
+      "DNS, ports, connectivity, routes and SSH investigation.",
+    problems: "4 troubleshooting areas",
+  },
+  {
+    name: "Monitoring",
+    description:
+      "Prometheus health, targets, exporters and monitoring checks.",
+    problems: "1 troubleshooting area",
+  },
+  {
+    name: "Production Support",
+    description:
+      "A structured first-response workflow for production incidents.",
+    problems: "Incident workflow",
+  },
+];
+
+const popularProblems = [
+  {
+    title: "Kubernetes CrashLoopBackOff",
+    description:
+      "Check logs, previous container logs, events, probes, configuration and resources.",
+    category: "Kubernetes",
+  },
+  {
+    title: "Kubernetes Pod Pending",
+    description:
+      "Investigate scheduling, resources, taints, node availability and events.",
+    category: "Kubernetes",
+  },
+  {
+    title: "Linux Disk Full",
+    description:
+      "Find full filesystems, large directories, inode exhaustion and journal usage.",
+    category: "Linux",
+  },
+  {
+    title: "Linux High CPU",
+    description:
+      "Identify CPU-heavy processes and investigate application behaviour.",
+    category: "Linux",
+  },
+  {
+    title: "Docker Container Not Starting",
+    description:
+      "Inspect container state, logs, images, configuration, ports and volumes.",
+    category: "Docker",
+  },
+  {
+    title: "Jenkins Build Failure",
+    description:
+      "Check console output, Java, workspace, disk, memory and build environment.",
+    category: "Jenkins",
+  },
+  {
+    title: "Terraform State Problems",
+    description:
+      "Inspect state, identify drift and investigate state-related failures safely.",
+    category: "Terraform",
+  },
+  {
+    title: "Application Port Not Responding",
+    description:
+      "Check listeners, processes, firewall rules, routes and network connectivity.",
+    category: "Networking",
+  },
+];
+
 export default function DevopsTroubleshootingPage() {
   return (
-    <main className="min-h-screen bg-white text-slate-900">
-      <section className="mx-auto max-w-6xl px-6 py-16">
-        <div className="max-w-3xl">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-blue-600">
-            DevOps Troubleshooting
+    <main className="min-h-screen bg-slate-950 text-white">
+      {/* Hero */}
+      <section className="border-b border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950">
+        <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
+          <div className="max-w-4xl">
+            <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-cyan-400">
+              DevOps • SRE • Production Support
+            </p>
+
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+              DevOps Troubleshooting Guide
+            </h1>
+
+            <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
+              Find the right commands, understand common failure symptoms and
+              follow practical investigation workflows for DevOps,
+              application support, SRE and production environments.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-3 text-sm">
+              {[
+                "Kubernetes",
+                "Linux",
+                "Docker",
+                "Jenkins",
+                "Terraform",
+                "Networking",
+                "Monitoring",
+                "Production Support",
+              ].map((item) => (
+                <span
+                  key={item}
+                  className="rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-slate-300"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Search */}
+      <section className="mx-auto max-w-6xl px-6 py-10">
+        <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
+          <div className="mb-5">
+            <h2 className="text-2xl font-bold">What are you troubleshooting?</h2>
+
+            <p className="mt-2 text-sm text-slate-400">
+              Search for a symptom, technology, command or production issue.
+            </p>
+          </div>
+
+          <DevopsTroubleshootingSearch sections={sections} />
+        </div>
+      </section>
+
+      {/* Quick incident workflow */}
+      <section className="mx-auto max-w-6xl px-6 pb-14">
+        <div className="rounded-2xl border border-cyan-900/50 bg-cyan-950/20 p-6 sm:p-8">
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+              Production Incident
+            </p>
+
+            <h2 className="mt-2 text-2xl font-bold">
+              Where should you start?
+            </h2>
+
+            <p className="mt-3 text-slate-300">
+              When an application or server is failing, start broad and narrow
+              the investigation instead of immediately changing configuration.
+            </p>
+          </div>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              ["1", "Confirm the symptom", "What exactly is failing?"],
+              ["2", "Check recent changes", "Deployment, config, code or infrastructure?"],
+              ["3", "Check health signals", "CPU, memory, disk, logs and network."],
+              ["4", "Isolate the cause", "Use targeted commands before applying a fix."],
+            ].map(([number, title, description]) => (
+              <div
+                key={number}
+                className="rounded-xl border border-slate-800 bg-slate-950 p-5"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-500/10 text-sm font-bold text-cyan-400">
+                  {number}
+                </div>
+
+                <h3 className="mt-4 font-semibold text-white">{title}</h3>
+
+                <p className="mt-2 text-sm leading-6 text-slate-400">
+                  {description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="mx-auto max-w-6xl px-6 pb-16">
+        <div className="mb-8">
+          <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+            Explore
           </p>
 
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            DevOps Troubleshooting Guide
-          </h1>
+          <h2 className="mt-2 text-3xl font-bold">
+            Troubleshoot by Technology
+          </h2>
 
-          <p className="mt-5 text-lg leading-8 text-slate-600">
-            Practical troubleshooting commands and investigation workflows for
-            Linux, Docker, Kubernetes, Jenkins, Terraform, Prometheus and
-            production incidents.
+          <p className="mt-3 max-w-2xl text-slate-400">
+            Start with the technology closest to the problem and work through
+            the relevant checks.
           </p>
         </div>
 
-        <div className="mt-10">
-          <DevopsTroubleshootingSearch sections={sections} />
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {categories.map((category) => (
+            <div
+              key={category.name}
+              className="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:-translate-y-1 hover:border-cyan-700"
+            >
+              <h3 className="text-xl font-bold text-white">
+                {category.name}
+              </h3>
+
+              <p className="mt-3 text-sm leading-6 text-slate-400">
+                {category.description}
+              </p>
+
+              <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-cyan-400">
+                {category.problems}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Popular problems */}
+      <section className="border-y border-slate-800 bg-slate-900/40">
+        <div className="mx-auto max-w-6xl px-6 py-16">
+          <div className="mb-8">
+            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+              Popular Problems
+            </p>
+
+            <h2 className="mt-2 text-3xl font-bold">
+              Start with a Common Production Issue
+            </h2>
+
+            <p className="mt-3 max-w-2xl text-slate-400">
+              These are common symptoms that DevOps, SRE and application
+              support engineers investigate during incidents.
+            </p>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            {popularProblems.map((problem) => (
+              <article
+                key={problem.title}
+                className="rounded-2xl border border-slate-800 bg-slate-950 p-6 transition hover:border-cyan-700"
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
+                    {problem.category}
+                  </span>
+                </div>
+
+                <h3 className="mt-3 text-xl font-bold text-white">
+                  {problem.title}
+                </h3>
+
+                <p className="mt-3 text-sm leading-6 text-slate-400">
+                  {problem.description}
+                </p>
+
+                <a
+  href="#troubleshooting-commands"
+  className="mt-5 inline-block text-sm font-semibold text-cyan-400 transition hover:text-cyan-300"
+>
+  Find troubleshooting commands →
+</a>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Command reference */}
+      <section className="mx-auto max-w-6xl px-6 py-16">
+        <div className="mb-8">
+          <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+            Command Reference
+          </p>
+
+          <h2 className="mt-2 text-3xl font-bold">
+            Practical Troubleshooting Commands
+          </h2>
+
+          <p className="mt-3 max-w-2xl text-slate-400">
+            Searchable commands grouped by the production problems they help
+            investigate.
+          </p>
+        </div>
+
+        <DevopsTroubleshootingSearch sections={sections} />
+      </section>
+
+      {/* CTA */}
+      <section className="border-t border-slate-800 bg-slate-900">
+        <div className="mx-auto max-w-6xl px-6 py-16 text-center">
+          <h2 className="text-3xl font-bold">
+            Need the command, not the explanation?
+          </h2>
+
+          <p className="mx-auto mt-4 max-w-2xl text-slate-400">
+            Explore the DevOps command references for Kubernetes, Linux,
+            Docker, AWS, Terraform, Ansible, Jenkins and more.
+          </p>
+
+          <a
+            href="/"
+            className="mt-7 inline-flex rounded-lg bg-cyan-500 px-6 py-3 font-semibold text-slate-950 transition hover:bg-cyan-400"
+          >
+            Explore DevOps Commands →
+          </a>
         </div>
       </section>
     </main>

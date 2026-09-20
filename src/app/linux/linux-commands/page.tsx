@@ -13,10 +13,12 @@ type LinuxSection = {
 };
 
 type Props = {
-  sections: LinuxSection[];
+  sections?: LinuxSection[];
 };
 
-export default function LinuxCommandSearch({ sections }: Props) {
+export default function LinuxCommandSearch({
+  sections = [],
+}: Props) {
   const [search, setSearch] = useState("");
 
   const filteredSections = useMemo<LinuxSection[]>(() => {
