@@ -27,6 +27,14 @@ export default function Home() {
       gcloud: "/gcp/gcloud-commands",
       "google cloud": "/gcp/gcloud-commands",
       "google cloud cli": "/gcp/gcloud-commands",
+      oci: "/oci/oci-cli",
+      "oci cli": "/oci/oci-cli",
+      "oracle cloud": "/oci/oci-cli",
+      "oracle cloud infrastructure": "/oci/oci-cli",
+      ibm: "/ibm/ibm-cli",
+      "ibm cloud": "/ibm/ibm-cli",
+      "ibm cloud cli": "/ibm/ibm-cli",
+      ibmcloud: "/ibm/ibm-cli",
       sre: "/sre/sre-troubleshooting",
       yaml: "/tools/yaml-validator",
       json: "/tools/json-formatter",
@@ -80,15 +88,15 @@ export default function Home() {
 
         <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
           Learn Linux, Docker, Kubernetes, Ansible, Git, Terraform, Jenkins,
-          AWS CLI, Azure CLI, Google Cloud CLI and SRE through practical
-          examples, troubleshooting guides and free tools.
+          AWS CLI, Azure CLI, Google Cloud CLI, OCI CLI, IBM Cloud CLI and SRE
+          through practical examples, troubleshooting guides and free tools.
         </p>
 
         {/* Search */}
         <div className="mx-auto mt-10 flex max-w-2xl">
           <input
             type="text"
-            placeholder="Search Kubernetes, Linux, Docker, Git, Terraform, Jenkins, AWS, Azure, GCP..."
+            placeholder="Search Kubernetes, Linux, Docker, Git, Terraform, Jenkins, AWS, Azure, GCP, OCI, IBM..."
             className="w-full rounded-l-lg border border-slate-700 bg-slate-900 px-5 py-4 text-white outline-none focus:border-cyan-500"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -154,6 +162,14 @@ export default function Home() {
             [
               "Google Cloud CLI",
               "Google Cloud administration, Compute Engine, Storage, GKE, Cloud Run, IAM and DevOps workflows.",
+            ],
+            [
+              "Oracle Cloud CLI",
+              "Oracle Cloud Infrastructure administration, Compute, Object Storage, VCN, OKE, IAM, Vault and DevOps workflows.",
+            ],
+            [
+              "IBM Cloud CLI",
+              "IBM Cloud administration, IAM, VPC, Kubernetes, Code Engine, Container Registry, Object Storage and DevOps workflows.",
             ],
             [
               "SRE",
@@ -407,6 +423,54 @@ export default function Home() {
               gcloud commands for Compute Engine, Cloud Storage, GKE,
               Artifact Registry, Cloud Run, Cloud SQL, IAM, networking,
               logging and DevOps workflows.
+            </p>
+
+            <p className="mt-5 text-sm font-semibold text-cyan-400">
+              Read guide →
+            </p>
+          </a>
+
+          {/* Oracle Cloud */}
+          <a
+            href="/oci/oci-cli"
+            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
+          >
+            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+              Oracle Cloud CLI
+            </p>
+
+            <h4 className="mt-3 text-xl font-semibold">
+              OCI CLI Commands Cheat Sheet
+            </h4>
+
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              OCI CLI commands for Compute, Object Storage, VCN, OKE,
+              Container Registry, IAM, Vault, Load Balancer, databases,
+              monitoring and DevOps workflows.
+            </p>
+
+            <p className="mt-5 text-sm font-semibold text-cyan-400">
+              Read guide →
+            </p>
+          </a>
+
+          {/* IBM Cloud */}
+          <a
+            href="/ibm/ibm-cli"
+            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
+          >
+            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+              IBM Cloud CLI
+            </p>
+
+            <h4 className="mt-3 text-xl font-semibold">
+              IBM Cloud CLI Commands Cheat Sheet
+            </h4>
+
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              IBM Cloud CLI commands for IAM, VPC, Kubernetes, Code Engine,
+              Container Registry, Object Storage, Compute, databases and
+              DevOps workflows.
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
