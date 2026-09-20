@@ -13,22 +13,45 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.devopscommands.com"),
+
   title: {
-    default: "DevOpsToolbox | DevOps, SRE & Cloud Tools",
-    template: "%s | DevOpsToolbox",
+    default: "DevOps Commands | Kubernetes, Docker, Linux & Ansible",
+    template: "%s | DevOps Commands",
   },
+
   description:
-    "Practical DevOps, SRE, Linux, Docker, Kubernetes and Ansible guides, commands and free developer tools.",
+    "DevOps commands, Kubernetes kubectl commands, Docker commands, Linux commands, Ansible commands, SRE troubleshooting guides and free DevOps tools.",
+
   keywords: [
-    "DevOps",
-    "SRE",
-    "Linux",
-    "Docker",
-    "Kubernetes",
-    "Ansible",
-    "DevOps tools",
     "DevOps commands",
+    "Kubernetes commands",
+    "kubectl commands",
+    "Docker commands",
+    "Linux commands",
+    "Ansible commands",
+    "SRE troubleshooting",
+    "DevOps tools",
+    "DevOps cheat sheet",
   ],
+
+  alternates: {
+    canonical: "https://www.devopscommands.com/",
+  },
+
+  openGraph: {
+    type: "website",
+    url: "https://www.devopscommands.com/",
+    siteName: "DevOps Commands",
+    title: "DevOps Commands | Kubernetes, Docker, Linux & Ansible",
+    description:
+      "Practical DevOps commands, Kubernetes, Docker, Linux, Ansible and SRE guides with free developer tools.",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -41,3 +64,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     </html>
   );
 }
+
+
+
+
+
+
