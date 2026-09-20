@@ -190,6 +190,41 @@ export default function Home() {
     </p>
   </a>
   <a
+  href="/git/git-commands"
+  className="rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500/50"
+>
+  <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+    Git
+  </p>
+
+  <h2 className="mt-2 text-xl font-bold">
+    Git Commands Cheat Sheet
+  </h2>
+
+  <p className="mt-3 text-slate-400">
+    Branches, commits, merge, rebase, stash, remotes, tags and Git
+    troubleshooting.
+  </p>
+</a>
+
+<a
+  href="/terraform/terraform-commands"
+  className="rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500/50"
+>
+  <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+    Terraform
+  </p>
+
+  <h2 className="mt-2 text-xl font-bold">
+    Terraform Commands Cheat Sheet
+  </h2>
+
+  <p className="mt-3 text-slate-400">
+    Infrastructure as code, providers, state, modules, workspaces,
+    planning and deployment.
+  </p>
+</a>
+  <a
   href="/sre/sre-troubleshooting"
   className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
 >
