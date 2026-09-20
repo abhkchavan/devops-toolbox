@@ -25,6 +25,13 @@ const searchItems: SearchItem[] = [
     category: "Guide",
   },
   {
+    title: "Kubernetes Command Builder",
+    description:
+      "Build kubectl commands interactively with actions, resources, namespaces and options.",
+    href: "/command-builder",
+    category: "Tool",
+  },
+  {
     title: "Linux",
     description:
       "Linux commands, system administration, networking, processes, storage and troubleshooting.",
@@ -457,24 +464,35 @@ const guides = [
 
 const tools = [
   {
+    title: "Kubernetes Command Builder",
+    description:
+      "Build kubectl commands interactively with actions, resources, namespaces and options.",
+    href: "/command-builder",
+    featured: true,
+  },
+  {
     title: "YAML Validator",
     description: "Validate YAML syntax instantly.",
     href: "/tools/yaml-validator",
+    featured: false,
   },
   {
     title: "JSON Formatter",
     description: "Format, validate and minify JSON instantly.",
     href: "/tools/json-formatter",
+    featured: false,
   },
   {
     title: "Cron Generator",
     description: "Create cron expressions easily.",
     href: "/tools/cron-generator",
+    featured: false,
   },
   {
     title: "CIDR Calculator",
     description: "Calculate IP ranges and subnets.",
     href: "/tools/cidr-calculator",
+    featured: false,
   },
 ];
 
@@ -663,6 +681,12 @@ export default function Home() {
             </a>
             <a href="#tools" className="transition hover:text-cyan-400">
               Tools
+            </a>
+            <a
+              href="/command-builder"
+              className="transition hover:text-cyan-400"
+            >
+              Command Builder
             </a>
             <a href="#interview" className="transition hover:text-cyan-400">
               Interview
@@ -883,19 +907,19 @@ export default function Home() {
           </a>
 
           <a
-            href="#interview"
-            className="group rounded-2xl border border-slate-800 bg-slate-900 p-7 transition hover:-translate-y-1 hover:border-cyan-500"
+            href="/command-builder"
+            className="group rounded-2xl border border-cyan-500/30 bg-cyan-500/5 p-7 transition hover:-translate-y-1 hover:border-cyan-500"
           >
-            <div className="text-3xl">🎯</div>
+            <div className="text-3xl">🛠️</div>
             <h2 className="mt-5 text-xl font-bold group-hover:text-cyan-400">
-              Prepare for Interviews
+              Build Commands
             </h2>
             <p className="mt-3 text-sm leading-6 text-slate-400">
-              Practice practical DevOps, SRE, cloud and production-support
-              interview questions.
+              Build kubectl commands interactively with namespaces, resources,
+              images, ports and output options.
             </p>
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Start preparation →
+              Open Command Builder →
             </p>
           </a>
         </div>
@@ -1075,9 +1099,25 @@ export default function Home() {
               <a
                 key={tool.title}
                 href={tool.href}
-                className="group rounded-xl border border-slate-800 bg-slate-950 p-6 transition hover:-translate-y-1 hover:border-cyan-500"
+                className={`group rounded-xl border p-6 transition hover:-translate-y-1 ${
+                  tool.featured
+                    ? "border-cyan-500/50 bg-cyan-500/5 hover:border-cyan-400"
+                    : "border-slate-800 bg-slate-950 hover:border-cyan-500"
+                }`}
               >
-                <h3 className="font-semibold group-hover:text-cyan-400">
+                {tool.featured && (
+                  <span className="inline-flex rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2.5 py-1 text-xs font-semibold text-cyan-400">
+                    NEW
+                  </span>
+                )}
+
+                <h3
+                  className={`font-semibold ${
+                    tool.featured
+                      ? "mt-4 text-lg group-hover:text-cyan-400"
+                      : "group-hover:text-cyan-400"
+                  }`}
+                >
                   {tool.title}
                 </h3>
 
@@ -1086,7 +1126,9 @@ export default function Home() {
                 </p>
 
                 <p className="mt-4 text-sm font-semibold text-cyan-400">
-                  Open tool →
+                  {tool.featured
+                    ? "Build command →"
+                    : "Open tool →"}
                 </p>
               </a>
             ))}
@@ -1158,12 +1200,21 @@ export default function Home() {
             and build your DevOps knowledge.
           </p>
 
-          <a
-            href="#top"
-            className="mt-7 inline-flex rounded-lg border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-300 transition hover:border-cyan-500 hover:text-cyan-400"
-          >
-            Back to top ↑
-          </a>
+          <div className="mt-7 flex flex-wrap justify-center gap-3">
+            <a
+              href="/command-builder"
+              className="inline-flex rounded-lg bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
+            >
+              Build a kubectl Command →
+            </a>
+
+            <a
+              href="#top"
+              className="inline-flex rounded-lg border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-300 transition hover:border-cyan-500 hover:text-cyan-400"
+            >
+              Back to top ↑
+            </a>
+          </div>
         </div>
       </section>
 
