@@ -7,6 +7,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Homepage
     "/",
 
+    // Main pages
+    "/about",
+    "/contact",
+
     // DevOps technology command references
     "/kubernetes/kubectl-commands",
     "/linux/linux-commands",
@@ -19,14 +23,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/jenkins/jenkins-commands",
     "/helm/helm-commands",
     "/prometheus/prometheus-commands",
+    "/autosys/autosys-commands",
+    "/ibm/ibm-cli",
+    "/oci/oci-cli",
+    "/git/git-commands",
 
-    // SRE
+    // Kubernetes troubleshooting
+    "/kubernetes/troubleshooting/crashloopbackoff",
+
+    // SRE and DevOps troubleshooting
     "/sre/sre-troubleshooting",
-
-    // Troubleshooting
     "/troubleshooting/devops-troubleshooting",
 
-    // DevOps tools
+    // DevOps learning
+    "/interview/devops-interview",
+
+    // Interactive tools
+    "/command-builder",
+    "/scenarios",
+
+    // DevOps utilities
     "/tools/yaml-validator",
     "/tools/json-formatter",
     "/tools/cron-generator",
