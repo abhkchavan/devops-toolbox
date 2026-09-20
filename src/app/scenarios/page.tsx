@@ -241,7 +241,7 @@ Events:
       },
       {
         command: "kubectl get nodes",
-        output: `NAME       STATUS   ROLES
+        output: `NAME       STATUS    ROLES
 worker-1   Ready    <none>
 worker-2   Ready    <none>
 worker-3   Ready    <none>`,
@@ -343,7 +343,7 @@ backend-7f9d8c6b4-b7x4p   1/1     Running   app=backend`,
       },
       {
         command:
-          "kubectl patch service backend -p {\"spec\":{\"selector\":{\"app\":\"backend\"}}}",
+          'kubectl patch service backend -p {"spec":{"selector":{"app":"backend"}}}',
         output: `service/backend patched
 
 Service selector updated from app=backend-v2 to app=backend.
@@ -1117,7 +1117,7 @@ export default function ScenariosPage() {
                     }
                     onKeyDown={handleKeyDown}
                     placeholder="Type a kubectl command..."
-                    className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 font-mono text-sm text-white outline-none placeholder:text-slate-500 focus:border-blue-500"
+                    className="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 font-mono text-sm text-white outline-none placeholder:text-slate-400 focus:border-blue-500"
                   />
 
                   <button
