@@ -1,0 +1,137 @@
+﻿"use client";
+
+import { useMemo, useState } from "react";
+
+type AutosysCommand = {
+  command: string;
+  description: string;
+};
+
+type AutosysSection = {
+  title: string;
+  commands: AutosysCommand[];
+};
+
+type Props = {
+  sections: AutosysSection[];
+};
+
+export default function AutosysCommandSearch({ sections }: Props) {
+  const [search, setSearch] = useState("");
+
+  const filteredSections = useMemo(() => {
+    const query = search.trim().toLowerCase();
+
+    if (!query) {
+      return sections;
+    }
+
+    return sections
+      .map((section) => {
+        const sectionMatches = section.title
+          .toLowerCase()
+          .includes(query);
+
+        const filteredCommands = section.commands.filter(
+          (item) =>
+            item.command.toLowerCase().includes(query) ||
+            item.description.toLowerCase().includes(query),
+        );
+
+        if (sectionMatches) {
+          return section;
+        }
+
+        if (filteredCommands.length > 0) {
+          return {
+            ...section,
+            commands: filteredCommands,
+          };
+        }
+
+        return null;
+      })
+      .filter(
+        (section): section is AutosysSection => section !== null,
+      );
+  }, [search, sections]);
+
+  const resultCount = filteredSections.reduce(
+    (total, section) => total + section.commands.length,
+    0,
+  );
+
+  return (
+    <div className="mb-10">
+      <div className="flex flex-col gap-3 sm:flex-row">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search AutoSys commands..."
+          className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-cyan-500"
+        />
+
+        {search && (
+          <button
+            type="button"
+            onClick={() => setSearch("")}
+            className="rounded-lg border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-300 transition hover:border-cyan-500 hover:text-cyan-400"
+          >
+            Clear
+          </button>
+        )}
+      </div>
+
+      <p className="mt-3 text-sm text-slate-400">
+        Showing{" "}
+        <span className="font-semibold text-cyan-400">
+          {resultCount}
+        </span>{" "}
+        command{resultCount === 1 ? "" : "s"}.
+      </p>
+
+      {search && filteredSections.length === 0 && (
+        <div className="mt-6 rounded-lg border border-slate-800 bg-slate-900 p-6 text-center">
+          <p className="font-semibold text-white">
+            No AutoSys commands found
+          </p>
+
+          <p className="mt-2 text-sm text-slate-400">
+            Try autorep, sendevent, jil, job status, dependency, box,
+            calendar, agent, hold, ice or troubleshooting.
+          </p>
+        </div>
+      )}
+
+      {filteredSections.length > 0 && (
+        <div className="mt-8 space-y-10">
+          {filteredSections.map((section) => (
+            <section key={section.title}>
+              <h2 className="mb-4 text-2xl font-bold text-white">
+                {section.title}
+              </h2>
+
+              <div className="space-y-4">
+                {section.commands.map((item) => (
+                  <div
+                    key={`${section.title}-${item.command}-${item.description}`}
+                    className="rounded-lg border border-slate-800 bg-slate-900 p-5 transition hover:border-slate-700"
+                  >
+                    <code className="block break-all text-sm font-semibold text-cyan-400">
+                      {item.command}
+                    </code>
+
+                    <p className="mt-2 text-sm leading-6 text-slate-400">
+                      {item.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

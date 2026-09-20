@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -348,7 +348,7 @@ export default function Home() {
       title: "AutoSys",
       description:
         "Jobs, dependencies, scheduling and troubleshooting.",
-      href: "#guides",
+      href: "/autosys/autosys-commands",
     },
   ];
 
@@ -502,7 +502,7 @@ export default function Home() {
       {/* Hero */}
       <section className="mx-auto max-w-6xl px-6 py-24 text-center">
         <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-cyan-400">
-          DevOps • SRE • Cloud
+          DevOps â€¢ SRE â€¢ Cloud
         </p>
 
         <h2 className="mx-auto max-w-4xl text-4xl font-bold tracking-tight md:text-6xl">
@@ -512,7 +512,7 @@ export default function Home() {
         <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
           Learn Linux, Docker, Kubernetes, Helm, Ansible, Git, Terraform,
           Jenkins, Prometheus, AWS CLI, Azure CLI, Google Cloud CLI, OCI CLI,
-          IBM Cloud CLI and SRE through practical examples, troubleshooting
+          IBM Cloud CLI, AutoSys and SRE through practical examples, troubleshooting
           guides and free tools.
         </p>
 
@@ -524,7 +524,7 @@ export default function Home() {
           <div className="flex">
             <input
               type="text"
-              placeholder="Search Kubernetes, Linux, Docker, Git, AWS, Terraform..."
+              placeholder="Search Kubernetes, Linux, Docker, Git, AWS, Terraform, AutoSys..."
               className="w-full rounded-l-lg border border-slate-700 bg-slate-900 px-5 py-4 text-white outline-none focus:border-cyan-500"
               value={search}
               onChange={handleSearchChange}
@@ -546,7 +546,7 @@ export default function Home() {
                 className="border-y border-slate-700 bg-slate-900 px-4 text-slate-400 transition hover:text-white"
                 aria-label="Clear search"
               >
-                ✕
+                âœ•
               </button>
             )}
 
@@ -619,7 +619,7 @@ export default function Home() {
                   </p>
 
                   <p className="mt-2 text-sm text-slate-400">
-                    Try Kubernetes, Linux, Docker, Git, Terraform,
+                    Try Kubernetes, Linux, Docker, Git, Terraform, AutoSys,
                     Jenkins, Helm, Prometheus, AWS, Azure, GCP, OCI,
                     IBM, SRE, YAML, JSON, Cron or CIDR.
                   </p>
@@ -656,7 +656,7 @@ export default function Home() {
               </p>
 
               <p className="mt-4 text-sm font-semibold text-cyan-400">
-                Explore commands →
+                Explore commands â†’
               </p>
             </a>
           ))}
@@ -689,7 +689,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
 
@@ -712,7 +712,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
 
@@ -735,7 +735,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
 
@@ -758,7 +758,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
 
@@ -781,7 +781,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
 
@@ -804,7 +804,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
 
@@ -827,7 +827,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
 
@@ -850,7 +850,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
 
@@ -873,7 +873,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
 
@@ -896,7 +896,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
 
@@ -919,7 +919,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
 
@@ -943,7 +943,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
 
@@ -967,7 +967,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
 
@@ -991,10 +991,32 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
 
+          {/* AutoSys */}
+          <a
+            href="/autosys/autosys-commands"
+            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
+          >
+            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+              AutoSys
+            </p>
+
+            <h4 className="mt-3 text-xl font-semibold">
+              AutoSys Commands Cheat Sheet
+            </h4>
+
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              AutoSys commands for jobs, boxes, dependencies, calendars,
+              autorep, sendevent, JIL and production troubleshooting.
+            </p>
+
+            <p className="mt-5 text-sm font-semibold text-cyan-400">
+              Read guide →
+            </p>
+          </a>
           {/* SRE */}
           <a
             href="/sre/sre-troubleshooting"
@@ -1014,7 +1036,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide →
+              Read guide â†’
             </p>
           </a>
         </div>
@@ -1039,7 +1061,7 @@ export default function Home() {
             </p>
 
             <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool →
+              Open tool â†’
             </p>
           </a>
 
@@ -1055,7 +1077,7 @@ export default function Home() {
             </p>
 
             <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool →
+              Open tool â†’
             </p>
           </a>
 
@@ -1071,7 +1093,7 @@ export default function Home() {
             </p>
 
             <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool →
+              Open tool â†’
             </p>
           </a>
 
@@ -1087,7 +1109,7 @@ export default function Home() {
             </p>
 
             <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool →
+              Open tool â†’
             </p>
           </a>
         </div>
@@ -1097,7 +1119,7 @@ export default function Home() {
       <footer className="border-t border-slate-800 px-6 py-10 text-slate-400">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-sm">
-            © 2026 DevOpsToolbox. Practical DevOps & SRE resources.
+            Â© 2026 DevOpsToolbox. Practical DevOps & SRE resources.
           </p>
 
           <nav className="flex flex-wrap justify-center gap-5 text-sm">
