@@ -364,6 +364,18 @@ export default function Home() {
         "Jobs, dependencies, scheduling and troubleshooting.",
       href: "/autosys/autosys-commands",
     },
+    {
+      title: "DevOps Troubleshooting",
+      description:
+        "Troubleshoot Linux, Docker, Kubernetes, Jenkins, Terraform and monitoring issues.",
+      href: "/troubleshooting/devops-troubleshooting",
+    },
+    {
+      title: "DevOps Interview",
+      description:
+        "Practical DevOps interview questions covering Linux, Git, Docker, Kubernetes, cloud and SRE.",
+      href: "/interview/devops-interview",
+    },
   ];
 
   const filteredSuggestions = search.trim()
@@ -516,7 +528,7 @@ export default function Home() {
       {/* Hero */}
       <section className="mx-auto max-w-6xl px-6 py-24 text-center">
         <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-cyan-400">
-          DevOps â€¢ SRE â€¢ Cloud
+          DevOps ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ SRE ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢ Cloud
         </p>
 
         <h2 className="mx-auto max-w-4xl text-4xl font-bold tracking-tight md:text-6xl">
@@ -560,7 +572,7 @@ export default function Home() {
                 className="border-y border-slate-700 bg-slate-900 px-4 text-slate-400 transition hover:text-white"
                 aria-label="Clear search"
               >
-                Ã¢Å“â€¢
+                ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢
               </button>
             )}
 
@@ -670,7 +682,7 @@ export default function Home() {
               </p>
 
               <p className="mt-4 text-sm font-semibold text-cyan-400">
-                Explore commands â†’
+                Explore commands ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
               </p>
             </a>
           ))}
@@ -703,7 +715,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -726,7 +738,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -749,7 +761,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -772,7 +784,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -795,7 +807,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -818,7 +830,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -841,7 +853,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -864,7 +876,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -887,7 +899,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -910,7 +922,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -933,7 +945,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -957,7 +969,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -981,7 +993,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -1005,7 +1017,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -1028,7 +1040,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
           {/* SRE */}
@@ -1050,7 +1062,7 @@ export default function Home() {
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
-              Read guide â†’
+              Read guide ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
         </div>
@@ -1075,7 +1087,7 @@ export default function Home() {
             </p>
 
             <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool â†’
+              Open tool ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -1091,7 +1103,7 @@ export default function Home() {
             </p>
 
             <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool â†’
+              Open tool ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -1107,7 +1119,7 @@ export default function Home() {
             </p>
 
             <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool â†’
+              Open tool ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
 
@@ -1123,7 +1135,7 @@ export default function Home() {
             </p>
 
             <p className="mt-4 text-sm font-semibold text-cyan-400">
-              Open tool â†’
+              Open tool ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢
             </p>
           </a>
         </div>
@@ -1133,7 +1145,7 @@ export default function Home() {
       <footer className="border-t border-slate-800 px-6 py-10 text-slate-400">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-sm">
-            Â© 2026 DevOpsToolbox. Practical DevOps & SRE resources.
+            Ãƒâ€šÃ‚Â© 2026 DevOpsToolbox. Practical DevOps & SRE resources.
           </p>
 
           <nav className="flex flex-wrap justify-center gap-5 text-sm">
