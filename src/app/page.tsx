@@ -32,6 +32,13 @@ const searchItems: SearchItem[] = [
     category: "Tool",
   },
   {
+    title: "Kubernetes CrashLoopBackOff",
+    description:
+      "Troubleshoot Kubernetes CrashLoopBackOff using logs, events, probes, configuration and resource checks.",
+    href: "/kubernetes/troubleshooting/crashloopbackoff",
+    category: "Guide",
+  },
+  {
     title: "Linux",
     description:
       "Linux commands, system administration, networking, processes, storage and troubleshooting.",
@@ -347,7 +354,7 @@ const troubleshooting = [
     title: "Kubernetes Pod CrashLoopBackOff",
     description:
       "Check pod status, events, logs, probes, configuration and resource issues.",
-    href: "/troubleshooting/devops-troubleshooting",
+    href: "/kubernetes/troubleshooting/crashloopbackoff",
     tag: "Kubernetes",
   },
   {
