@@ -4,7 +4,57 @@ import KubectlCommandSearch from "./KubectlCommandSearch";
 export const metadata: Metadata = {
   title: "kubectl Commands Cheat Sheet | Kubernetes CLI Reference",
   description:
-    "Practical kubectl commands for Kubernetes clusters, pods, deployments, services, namespaces, configmaps, secrets, networking, RBAC, debugging, rollouts and troubleshooting.",
+    "Complete kubectl commands cheat sheet for Kubernetes clusters, pods, deployments, services, namespaces, storage, networking, RBAC, logs, rollouts and troubleshooting.",
+
+  keywords: [
+    "kubectl commands",
+    "kubectl cheat sheet",
+    "Kubernetes commands",
+    "Kubernetes CLI",
+    "kubectl command reference",
+    "kubectl troubleshooting",
+    "Kubernetes troubleshooting",
+    "kubectl get pods",
+    "kubectl logs",
+    "kubectl exec",
+    "kubectl apply",
+    "kubectl rollout",
+    "kubectl describe",
+    "Kubernetes DevOps commands",
+    "Kubernetes SRE commands",
+  ],
+
+  alternates: {
+    canonical: "/kubernetes/kubectl-commands",
+  },
+
+  openGraph: {
+    type: "article",
+    url: "https://www.devopscommands.com/kubernetes/kubectl-commands",
+    siteName: "DevOps Commands",
+    title: "kubectl Commands Cheat Sheet | Kubernetes CLI Reference",
+    description:
+      "Complete kubectl command reference for Kubernetes clusters, pods, deployments, services, networking, RBAC, logs, rollouts and troubleshooting.",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: "kubectl Commands Cheat Sheet | Kubernetes CLI Reference",
+    description:
+      "Practical kubectl commands for Kubernetes administration, DevOps, SRE troubleshooting and cluster management.",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
 };
 
 const commandSections = [
@@ -1204,7 +1254,7 @@ export default function KubectlCommands() {
           href="/"
           className="text-sm text-cyan-400 hover:underline"
         >
-          {"←"} Back to DevOpsToolbox
+          ? Back to DevOpsToolbox
         </a>
 
         <header className="mt-8">
