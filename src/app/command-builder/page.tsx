@@ -14,7 +14,11 @@ type Resource = "pods" | "deployments" | "services" | "nodes";
 
 type OutputFormat = "" | "wide" | "yaml" | "json";
 
-const actions: { value: Action; label: string; description: string }[] = [
+const actions: {
+  value: Action;
+  label: string;
+  description: string;
+}[] = [
   {
     value: "get",
     label: "Get",
@@ -23,12 +27,12 @@ const actions: { value: Action; label: string; description: string }[] = [
   {
     value: "describe",
     label: "Describe",
-    description: "Show detailed information about a resource",
+    description: "Show detailed information about a Kubernetes resource",
   },
   {
     value: "logs",
     label: "Logs",
-    description: "Print the logs for a container",
+    description: "Print the logs for a Pod",
   },
   {
     value: "delete",
@@ -43,11 +47,14 @@ const actions: { value: Action; label: string; description: string }[] = [
   {
     value: "exec",
     label: "Exec",
-    description: "Execute a command inside a container",
+    description: "Execute a command inside a Pod container",
   },
 ];
 
-const resources: { value: Resource; label: string }[] = [
+const resources: {
+  value: Resource;
+  label: string;
+}[] = [
   {
     value: "pods",
     label: "Pods",
@@ -66,7 +73,10 @@ const resources: { value: Resource; label: string }[] = [
   },
 ];
 
-const outputFormats: { value: OutputFormat; label: string }[] = [
+const outputFormats: {
+  value: OutputFormat;
+  label: string;
+}[] = [
   {
     value: "",
     label: "Default",
@@ -94,6 +104,18 @@ export default function CommandBuilderPage() {
   const [port, setPort] = useState("");
   const [output, setOutput] = useState<OutputFormat>("");
   const [containerCommand, setContainerCommand] = useState("sh");
+
+  const [allNamespaces, setAllNamespaces] = useState(false);
+  const [showLabels, setShowLabels] = useState(false);
+  const [selector, setSelector] = useState("");
+  const [fieldSelector, setFieldSelector] = useState("");
+  const [tail, setTail] = useState("");
+  const [follow, setFollow] = useState(false);
+  const [container, setContainer] = useState("");
+  const [force, setForce] = useState(false);
+  const [gracePeriod, setGracePeriod] = useState("");
+  const [dryRun, setDryRun] = useState(false);
+
   const [copied, setCopied] = useState(false);
 
   const showName =
@@ -102,12 +124,11 @@ export default function CommandBuilderPage() {
     action === "delete" ||
     action === "exec";
 
-  const showNamespace = action !== "exec" || resource === "pods";
+  const showNamespace = true;
 
   const showOutput =
     action === "get" ||
-    action === "describe" ||
-    action === "logs";
+    action === "describe";
 
   const showImage = action === "run";
 
@@ -115,13 +136,25 @@ export default function CommandBuilderPage() {
 
   const showContainerCommand = action === "exec";
 
-  const command = useMemo(() => {
-    const parts: string[] = ["kubectl", action];
+  const showGetOptions = action === "get";
 
+  const showLogsOptions = action === "logs";
+
+  const showDeleteOptions = action === "delete";
+
+  const showExecOptions = action === "exec";
+
+  const showRunOptions = action === "run";
+
+  const command = useMemo(() => {
     if (action === "run") {
       const podName = name.trim() || "my-pod";
 
-      parts.push(podName);
+      const parts = [
+        "kubectl",
+        "run",
+        podName,
+      ];
 
       if (image.trim()) {
         parts.push(`--image=${image.trim()}`);
@@ -135,20 +168,58 @@ export default function CommandBuilderPage() {
         parts.push(`-n ${namespace.trim()}`);
       }
 
+      if (dryRun) {
+        parts.push("--dry-run=client");
+      }
+
       return parts.join(" ");
     }
 
-    parts.push(resource);
+    if (action === "logs") {
+      const podName = name.trim() || "<pod-name>";
 
-    if (name.trim()) {
-      parts.push(name.trim());
-    }
+      const parts = [
+        "kubectl",
+        "logs",
+        podName,
+      ];
 
-    if (namespace.trim() && showNamespace) {
-      parts.push(`-n ${namespace.trim()}`);
+      if (namespace.trim()) {
+        parts.push(`-n ${namespace.trim()}`);
+      }
+
+      if (container.trim()) {
+        parts.push(`-c ${container.trim()}`);
+      }
+
+      if (tail.trim()) {
+        parts.push(`--tail=${tail.trim()}`);
+      }
+
+      if (follow) {
+        parts.push("-f");
+      }
+
+      return parts.join(" ");
     }
 
     if (action === "exec") {
+      const podName = name.trim() || "<pod-name>";
+
+      const parts = [
+        "kubectl",
+        "exec",
+        podName,
+      ];
+
+      if (namespace.trim()) {
+        parts.push(`-n ${namespace.trim()}`);
+      }
+
+      if (container.trim()) {
+        parts.push(`-c ${container.trim()}`);
+      }
+
       parts.push("--");
 
       if (containerCommand.trim()) {
@@ -158,8 +229,48 @@ export default function CommandBuilderPage() {
       return parts.join(" ");
     }
 
+    const parts: string[] = [
+      "kubectl",
+      action,
+      resource,
+    ];
+
+    if (name.trim()) {
+      parts.push(name.trim());
+    }
+
+    if (namespace.trim() && !allNamespaces) {
+      parts.push(`-n ${namespace.trim()}`);
+    }
+
+    if (allNamespaces) {
+      parts.push("-A");
+    }
+
     if (output) {
       parts.push(`-o ${output}`);
+    }
+
+    if (showLabels) {
+      parts.push("--show-labels");
+    }
+
+    if (selector.trim()) {
+      parts.push(`-l ${selector.trim()}`);
+    }
+
+    if (fieldSelector.trim()) {
+      parts.push(`--field-selector=${fieldSelector.trim()}`);
+    }
+
+    if (action === "delete") {
+      if (force) {
+        parts.push("--force");
+      }
+
+      if (gracePeriod.trim()) {
+        parts.push(`--grace-period=${gracePeriod.trim()}`);
+      }
     }
 
     return parts.join(" ");
@@ -172,24 +283,39 @@ export default function CommandBuilderPage() {
     port,
     output,
     containerCommand,
-    showNamespace,
+    allNamespaces,
+    showLabels,
+    selector,
+    fieldSelector,
+    tail,
+    follow,
+    container,
+    force,
+    gracePeriod,
+    dryRun,
   ]);
 
   const explanation = useMemo(() => {
     const explanations: string[] = [];
 
     explanations.push(
-      `kubectl is the Kubernetes command-line tool used to communicate with a Kubernetes cluster.`
-    );
-
-    explanations.push(
-      `${action} tells kubectl what operation you want to perform.`
+      "kubectl is the Kubernetes command-line tool used to communicate with a Kubernetes cluster."
     );
 
     if (action === "run") {
       explanations.push(
-        `run creates a new Pod using the container image you specify.`
+        "run creates a new Pod using the container image you specify."
       );
+
+      if (name.trim()) {
+        explanations.push(
+          `${name.trim()} is the name assigned to the new Pod.`
+        );
+      } else {
+        explanations.push(
+          "my-pod is used as the default Pod name because no name was entered."
+        );
+      }
 
       if (image.trim()) {
         explanations.push(
@@ -202,7 +328,93 @@ export default function CommandBuilderPage() {
           `The --port=${port.trim()} option declares the container port.`
         );
       }
+
+      if (namespace.trim()) {
+        explanations.push(
+          `-n ${namespace.trim()} tells kubectl to create the Pod in the ${namespace.trim()} namespace.`
+        );
+      }
+
+      if (dryRun) {
+        explanations.push(
+          "--dry-run=client generates the resource configuration without sending it to the Kubernetes API server."
+        );
+      }
+    } else if (action === "logs") {
+      explanations.push(
+        "logs retrieves the logs produced by the specified Pod."
+      );
+
+      if (name.trim()) {
+        explanations.push(
+          `${name.trim()} identifies the Pod whose logs will be displayed.`
+        );
+      } else {
+        explanations.push(
+          "<pod-name> is a placeholder. Enter the name of the Pod you want to inspect."
+        );
+      }
+
+      if (namespace.trim()) {
+        explanations.push(
+          `-n ${namespace.trim()} tells kubectl to look for the Pod in the ${namespace.trim()} namespace.`
+        );
+      }
+
+      if (container.trim()) {
+        explanations.push(
+          `-c ${container.trim()} selects the ${container.trim()} container.`
+        );
+      }
+
+      if (tail.trim()) {
+        explanations.push(
+          `--tail=${tail.trim()} limits the number of log lines returned.`
+        );
+      }
+
+      if (follow) {
+        explanations.push(
+          "-f continuously follows new log output from the Pod."
+        );
+      }
+    } else if (action === "exec") {
+      explanations.push(
+        "exec runs a command inside a container belonging to the specified Pod."
+      );
+
+      if (name.trim()) {
+        explanations.push(
+          `${name.trim()} identifies the Pod where the command will run.`
+        );
+      } else {
+        explanations.push(
+          "<pod-name> is a placeholder. Enter the name of the Pod you want to access."
+        );
+      }
+
+      if (container.trim()) {
+        explanations.push(
+          `-c ${container.trim()} selects the container where the command will run.`
+        );
+      }
+
+      if (containerCommand.trim()) {
+        explanations.push(
+          `${containerCommand.trim()} is the command executed inside the container.`
+        );
+      }
+
+      if (namespace.trim()) {
+        explanations.push(
+          `-n ${namespace.trim()} tells kubectl to use the ${namespace.trim()} namespace.`
+        );
+      }
     } else {
+      explanations.push(
+        `${action} tells kubectl what operation you want to perform.`
+      );
+
       explanations.push(
         `${resource} tells kubectl which Kubernetes resource to operate on.`
       );
@@ -213,15 +425,51 @@ export default function CommandBuilderPage() {
         );
       }
 
-      if (namespace.trim()) {
+      if (namespace.trim() && !allNamespaces) {
         explanations.push(
           `-n ${namespace.trim()} tells kubectl to use the ${namespace.trim()} namespace.`
+        );
+      }
+
+      if (allNamespaces) {
+        explanations.push(
+          "-A searches across all namespaces instead of limiting the command to one namespace."
         );
       }
 
       if (output) {
         explanations.push(
           `-o ${output} controls the format of the command output.`
+        );
+      }
+
+      if (showLabels) {
+        explanations.push(
+          "--show-labels includes resource labels in the output."
+        );
+      }
+
+      if (selector.trim()) {
+        explanations.push(
+          `-l ${selector.trim()} filters resources using the specified label selector.`
+        );
+      }
+
+      if (fieldSelector.trim()) {
+        explanations.push(
+          `--field-selector=${fieldSelector.trim()} filters resources using Kubernetes field selectors.`
+        );
+      }
+
+      if (action === "delete" && force) {
+        explanations.push(
+          "--force forces deletion when supported by the selected resource and Kubernetes version."
+        );
+      }
+
+      if (action === "delete" && gracePeriod.trim()) {
+        explanations.push(
+          `--grace-period=${gracePeriod.trim()} specifies the grace period for deletion.`
         );
       }
     }
@@ -235,6 +483,17 @@ export default function CommandBuilderPage() {
     image,
     port,
     output,
+    containerCommand,
+    allNamespaces,
+    showLabels,
+    selector,
+    fieldSelector,
+    tail,
+    follow,
+    container,
+    force,
+    gracePeriod,
+    dryRun,
   ]);
 
   const copyCommand = async () => {
@@ -258,7 +517,20 @@ export default function CommandBuilderPage() {
     setImage("nginx:latest");
     setPort("");
     setOutput("");
+
     setContainerCommand("sh");
+
+    setAllNamespaces(false);
+    setShowLabels(false);
+    setSelector("");
+    setFieldSelector("");
+    setTail("");
+    setFollow(false);
+    setContainer("");
+    setForce(false);
+    setGracePeriod("");
+    setDryRun(false);
+
     setCopied(false);
   };
 
@@ -310,6 +582,7 @@ export default function CommandBuilderPage() {
                 <h2 className="text-xl font-semibold">
                   Build Your Command
                 </h2>
+
                 <p className="mt-1 text-sm text-slate-500">
                   Configure the options below.
                 </p>
@@ -356,29 +629,49 @@ export default function CommandBuilderPage() {
                 </p>
               </div>
 
-              {action !== "run" && (
-                <div>
-                  <label
-                    htmlFor="resource"
-                    className="mb-2 block text-sm font-medium text-slate-300"
-                  >
-                    Resource
-                  </label>
+              {action !== "run" &&
+                action !== "logs" &&
+                action !== "exec" && (
+                  <div>
+                    <label
+                      htmlFor="resource"
+                      className="mb-2 block text-sm font-medium text-slate-300"
+                    >
+                      Resource
+                    </label>
 
-                  <select
-                    id="resource"
-                    value={resource}
-                    onChange={(event) =>
-                      setResource(event.target.value as Resource)
-                    }
-                    className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
-                  >
-                    {resources.map((item) => (
-                      <option key={item.value} value={item.value}>
-                        {item.label}
-                      </option>
-                    ))}
-                  </select>
+                    <select
+                      id="resource"
+                      value={resource}
+                      onChange={(event) =>
+                        setResource(event.target.value as Resource)
+                      }
+                      className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition focus:border-cyan-500"
+                    >
+                      {resources.map((item) => (
+                        <option key={item.value} value={item.value}>
+                          {item.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+              {(action === "logs" || action === "exec") && (
+                <div>
+                  <div className="mb-2 block text-sm font-medium text-slate-300">
+                    Resource
+                  </div>
+
+                  <div className="rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-400">
+                    Pods
+                  </div>
+
+                  <p className="mt-2 text-xs text-slate-500">
+                    {action === "logs"
+                      ? "kubectl logs operates on a Pod."
+                      : "kubectl exec runs commands inside a Pod container."}
+                  </p>
                 </div>
               )}
 
@@ -402,13 +695,15 @@ export default function CommandBuilderPage() {
                 </div>
               )}
 
-                {showName && (
+              {showName && (
                 <div>
                   <label
                     htmlFor="resource-name"
                     className="mb-2 block text-sm font-medium text-slate-300"
                   >
-                    Resource Name
+                    {action === "logs" || action === "exec"
+                      ? "Pod Name"
+                      : "Resource Name"}
                   </label>
 
                   <input
@@ -417,13 +712,15 @@ export default function CommandBuilderPage() {
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                     placeholder={
-                      resource === "pods"
+                      action === "logs" || action === "exec"
                         ? "nginx-pod"
-                        : resource === "deployments"
-                          ? "nginx-deployment"
-                          : resource === "services"
-                            ? "nginx-service"
-                            : "node-name"
+                        : resource === "pods"
+                          ? "nginx-pod"
+                          : resource === "deployments"
+                            ? "nginx-deployment"
+                            : resource === "services"
+                              ? "nginx-service"
+                              : "node-name"
                     }
                     className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none transition focus:border-cyan-500"
                   />
@@ -518,6 +815,223 @@ export default function CommandBuilderPage() {
                 </div>
               )}
 
+              {showGetOptions && (
+                <div className="space-y-5 rounded-xl border border-slate-800 bg-slate-950/60 p-5">
+                  <h3 className="text-sm font-semibold text-white">
+                    Get Options
+                  </h3>
+
+                  <label className="flex items-center gap-3 text-sm text-slate-300">
+                    <input
+                      type="checkbox"
+                      checked={allNamespaces}
+                      onChange={(event) =>
+                        setAllNamespaces(event.target.checked)
+                      }
+                      className="h-4 w-4 rounded border-slate-700 bg-slate-950"
+                    />
+                    All namespaces
+                  </label>
+
+                  <label className="flex items-center gap-3 text-sm text-slate-300">
+                    <input
+                      type="checkbox"
+                      checked={showLabels}
+                      onChange={(event) =>
+                        setShowLabels(event.target.checked)
+                      }
+                      className="h-4 w-4 rounded border-slate-700 bg-slate-950"
+                    />
+                    Show labels
+                  </label>
+
+                  <div>
+                    <label
+                      htmlFor="selector"
+                      className="mb-2 block text-sm font-medium text-slate-300"
+                    >
+                      Label Selector
+                    </label>
+
+                    <input
+                      id="selector"
+                      type="text"
+                      value={selector}
+                      onChange={(event) =>
+                        setSelector(event.target.value)
+                      }
+                      placeholder="app=nginx"
+                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none transition focus:border-cyan-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="field-selector"
+                      className="mb-2 block text-sm font-medium text-slate-300"
+                    >
+                      Field Selector
+                    </label>
+
+                    <input
+                      id="field-selector"
+                      type="text"
+                      value={fieldSelector}
+                      onChange={(event) =>
+                        setFieldSelector(event.target.value)
+                      }
+                      placeholder="status.phase=Running"
+                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none transition focus:border-cyan-500"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {showLogsOptions && (
+                <div className="space-y-5 rounded-xl border border-slate-800 bg-slate-950/60 p-5">
+                  <h3 className="text-sm font-semibold text-white">
+                    Logs Options
+                  </h3>
+
+                  <div>
+                    <label
+                      htmlFor="container"
+                      className="mb-2 block text-sm font-medium text-slate-300"
+                    >
+                      Container
+                    </label>
+
+                    <input
+                      id="container"
+                      type="text"
+                      value={container}
+                      onChange={(event) =>
+                        setContainer(event.target.value)
+                      }
+                      placeholder="nginx"
+                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none transition focus:border-cyan-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="tail"
+                      className="mb-2 block text-sm font-medium text-slate-300"
+                    >
+                      Tail Lines
+                    </label>
+
+                    <input
+                      id="tail"
+                      type="number"
+                      min="0"
+                      value={tail}
+                      onChange={(event) => setTail(event.target.value)}
+                      placeholder="100"
+                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none transition focus:border-cyan-500"
+                    />
+                  </div>
+
+                  <label className="flex items-center gap-3 text-sm text-slate-300">
+                    <input
+                      type="checkbox"
+                      checked={follow}
+                      onChange={(event) =>
+                        setFollow(event.target.checked)
+                      }
+                      className="h-4 w-4 rounded border-slate-700 bg-slate-950"
+                    />
+                    Follow logs
+                  </label>
+                </div>
+              )}
+
+              {showExecOptions && (
+                <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-5">
+                  <div>
+                    <label
+                      htmlFor="exec-container"
+                      className="mb-2 block text-sm font-medium text-slate-300"
+                    >
+                      Container
+                    </label>
+
+                    <input
+                      id="exec-container"
+                      type="text"
+                      value={container}
+                      onChange={(event) =>
+                        setContainer(event.target.value)
+                      }
+                      placeholder="nginx"
+                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none transition focus:border-cyan-500"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {showDeleteOptions && (
+                <div className="space-y-5 rounded-xl border border-slate-800 bg-slate-950/60 p-5">
+                  <h3 className="text-sm font-semibold text-white">
+                    Delete Options
+                  </h3>
+
+                  <label className="flex items-center gap-3 text-sm text-slate-300">
+                    <input
+                      type="checkbox"
+                      checked={force}
+                      onChange={(event) =>
+                        setForce(event.target.checked)
+                      }
+                      className="h-4 w-4 rounded border-slate-700 bg-slate-950"
+                    />
+                    Force deletion
+                  </label>
+
+                  <div>
+                    <label
+                      htmlFor="grace-period"
+                      className="mb-2 block text-sm font-medium text-slate-300"
+                    >
+                      Grace Period
+                    </label>
+
+                    <input
+                      id="grace-period"
+                      type="number"
+                      min="0"
+                      value={gracePeriod}
+                      onChange={(event) =>
+                        setGracePeriod(event.target.value)
+                      }
+                      placeholder="30"
+                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none transition focus:border-cyan-500"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {showRunOptions && (
+                <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-5">
+                  <label className="flex items-center gap-3 text-sm text-slate-300">
+                    <input
+                      type="checkbox"
+                      checked={dryRun}
+                      onChange={(event) =>
+                        setDryRun(event.target.checked)
+                      }
+                      className="h-4 w-4 rounded border-slate-700 bg-slate-950"
+                    />
+                    Dry run
+                  </label>
+
+                  <p className="mt-2 text-xs leading-5 text-slate-500">
+                    Generate the command without creating the Pod on the
+                    cluster.
+                  </p>
+                </div>
+              )}
+
               {showContainerCommand && (
                 <div>
                   <label
@@ -549,6 +1063,7 @@ export default function CommandBuilderPage() {
                   <p className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
                     Generated Command
                   </p>
+
                   <h2 className="mt-1 text-lg font-semibold text-white">
                     Ready to use
                   </h2>
