@@ -21,6 +21,8 @@ export default function Home() {
       jenkins: "/jenkins/jenkins-commands",
       aws: "/aws/aws-cli",
       "aws cli": "/aws/aws-cli",
+      azure: "/azure/azure-cli",
+      "azure cli": "/azure/azure-cli",
       sre: "/sre/sre-troubleshooting",
       yaml: "/tools/yaml-validator",
       json: "/tools/json-formatter",
