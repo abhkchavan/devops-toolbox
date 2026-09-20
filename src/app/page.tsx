@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -225,6 +225,20 @@ export default function Home() {
       description:
         "Practical troubleshooting for CPU, memory, disk, processes, services, logs and networking.",
       href: "/sre/sre-troubleshooting",
+      category: "Guide",
+    },
+        {
+      title: "DevOps Troubleshooting",
+      description:
+        "Practical troubleshooting for Linux, Docker, Kubernetes, Jenkins, Terraform and monitoring.",
+      href: "/troubleshooting/devops-troubleshooting",
+      category: "Guide",
+    },
+    {
+      title: "DevOps Interview",
+      description:
+        "Practical DevOps interview questions covering Linux, Git, Docker, Kubernetes, cloud and SRE.",
+      href: "/interview/devops-interview",
       category: "Guide",
     },
     {
@@ -1144,5 +1158,8 @@ export default function Home() {
     </main>
   );
 }
+
+
+
 
 
