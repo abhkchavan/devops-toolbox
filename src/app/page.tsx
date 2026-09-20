@@ -227,7 +227,7 @@ export default function Home() {
       href: "/sre/sre-troubleshooting",
       category: "Guide",
     },
-        {
+    {
       title: "DevOps Troubleshooting",
       description:
         "Practical troubleshooting for Linux, Docker, Kubernetes, Jenkins, Terraform and monitoring.",
@@ -510,15 +510,24 @@ export default function Home() {
           </h1>
 
           <div className="hidden gap-6 text-sm text-slate-300 md:flex">
-            <a href="#guides" className="hover:text-cyan-400">
+            <a
+              href="#guides"
+              className="hover:text-cyan-400"
+            >
               Guides
             </a>
 
-            <a href="#tools" className="hover:text-cyan-400">
+            <a
+              href="#tools"
+              className="hover:text-cyan-400"
+            >
               Tools
             </a>
 
-            <a href="#topics" className="hover:text-cyan-400">
+            <a
+              href="#topics"
+              className="hover:text-cyan-400"
+            >
               Topics
             </a>
           </div>
@@ -538,8 +547,8 @@ export default function Home() {
         <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
           Learn Linux, Docker, Kubernetes, Helm, Ansible, Git, Terraform,
           Jenkins, Prometheus, AWS CLI, Azure CLI, Google Cloud CLI, OCI CLI,
-          IBM Cloud CLI, AutoSys and SRE through practical examples, troubleshooting
-          guides and free tools.
+          IBM Cloud CLI, AutoSys and SRE through practical examples,
+          troubleshooting guides and free tools.
         </p>
 
         {/* Search */}
@@ -572,7 +581,7 @@ export default function Home() {
                 className="border-y border-slate-700 bg-slate-900 px-4 text-slate-400 transition hover:text-white"
                 aria-label="Clear search"
               >
-                ÃƒÆ’Ã‚Â¢Ãƒâ€¦Ã¢â‚¬Å“ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¢
+                {"\u00D7"}
               </button>
             )}
 
@@ -661,7 +670,10 @@ export default function Home() {
       </section>
 
       {/* Topics */}
-      <section id="topics" className="mx-auto max-w-6xl px-6 py-12">
+      <section
+        id="topics"
+        className="mx-auto max-w-6xl px-6 py-12"
+      >
         <h3 className="mb-8 text-2xl font-bold">
           Explore Topics
         </h3>
@@ -690,7 +702,10 @@ export default function Home() {
       </section>
 
       {/* Guides */}
-      <section id="guides" className="mx-auto max-w-6xl px-6 py-16">
+      <section
+        id="guides"
+        className="mx-auto max-w-6xl px-6 py-16"
+      >
         <h3 className="mb-8 text-2xl font-bold">
           DevOps Command Guides
         </h3>
@@ -1043,6 +1058,7 @@ export default function Home() {
               Read guide {"\u2192"}
             </p>
           </a>
+
           {/* SRE */}
           <a
             href="/sre/sre-troubleshooting"
@@ -1065,11 +1081,60 @@ export default function Home() {
               Read guide {"\u2192"}
             </p>
           </a>
+
+          {/* DevOps Troubleshooting */}
+          <a
+            href="/troubleshooting/devops-troubleshooting"
+            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
+          >
+            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+              DevOps Troubleshooting
+            </p>
+
+            <h4 className="mt-3 text-xl font-semibold">
+              DevOps Troubleshooting Guide
+            </h4>
+
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Practical troubleshooting for Linux, Docker, Kubernetes, Jenkins,
+              Terraform, monitoring and common DevOps production issues.
+            </p>
+
+            <p className="mt-5 text-sm font-semibold text-cyan-400">
+              Read guide {"\u2192"}
+            </p>
+          </a>
+
+          {/* DevOps Interview */}
+          <a
+            href="/interview/devops-interview"
+            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
+          >
+            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+              DevOps Interview
+            </p>
+
+            <h4 className="mt-3 text-xl font-semibold">
+              DevOps Interview Guide
+            </h4>
+
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Practical DevOps interview questions covering Linux, Git, Docker,
+              Kubernetes, cloud, CI/CD and SRE.
+            </p>
+
+            <p className="mt-5 text-sm font-semibold text-cyan-400">
+              Read guide {"\u2192"}
+            </p>
+          </a>
         </div>
       </section>
 
       {/* Tools */}
-      <section id="tools" className="mx-auto max-w-6xl px-6 py-16">
+      <section
+        id="tools"
+        className="mx-auto max-w-6xl px-6 py-16"
+      >
         <h3 className="mb-8 text-2xl font-bold">
           Free DevOps Tools
         </h3>
@@ -1080,7 +1145,9 @@ export default function Home() {
             href="/tools/yaml-validator"
             className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
           >
-            <h4 className="font-semibold">YAML Validator</h4>
+            <h4 className="font-semibold">
+              YAML Validator
+            </h4>
 
             <p className="mt-2 text-sm text-slate-400">
               Validate YAML syntax instantly.
@@ -1096,7 +1163,9 @@ export default function Home() {
             href="/tools/json-formatter"
             className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
           >
-            <h4 className="font-semibold">JSON Formatter</h4>
+            <h4 className="font-semibold">
+              JSON Formatter
+            </h4>
 
             <p className="mt-2 text-sm text-slate-400">
               Format, validate and minify JSON instantly.
@@ -1112,7 +1181,9 @@ export default function Home() {
             href="/tools/cron-generator"
             className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
           >
-            <h4 className="font-semibold">Cron Generator</h4>
+            <h4 className="font-semibold">
+              Cron Generator
+            </h4>
 
             <p className="mt-2 text-sm text-slate-400">
               Create cron expressions easily.
@@ -1128,7 +1199,9 @@ export default function Home() {
             href="/tools/cidr-calculator"
             className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
           >
-            <h4 className="font-semibold">CIDR Calculator</h4>
+            <h4 className="font-semibold">
+              CIDR Calculator
+            </h4>
 
             <p className="mt-2 text-sm text-slate-400">
               Calculate IP ranges and subnets.
@@ -1145,23 +1218,35 @@ export default function Home() {
       <footer className="border-t border-slate-800 px-6 py-10 text-slate-400">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-sm">
-{"\u00A9"} 2026 DevOpsToolbox. Practical DevOps & SRE resources.
+            {"\u00A9"} 2026 DevOpsToolbox. Practical DevOps & SRE resources.
           </p>
 
           <nav className="flex flex-wrap justify-center gap-5 text-sm">
-            <a href="/about" className="hover:text-cyan-400">
+            <a
+              href="/about"
+              className="hover:text-cyan-400"
+            >
               About
             </a>
 
-            <a href="/contact" className="hover:text-cyan-400">
+            <a
+              href="/contact"
+              className="hover:text-cyan-400"
+            >
               Contact
             </a>
 
-            <a href="/privacy" className="hover:text-cyan-400">
+            <a
+              href="/privacy"
+              className="hover:text-cyan-400"
+            >
               Privacy
             </a>
 
-            <a href="/terms" className="hover:text-cyan-400">
+            <a
+              href="/terms"
+              className="hover:text-cyan-400"
+            >
               Terms
             </a>
           </nav>
@@ -1170,8 +1255,3 @@ export default function Home() {
     </main>
   );
 }
-
-
-
-
-
