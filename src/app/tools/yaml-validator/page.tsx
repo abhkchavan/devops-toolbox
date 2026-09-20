@@ -16,7 +16,7 @@ export default function YAMLValidator() {
     }
 
     try {
-      yaml.load(yamlText);
+      load(yamlText);
 
       setResult("YAML is valid.");
       setValid(true);
