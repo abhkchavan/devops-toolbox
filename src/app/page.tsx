@@ -484,6 +484,7 @@ export default function Home() {
   const [selectedIndex, setSelectedIndex] = useState(-1);
 
   const searchRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const filteredSuggestions = search.trim()
     ? searchItems
@@ -517,6 +518,43 @@ export default function Home() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleGlobalKeyDown = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+
+      if (
+        target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
+      if (
+        (event.ctrlKey || event.metaKey) &&
+        event.key.toLowerCase() === "k"
+      ) {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+        setShowSuggestions(Boolean(search.trim()));
+        return;
+      }
+
+      if (event.key === "/") {
+        event.preventDefault();
+        searchInputRef.current?.focus();
+        setShowSuggestions(Boolean(search.trim()));
+      }
+    };
+
+    document.addEventListener("keydown", handleGlobalKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleGlobalKeyDown);
+    };
+  }, [search]);
+
   const openSearchResult = (item: SearchItem) => {
     window.location.href = item.href;
   };
@@ -524,6 +562,12 @@ export default function Home() {
   const handleSearchKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
+    if (e.key === "Escape") {
+      setShowSuggestions(false);
+      setSelectedIndex(-1);
+      return;
+    }
+
     if (!search.trim()) return;
 
     if (e.key === "ArrowDown") {
@@ -573,11 +617,6 @@ export default function Home() {
 
       return;
     }
-
-    if (e.key === "Escape") {
-      setShowSuggestions(false);
-      setSelectedIndex(-1);
-    }
   };
 
   const handleSearchChange = (
@@ -587,7 +626,6 @@ export default function Home() {
 
     setSearch(value);
     setSelectedIndex(-1);
-
     setShowSuggestions(Boolean(value.trim()));
   };
 
@@ -595,13 +633,14 @@ export default function Home() {
     setSearch("");
     setShowSuggestions(false);
     setSelectedIndex(-1);
+    searchInputRef.current?.focus();
   };
 
   return (
     <main
-  id="top"
-  className="min-h-screen bg-slate-950 text-white"
->
+      id="top"
+      className="min-h-screen bg-slate-950 text-white"
+    >
       {/* Navigation */}
       <nav className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6">
@@ -659,6 +698,7 @@ export default function Home() {
           >
             <div className="flex rounded-xl shadow-2xl shadow-cyan-950/20">
               <input
+                ref={searchInputRef}
                 type="text"
                 placeholder="Search Kubernetes, Linux, Docker, AWS, Terraform..."
                 className="min-w-0 flex-1 rounded-l-xl border border-slate-700 bg-slate-900 px-5 py-4 text-sm text-white outline-none placeholder:text-slate-500 focus:border-cyan-500 sm:text-base"
@@ -700,6 +740,16 @@ export default function Home() {
               >
                 Search
               </button>
+            </div>
+
+            <div className="mt-2 flex justify-end px-1">
+              <span className="text-xs text-slate-500">
+                Press{" "}
+                <kbd className="rounded border border-slate-700 bg-slate-900 px-1.5 py-0.5 font-mono text-slate-400">
+                  Ctrl K
+                </kbd>{" "}
+                to search
+              </span>
             </div>
 
             {/* Suggestions */}
