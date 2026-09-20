@@ -24,6 +24,7 @@ export default function Home() {
       json: "/tools/json-formatter",
       cron: "/tools/cron-generator",
       cidr: "/tools/cidr-calculator",
+      aws: "/aws/aws-cli",
     };
 
     const route = Object.entries(routes).find(([keyword]) =>
