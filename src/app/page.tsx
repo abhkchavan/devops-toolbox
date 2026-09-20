@@ -502,7 +502,7 @@ export default function Home() {
       {/* Hero */}
       <section className="mx-auto max-w-6xl px-6 py-24 text-center">
         <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-cyan-400">
-          DevOps â€¢ SRE â€¢ Cloud
+          DevOps • SRE • Cloud
         </p>
 
         <h2 className="mx-auto max-w-4xl text-4xl font-bold tracking-tight md:text-6xl">
@@ -1119,7 +1119,7 @@ export default function Home() {
       <footer className="border-t border-slate-800 px-6 py-10 text-slate-400">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-sm">
-            Â© 2026 DevOpsToolbox. Practical DevOps & SRE resources.
+            © 2026 DevOpsToolbox. Practical DevOps & SRE resources.
           </p>
 
           <nav className="flex flex-wrap justify-center gap-5 text-sm">
@@ -1144,4 +1144,5 @@ export default function Home() {
     </main>
   );
 }
+
 
