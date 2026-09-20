@@ -16,42 +16,85 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.devopscommands.com"),
 
   title: {
-    default: "DevOps Commands | Kubernetes, Docker, Linux & Ansible",
+    default:
+      "DevOps Commands, Troubleshooting & Tools | Kubernetes, Linux, Docker",
     template: "%s | DevOps Commands",
   },
 
   description:
-    "DevOps commands, Kubernetes kubectl commands, Docker commands, Linux commands, Ansible commands, SRE troubleshooting guides and free DevOps tools.",
+    "Free DevOps commands, Kubernetes kubectl, Linux, Docker, Git, Terraform, Ansible, Jenkins and cloud CLI references. Practical SRE troubleshooting guides, DevOps interview questions and developer tools.",
 
   keywords: [
     "DevOps commands",
+    "DevOps cheat sheet",
     "Kubernetes commands",
     "kubectl commands",
-    "Docker commands",
+    "Kubernetes troubleshooting",
     "Linux commands",
+    "Linux troubleshooting",
+    "Docker commands",
+    "Docker troubleshooting",
+    "Git commands",
+    "Terraform commands",
+    "Terraform troubleshooting",
     "Ansible commands",
+    "Jenkins commands",
+    "AWS CLI commands",
+    "Azure CLI commands",
+    "Google Cloud CLI commands",
+    "Helm commands",
+    "Prometheus commands",
     "SRE troubleshooting",
+    "DevOps interview questions",
     "DevOps tools",
-    "DevOps cheat sheet",
   ],
 
+  authors: [
+    {
+      name: "DevOps Commands",
+      url: "https://www.devopscommands.com",
+    },
+  ],
+
+  creator: "DevOps Commands",
+  publisher: "DevOps Commands",
+
   alternates: {
-    canonical: "https://www.devopscommands.com/",
+    canonical: "/",
   },
 
   openGraph: {
     type: "website",
-    url: "https://www.devopscommands.com/",
+    locale: "en_US",
+    url: "/",
     siteName: "DevOps Commands",
-    title: "DevOps Commands | Kubernetes, Docker, Linux & Ansible",
+    title:
+      "DevOps Commands, Troubleshooting & Tools | Kubernetes, Linux, Docker",
     description:
-      "Practical DevOps commands, Kubernetes, Docker, Linux, Ansible and SRE guides with free developer tools.",
+      "Practical DevOps commands, troubleshooting guides, interview preparation and free tools for DevOps, SRE and cloud engineers.",
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title:
+      "DevOps Commands, Troubleshooting & Tools | Kubernetes, Linux, Docker",
+    description:
+      "Practical DevOps commands, troubleshooting guides, interview preparation and free DevOps tools.",
   },
 
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
+
+  category: "technology",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -64,9 +107,3 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     </html>
   );
 }
-
-
-
-
-
-
