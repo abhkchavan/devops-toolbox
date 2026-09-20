@@ -2,18 +2,18 @@
 
 import { useMemo, useState } from "react";
 
-type Command = {
+type LinuxCommand = {
   command: string;
   description: string;
 };
 
-type CommandSection = {
+type LinuxSection = {
   title: string;
-  commands: Command[];
+  commands: LinuxCommand[];
 };
 
 type Props = {
-  sections: CommandSection[];
+  sections: LinuxSection[];
 };
 
 export default function LinuxCommandSearch({ sections }: Props) {
@@ -28,105 +28,122 @@ export default function LinuxCommandSearch({ sections }: Props) {
 
     return sections
       .map((section) => {
-        const sectionMatches = section.title.toLowerCase().includes(query);
+        const sectionMatches = section.title
+          .toLowerCase()
+          .includes(query);
 
-        const commands = section.commands.filter(
+        const filteredCommands = section.commands.filter(
           (item) =>
             item.command.toLowerCase().includes(query) ||
             item.description.toLowerCase().includes(query),
         );
 
-        return {
-          ...section,
-          commands: sectionMatches ? section.commands : commands,
-        };
+        if (sectionMatches) {
+          return section;
+        }
+
+        if (filteredCommands.length > 0) {
+          return {
+            ...section,
+            commands: filteredCommands,
+          };
+        }
+
+        return null;
       })
-      .filter((section) => section.commands.length > 0);
+      .filter(
+        (section): section is LinuxSection => section !== null,
+      );
   }, [search, sections]);
 
-  const commandCount = search
-    ? filteredSections.reduce(
-        (total, section) => total + section.commands.length,
-        0,
-      )
-    : sections.reduce(
-        (total, section) => total + section.commands.length,
-        0,
-      );
+  const resultCount = filteredSections.reduce(
+    (total, section) => total + section.commands.length,
+    0,
+  );
 
   return (
-    <>
-      <section className="mt-10 rounded-xl border border-slate-800 bg-slate-900 p-5">
-        <label
-          htmlFor="linux-search"
-          className="text-sm font-semibold text-slate-300"
-        >
-          Search Linux commands
-        </label>
-
+    <div className="mb-10">
+      <div className="flex flex-col gap-3 sm:flex-row">
         <input
-          id="linux-search"
-          type="search"
+          type="text"
           value={search}
-          onChange={(event) => setSearch(event.target.value)}
-          placeholder="Search files, permissions, processes, networking..."
-          className="mt-3 w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-cyan-400"
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search Linux commands..."
+          className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-cyan-500"
         />
 
-        <div className="mt-3 flex items-center justify-between text-sm">
-          <span className="text-slate-500">
-            {search
-              ? `${commandCount} matching commands`
-              : `${commandCount} commands`}
-          </span>
+        {search && (
+          <button
+            type="button"
+            onClick={() => setSearch("")}
+            className="rounded-lg border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-300 transition hover:border-cyan-500 hover:text-cyan-400"
+          >
+            Clear
+          </button>
+        )}
+      </div>
 
-          {search && (
-            <button
-              type="button"
-              onClick={() => setSearch("")}
-              className="text-cyan-400 hover:underline"
-            >
-              Clear search
-            </button>
-          )}
-        </div>
-      </section>
+      <p className="mt-3 text-sm text-slate-400">
+        {search ? (
+          <>
+            Found{" "}
+            <span className="font-semibold text-cyan-400">
+              {resultCount}
+            </span>{" "}
+            matching command{resultCount === 1 ? "" : "s"}.
+          </>
+        ) : (
+          <>
+            Showing{" "}
+            <span className="font-semibold text-cyan-400">
+              {resultCount}
+            </span>{" "}
+            commands.
+          </>
+        )}
+      </p>
 
-      {search && filteredSections.length === 0 ? (
-        <section className="mt-8 rounded-xl border border-slate-800 bg-slate-900 p-8 text-center">
-          <h2 className="text-xl font-bold">No commands found</h2>
-
-          <p className="mt-3 text-slate-400">
-            Try searching for files, permissions, processes, networking,
-            SSH, systemd, logs, disk, packages or troubleshooting.
+      {search && filteredSections.length === 0 && (
+        <div className="mt-6 rounded-lg border border-slate-800 bg-slate-900 p-6 text-center">
+          <p className="font-semibold text-white">
+            No Linux commands found
           </p>
-        </section>
-      ) : (
-        filteredSections.map((section) => (
-          <section key={section.title} className="mt-12">
-            <h2 className="text-2xl font-bold">{section.title}</h2>
 
-            <div className="mt-5 space-y-4">
-              {section.commands.map((item) => (
-                <div
-                  key={item.command}
-                  className="rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:border-cyan-500/30"
-                >
-                  <div className="overflow-x-auto rounded-lg bg-slate-950 p-4">
-                    <code className="whitespace-nowrap text-sm text-cyan-400">
+          <p className="mt-2 text-sm text-slate-400">
+            Try searching for files, permissions, users, processes,
+            networking, systemd, logs, SSH, disk, packages or shell.
+          </p>
+        </div>
+      )}
+
+      {filteredSections.length > 0 && (
+        <div className="mt-8 space-y-10">
+          {filteredSections.map((section) => (
+            <section key={section.title}>
+              <h2 className="mb-4 text-2xl font-bold text-white">
+                {section.title}
+              </h2>
+
+              <div className="space-y-4">
+                {section.commands.map((item) => (
+                  <div
+                    key={`${section.title}-${item.command}`}
+                    className="rounded-lg border border-slate-800 bg-slate-900 p-5"
+                  >
+                    <code className="break-all text-sm font-semibold text-cyan-400">
                       {item.command}
                     </code>
-                  </div>
 
-                  <p className="mt-4 leading-7 text-slate-400">
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        ))
+                    <p className="mt-3 text-sm leading-6 text-slate-400">
+                      {item.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
       )}
-    </>
+    </div>
   );
 }

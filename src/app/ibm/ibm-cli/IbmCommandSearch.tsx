@@ -68,7 +68,7 @@ export default function IbmCommandSearch({ sections }: Props) {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search IBM Cloud CLI commands..."
+          placeholder="Search IBM Cloud commands..."
           className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-cyan-500"
         />
 
@@ -83,37 +83,46 @@ export default function IbmCommandSearch({ sections }: Props) {
         )}
       </div>
 
-      {search && (
-        <p className="mt-3 text-sm text-slate-400">
-          Found{" "}
-          <span className="font-semibold text-cyan-400">
-            {resultCount}
-          </span>{" "}
-          matching command{resultCount === 1 ? "" : "s"}.
-        </p>
-      )}
+      <p className="mt-3 text-sm text-slate-400">
+        {search ? (
+          <>
+            Found{" "}
+            <span className="font-semibold text-cyan-400">
+              {resultCount}
+            </span>{" "}
+            matching command{resultCount === 1 ? "" : "s"}.
+          </>
+        ) : (
+          <>
+            Showing{" "}
+            <span className="font-semibold text-cyan-400">
+              {resultCount}
+            </span>{" "}
+            commands.
+          </>
+        )}
+      </p>
 
       {search && filteredSections.length === 0 && (
         <div className="mt-6 rounded-lg border border-slate-800 bg-slate-900 p-6 text-center">
           <p className="font-semibold text-white">
-            No IBM Cloud CLI commands found
+            No IBM Cloud commands found
           </p>
 
           <p className="mt-2 text-sm text-slate-400">
-            Try searching for IAM, VPC, Kubernetes, Code Engine,
-            Container Registry, Object Storage, Compute, Database,
-            Plugins or Resource Groups.
+            Try searching for IAM, VPC, Object Storage, Kubernetes,
+            Code Engine, Container Registry, Functions or databases.
           </p>
         </div>
       )}
 
-      {search && filteredSections.length > 0 && (
-        <div className="mt-6 space-y-8">
+      {filteredSections.length > 0 && (
+        <div className="mt-8 space-y-10">
           {filteredSections.map((section) => (
-            <div key={section.title}>
-              <h3 className="mb-4 text-xl font-bold text-white">
+            <section key={section.title}>
+              <h2 className="mb-4 text-2xl font-bold text-white">
                 {section.title}
-              </h3>
+              </h2>
 
               <div className="space-y-4">
                 {section.commands.map((item) => (
@@ -125,13 +134,13 @@ export default function IbmCommandSearch({ sections }: Props) {
                       {item.command}
                     </code>
 
-                    <p className="mt-2 text-sm leading-6 text-slate-400">
+                    <p className="mt-3 text-sm leading-6 text-slate-400">
                       {item.description}
                     </p>
                   </div>
                 ))}
               </div>
-            </div>
+            </section>
           ))}
         </div>
       )}

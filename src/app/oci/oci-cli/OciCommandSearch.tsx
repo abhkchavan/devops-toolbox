@@ -2,21 +2,21 @@
 
 import { useMemo, useState } from "react";
 
-type GitCommand = {
+type OciCommand = {
   command: string;
   description: string;
 };
 
-type GitSection = {
+type OciSection = {
   title: string;
-  commands: GitCommand[];
+  commands: OciCommand[];
 };
 
 type Props = {
-  sections: GitSection[];
+  sections: OciSection[];
 };
 
-export default function GitCommandSearch({ sections }: Props) {
+export default function OciCommandSearch({ sections }: Props) {
   const [search, setSearch] = useState("");
 
   const filteredSections = useMemo(() => {
@@ -52,7 +52,7 @@ export default function GitCommandSearch({ sections }: Props) {
         return null;
       })
       .filter(
-        (section): section is GitSection => section !== null,
+        (section): section is OciSection => section !== null,
       );
   }, [search, sections]);
 
@@ -68,7 +68,7 @@ export default function GitCommandSearch({ sections }: Props) {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search Git commands..."
+          placeholder="Search OCI CLI commands..."
           className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-cyan-500"
         />
 
@@ -106,12 +106,12 @@ export default function GitCommandSearch({ sections }: Props) {
       {search && filteredSections.length === 0 && (
         <div className="mt-6 rounded-lg border border-slate-800 bg-slate-900 p-6 text-center">
           <p className="font-semibold text-white">
-            No Git commands found
+            No OCI CLI commands found
           </p>
 
           <p className="mt-2 text-sm text-slate-400">
-            Try searching for clone, branch, commit, merge, rebase,
-            stash, remote, tag, log or reset.
+            Try searching for Compute, Object Storage, VCN, OKE,
+            IAM, Vault, DNS, Load Balancer, Monitoring or Terraform.
           </p>
         </div>
       )}

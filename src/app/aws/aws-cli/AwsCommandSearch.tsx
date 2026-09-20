@@ -83,36 +83,46 @@ export default function AwsCommandSearch({ sections }: Props) {
         )}
       </div>
 
-      {search && (
-        <p className="mt-3 text-sm text-slate-400">
-          Found{" "}
-          <span className="font-semibold text-cyan-400">
-            {resultCount}
-          </span>{" "}
-          matching command{resultCount === 1 ? "" : "s"}.
-        </p>
-      )}
+      <p className="mt-3 text-sm text-slate-400">
+        {search ? (
+          <>
+            Found{" "}
+            <span className="font-semibold text-cyan-400">
+              {resultCount}
+            </span>{" "}
+            matching command{resultCount === 1 ? "" : "s"}.
+          </>
+        ) : (
+          <>
+            Showing{" "}
+            <span className="font-semibold text-cyan-400">
+              {resultCount}
+            </span>{" "}
+            commands.
+          </>
+        )}
+      </p>
 
       {search && filteredSections.length === 0 && (
         <div className="mt-6 rounded-lg border border-slate-800 bg-slate-900 p-6 text-center">
           <p className="font-semibold text-white">
-            No AWS commands found
+            No AWS CLI commands found
           </p>
 
           <p className="mt-2 text-sm text-slate-400">
-            Try searching for EC2, S3, IAM, VPC, EKS, ECR, Lambda,
-            CloudWatch, RDS or Route 53.
+            Try searching for EC2, S3, IAM, VPC, EKS, ECS, Lambda,
+            RDS, CloudWatch, Route 53 or ECR.
           </p>
         </div>
       )}
 
-      {search && filteredSections.length > 0 && (
-        <div className="mt-6 space-y-8">
+      {filteredSections.length > 0 && (
+        <div className="mt-8 space-y-10">
           {filteredSections.map((section) => (
-            <div key={section.title}>
-              <h3 className="mb-4 text-xl font-bold text-white">
+            <section key={section.title}>
+              <h2 className="mb-4 text-2xl font-bold text-white">
                 {section.title}
-              </h3>
+              </h2>
 
               <div className="space-y-4">
                 {section.commands.map((item) => (
@@ -124,13 +134,13 @@ export default function AwsCommandSearch({ sections }: Props) {
                       {item.command}
                     </code>
 
-                    <p className="mt-2 text-sm leading-6 text-slate-400">
+                    <p className="mt-3 text-sm leading-6 text-slate-400">
                       {item.description}
                     </p>
                   </div>
                 ))}
               </div>
-            </div>
+            </section>
           ))}
         </div>
       )}
