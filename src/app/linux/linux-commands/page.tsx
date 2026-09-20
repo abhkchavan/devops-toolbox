@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-
+import LinuxCommandSearch from "./LinuxCommandSearch";
 export const metadata: Metadata = {
   title: "Linux Commands Cheat Sheet",
   description:
@@ -839,30 +839,7 @@ export default function LinuxCommands() {
           </div>
         </header>
 
-        {commandSections.map((section) => (
-          <section key={section.title} className="mt-12">
-            <h2 className="text-2xl font-bold">{section.title}</h2>
-
-            <div className="mt-5 space-y-4">
-              {section.commands.map((item) => (
-                <div
-                  key={item.command}
-                  className="rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:border-cyan-500/30"
-                >
-                  <div className="overflow-x-auto rounded-lg bg-slate-950 p-4">
-                    <code className="whitespace-nowrap text-sm text-cyan-400">
-                      {item.command}
-                    </code>
-                  </div>
-
-                  <p className="mt-4 leading-7 text-slate-400">
-                    {item.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        ))}
+        <LinuxCommandSearch sections={commandSections} />
 
         <section className="mt-12 rounded-xl border border-cyan-900 bg-slate-900 p-6">
           <h2 className="text-xl font-bold">DevOps Troubleshooting Workflow</h2>
