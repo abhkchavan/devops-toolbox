@@ -59,6 +59,8 @@ export const metadata: Metadata = {
   creator: "DevOps Commands",
   publisher: "DevOps Commands",
 
+  applicationName: "DevOps Commands",
+
   alternates: {
     canonical: "/",
   },
@@ -66,7 +68,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "/",
+    url: "https://www.devopscommands.com/",
     siteName: "DevOps Commands",
     title:
       "DevOps Commands, Troubleshooting & Tools | Kubernetes, Linux, Docker",
