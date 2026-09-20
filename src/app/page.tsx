@@ -21,6 +21,10 @@ export default function Home() {
       git: "/git/git-commands",
       terraform: "/terraform/terraform-commands",
       jenkins: "/jenkins/jenkins-commands",
+      prometheus: "/prometheus/prometheus-commands",
+      promql: "/prometheus/prometheus-commands",
+      promtool: "/prometheus/prometheus-commands",
+      monitoring: "/prometheus/prometheus-commands",
       aws: "/aws/aws-cli",
       "aws cli": "/aws/aws-cli",
       azure: "/azure/azure-cli",
@@ -90,16 +94,16 @@ export default function Home() {
 
         <p className="mx-auto mt-6 max-w-2xl text-lg text-slate-400">
           Learn Linux, Docker, Kubernetes, Helm, Ansible, Git, Terraform,
-          Jenkins, AWS CLI, Azure CLI, Google Cloud CLI, OCI CLI, IBM Cloud
-          CLI and SRE through practical examples, troubleshooting guides and
-          free tools.
+          Jenkins, Prometheus, AWS CLI, Azure CLI, Google Cloud CLI, OCI CLI,
+          IBM Cloud CLI and SRE through practical examples,
+          troubleshooting guides and free tools.
         </p>
 
         {/* Search */}
         <div className="mx-auto mt-10 flex max-w-2xl">
           <input
             type="text"
-            placeholder="Search Kubernetes, Helm, Linux, Docker, Git, Terraform, Jenkins, AWS, Azure, GCP, OCI, IBM..."
+            placeholder="Search Kubernetes, Helm, Prometheus, Linux, Docker, Git, Terraform, Jenkins, AWS, Azure, GCP, OCI, IBM..."
             className="w-full rounded-l-lg border border-slate-700 bg-slate-900 px-5 py-4 text-white outline-none focus:border-cyan-500"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -157,6 +161,10 @@ export default function Home() {
             [
               "Jenkins",
               "Jobs, builds, pipelines, agents and CI/CD automation.",
+            ],
+            [
+              "Prometheus",
+              "Monitoring, PromQL, alerting, recording rules, targets and SRE troubleshooting.",
             ],
             [
               "AWS CLI",
@@ -385,6 +393,29 @@ export default function Home() {
             <p className="mt-3 text-sm leading-6 text-slate-400">
               Helm commands for Kubernetes charts, repositories, releases,
               upgrades, rollbacks, values, templates and CI/CD.
+            </p>
+
+            <p className="mt-5 text-sm font-semibold text-cyan-400">
+              Read guide →
+            </p>
+          </a>
+
+          {/* Prometheus */}
+          <a
+            href="/prometheus/prometheus-commands"
+            className="block rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500 hover:bg-slate-800"
+          >
+            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+              Prometheus
+            </p>
+
+            <h4 className="mt-3 text-xl font-semibold">
+              Prometheus & PromQL Cheat Sheet
+            </h4>
+
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Prometheus commands, promtool, PromQL, monitoring, alerting,
+              recording rules, targets and troubleshooting.
             </p>
 
             <p className="mt-5 text-sm font-semibold text-cyan-400">
