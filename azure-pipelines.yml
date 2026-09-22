@@ -1,0 +1,28 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+pool:
+ vmImage: unubtu-latest
+
+steps:
+  - task: Node@0
+    display-name: 'Install Node JS'
+    inputs:
+       versionSpec: '20.x'
+
+  - script: |
+    node --version
+    npm --version
+    displayName: 'Check Node.js and npm'
+
+  - script: |
+    npm ci
+    displayName: 'Install dependencies'
+
+  - script: |
+  npm run build
+  displayName: 'Build Next.js application'
