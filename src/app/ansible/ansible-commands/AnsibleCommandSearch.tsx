@@ -19,9 +19,9 @@ type Props = {
 export default function AnsibleCommandSearch({ sections }: Props) {
   const [query, setQuery] = useState("");
 
-  const filteredSections = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase();
+  const normalizedQuery = query.trim().toLowerCase();
 
+  const filteredSections = useMemo(() => {
     if (!normalizedQuery) {
       return sections;
     }
@@ -31,21 +31,79 @@ export default function AnsibleCommandSearch({ sections }: Props) {
         ...section,
         commands: section.commands.filter(
           (item) =>
+            section.title.toLowerCase().includes(normalizedQuery) ||
             item.command.toLowerCase().includes(normalizedQuery) ||
-            item.description.toLowerCase().includes(normalizedQuery)
+            item.description.toLowerCase().includes(normalizedQuery),
         ),
       }))
       .filter((section) => section.commands.length > 0);
-  }, [query, sections]);
+  }, [normalizedQuery, sections]);
 
   const resultCount = filteredSections.reduce(
     (total, section) => total + section.commands.length,
-    0
+    0,
   );
+
+  const totalCommands = sections.reduce(
+    (total, section) => total + section.commands.length,
+    0,
+  );
+
+  const getSectionId = (title: string) =>
+    `ansible-${title
+      .replace(/^\d+\.\s*/, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")}`;
 
   return (
     <section className="mt-12">
-      <div className="rounded-xl border border-slate-800 bg-slate-900 p-6">
+      {!normalizedQuery && (
+        <section>
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-bold text-white">
+                Ansible Command Categories
+              </h2>
+
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                Jump directly to the Ansible commands you need.
+              </p>
+            </div>
+
+            <span className="hidden text-sm text-slate-500 sm:block">
+              {sections.length} categories
+            </span>
+          </div>
+
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {sections.map((section) => (
+              <a
+                key={section.title}
+                href={`#${getSectionId(section.title)}`}
+                className="group rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:border-cyan-500/50 hover:bg-slate-800/70"
+              >
+                <h3 className="font-bold text-white transition group-hover:text-cyan-400">
+                  {section.title}
+                </h3>
+
+                <p className="mt-2 text-sm text-slate-500">
+                  {section.commands.length}{" "}
+                  {section.commands.length === 1
+                    ? "command"
+                    : "commands"}
+                </p>
+
+                <span className="mt-4 inline-block text-sm font-semibold text-cyan-400">
+                  View commands →
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <div className="mt-10 rounded-xl border border-slate-800 bg-slate-900 p-6">
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <h2 className="text-2xl font-bold">
@@ -58,8 +116,10 @@ export default function AnsibleCommandSearch({ sections }: Props) {
           </div>
 
           <p className="text-sm font-semibold text-cyan-400">
-            {resultCount}{" "}
-            {resultCount === 1 ? "command" : "commands"}
+            {normalizedQuery ? resultCount : totalCommands}{" "}
+            {(normalizedQuery ? resultCount : totalCommands) === 1
+              ? "command"
+              : "commands"}
           </p>
         </div>
 
@@ -86,7 +146,7 @@ export default function AnsibleCommandSearch({ sections }: Props) {
         </div>
       </div>
 
-      {query && filteredSections.length === 0 ? (
+      {normalizedQuery && filteredSections.length === 0 ? (
         <div className="mt-6 rounded-xl border border-slate-800 bg-slate-900 p-8 text-center">
           <h3 className="text-lg font-semibold text-white">
             No Ansible commands found
@@ -99,14 +159,35 @@ export default function AnsibleCommandSearch({ sections }: Props) {
             <code className="mx-1 text-cyan-400">vault</code>, or
             <code className="mx-1 text-cyan-400">docker</code>.
           </p>
+
+          <button
+            type="button"
+            onClick={() => setQuery("")}
+            className="mt-5 text-sm font-semibold text-cyan-400 transition hover:text-cyan-300 hover:underline"
+          >
+            Show all Ansible commands
+          </button>
         </div>
       ) : (
         <div className="mt-6 space-y-8">
           {filteredSections.map((section) => (
-            <section key={section.title}>
-              <h3 className="text-xl font-bold text-white">
-                {section.title}
-              </h3>
+            <section
+              key={section.title}
+              id={getSectionId(section.title)}
+              className="scroll-mt-24"
+            >
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 className="text-xl font-bold text-white">
+                  {section.title}
+                </h3>
+
+                <span className="text-sm text-slate-500">
+                  {section.commands.length}{" "}
+                  {section.commands.length === 1
+                    ? "command"
+                    : "commands"}
+                </span>
+              </div>
 
               <div className="mt-4 space-y-3">
                 {section.commands.map((item) => (

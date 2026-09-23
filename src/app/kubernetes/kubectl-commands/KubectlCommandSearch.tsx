@@ -16,7 +16,7 @@ type Props = {
   sections: CommandSection[];
 };
 
-export default function AzureCommandSearch({ sections }: Props) {
+export default function KubectlCommandSearch({ sections }: Props) {
   const [search, setSearch] = useState("");
 
   const query = search.trim().toLowerCase();
@@ -58,32 +58,51 @@ export default function AzureCommandSearch({ sections }: Props) {
     0,
   );
 
+  /*
+   * Converts:
+   *
+   * 9. Deployments and Rollouts
+   *
+   * into:
+   *
+   * kubectl-deployments-and-rollouts
+   *
+   * This matches the href values used by the category cards
+   * in page.tsx.
+   */
+  const getSectionId = (title: string) =>
+    `kubectl-${title
+      .replace(/^\d+\.\s*/, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")}`;
+
   return (
     <>
       <section className="mt-10 rounded-xl border border-slate-800 bg-slate-900 p-5">
         <label
-          htmlFor="azure-search"
+          htmlFor="kubectl-search"
           className="text-sm font-semibold text-slate-300"
         >
-          Search Azure CLI commands
+          Search kubectl commands
         </label>
 
         <div className="relative mt-3">
           <input
-            id="azure-search"
+            id="kubectl-search"
             type="search"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
-            placeholder="Search resource groups, VM, AKS, storage, networking..."
+            placeholder="Search pods, deployments, services, nodes, logs, RBAC..."
             className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 pr-12 text-white outline-none placeholder:text-slate-500 focus:border-cyan-400"
-            aria-describedby="azure-search-results"
+            aria-describedby="kubectl-search-results"
           />
 
           {search && (
             <button
               type="button"
               onClick={() => setSearch("")}
-              aria-label="Clear Azure CLI command search"
+              aria-label="Clear kubectl command search"
               className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md px-2 py-1 text-lg text-slate-400 transition hover:bg-slate-800 hover:text-white"
             >
               {"\u00D7"}
@@ -92,18 +111,15 @@ export default function AzureCommandSearch({ sections }: Props) {
         </div>
 
         <div
-          id="azure-search-results"
+          id="kubectl-search-results"
           className="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm"
         >
           <span className="text-slate-500">
             {query
-              ? commandCount +
-                " matching " +
-                (commandCount === 1 ? "command" : "commands")
-              : totalCommands +
-                " commands across " +
-                sections.length +
-                " categories"}
+              ? `${commandCount} matching ${
+                  commandCount === 1 ? "command" : "commands"
+                }`
+              : `${totalCommands} commands across ${sections.length} categories`}
           </span>
 
           {query && (
@@ -121,13 +137,13 @@ export default function AzureCommandSearch({ sections }: Props) {
       {query && filteredSections.length === 0 ? (
         <section className="mt-8 rounded-xl border border-slate-800 bg-slate-900 p-8 text-center">
           <h2 className="text-xl font-bold text-white">
-            No commands found
+            No kubectl commands found
           </h2>
 
           <p className="mt-3 leading-7 text-slate-400">
-            Try searching for resource groups, virtual machines, AKS,
-            storage, networking, containers, App Service, databases,
-            monitoring, permissions or troubleshooting.
+            Try searching for pods, deployments, services, logs, nodes,
+            networking, RBAC, storage, configuration, contexts or
+            troubleshooting.
           </p>
 
           <button
@@ -140,7 +156,11 @@ export default function AzureCommandSearch({ sections }: Props) {
         </section>
       ) : (
         filteredSections.map((section) => (
-          <section key={section.title} className="mt-12">
+          <section
+            key={section.title}
+            id={getSectionId(section.title)}
+            className="mt-12 scroll-mt-24"
+          >
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="text-2xl font-bold text-white">
                 {section.title}

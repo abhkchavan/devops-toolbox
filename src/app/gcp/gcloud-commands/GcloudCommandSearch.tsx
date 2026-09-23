@@ -21,6 +21,13 @@ export default function GcloudCommandSearch({ sections }: Props) {
 
   const query = search.trim().toLowerCase();
 
+  const getSectionId = (title: string) =>
+    `gcloud-${title
+      .replace(/^\d+\.\s*/, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")}`;
+
   const filteredSections = useMemo<GcloudSection[]>(() => {
     if (!query) {
       return sections;
@@ -60,6 +67,49 @@ export default function GcloudCommandSearch({ sections }: Props) {
 
   return (
     <>
+      {!query && (
+        <section className="mt-10">
+          <div className="mb-5">
+            <h2 className="text-2xl font-bold text-white">
+              Google Cloud CLI Command Categories
+            </h2>
+
+            <p className="mt-2 text-slate-400">
+              Jump directly to the Google Cloud CLI commands you need.
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {sections.map((section) => (
+              <a
+                key={section.title}
+                href={`#${getSectionId(section.title)}`}
+                className="group rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:border-cyan-500/50 hover:bg-slate-800/70"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="font-semibold text-white transition group-hover:text-cyan-400">
+                    {section.title}
+                  </h3>
+
+                  <span className="shrink-0 rounded-full border border-slate-700 px-2 py-1 text-xs text-slate-400">
+                    {section.commands.length}
+                  </span>
+                </div>
+
+                <p className="mt-3 text-sm leading-6 text-slate-400">
+                  Google Cloud CLI commands for{" "}
+                  {section.title.toLowerCase()}.
+                </p>
+
+                <span className="mt-4 inline-block text-sm font-medium text-cyan-400">
+                  View commands →
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section className="mt-10 rounded-xl border border-slate-800 bg-slate-900 p-5">
         <label
           htmlFor="gcloud-search"
@@ -141,7 +191,11 @@ export default function GcloudCommandSearch({ sections }: Props) {
         </section>
       ) : (
         filteredSections.map((section) => (
-          <section key={section.title} className="mt-12">
+          <section
+            key={section.title}
+            id={getSectionId(section.title)}
+            className="mt-12 scroll-mt-24"
+          >
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="text-2xl font-bold text-white">
                 {section.title}

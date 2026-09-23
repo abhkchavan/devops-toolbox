@@ -58,8 +58,60 @@ export default function DockerCommandSearch({ sections }: Props) {
     0,
   );
 
+  const getSectionId = (title: string) =>
+    `docker-${title
+      .replace(/^\d+\.\s*/, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")}`;
+
   return (
     <>
+      {!query && (
+        <section className="mt-10">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-bold text-white">
+                Docker Command Categories
+              </h2>
+
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                Jump directly to the Docker commands you need.
+              </p>
+            </div>
+
+            <span className="hidden text-sm text-slate-500 sm:block">
+              {sections.length} categories
+            </span>
+          </div>
+
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {sections.map((section) => (
+              <a
+                key={section.title}
+                href={`#${getSectionId(section.title)}`}
+                className="group rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:border-cyan-500/50 hover:bg-slate-800/70"
+              >
+                <h3 className="font-bold text-white transition group-hover:text-cyan-400">
+                  {section.title}
+                </h3>
+
+                <p className="mt-2 text-sm text-slate-500">
+                  {section.commands.length}{" "}
+                  {section.commands.length === 1
+                    ? "command"
+                    : "commands"}
+                </p>
+
+                <span className="mt-4 inline-block text-sm font-semibold text-cyan-400">
+                  View commands →
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
       <section className="mt-10 rounded-xl border border-slate-800 bg-slate-900 p-5">
         <label
           htmlFor="docker-search"
@@ -140,7 +192,11 @@ export default function DockerCommandSearch({ sections }: Props) {
         </section>
       ) : (
         filteredSections.map((section) => (
-          <section key={section.title} className="mt-12">
+          <section
+            key={section.title}
+            id={getSectionId(section.title)}
+            className="mt-12 scroll-mt-24"
+          >
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="text-2xl font-bold text-white">
                 {section.title}

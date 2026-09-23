@@ -19,9 +19,9 @@ type Props = {
 export default function TerraformCommandSearch({ sections }: Props) {
   const [search, setSearch] = useState("");
 
-  const filteredSections = useMemo<TerraformSection[]>(() => {
-    const query = search.trim().toLowerCase();
+  const query = search.trim().toLowerCase();
 
+  const filteredSections = useMemo<TerraformSection[]>(() => {
     if (!query) {
       return sections;
     }
@@ -54,56 +54,127 @@ export default function TerraformCommandSearch({ sections }: Props) {
       .filter(
         (section): section is TerraformSection => section !== null,
       );
-  }, [search, sections]);
+  }, [query, sections]);
 
   const resultCount = filteredSections.reduce(
     (total, section) => total + section.commands.length,
     0,
   );
 
+  const totalCommands = sections.reduce(
+    (total, section) => total + section.commands.length,
+    0,
+  );
+
+  const getSectionId = (title: string) =>
+    `terraform-${title
+      .replace(/^\d+\.\s*/, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")}`;
+
   return (
     <div className="mb-10">
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search Terraform commands..."
-          className="w-full rounded-lg border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-cyan-500"
-        />
+      {!query && (
+        <section className="mt-10">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-2xl font-bold text-white">
+                Terraform Command Categories
+              </h2>
 
-        {search && (
-          <button
-            type="button"
-            onClick={() => setSearch("")}
-            className="rounded-lg border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-300 transition hover:border-cyan-500 hover:text-cyan-400"
-          >
-            Clear
-          </button>
-        )}
-      </div>
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                Jump directly to the Terraform commands you need.
+              </p>
+            </div>
 
-      <p className="mt-3 text-sm text-slate-400">
-        {search ? (
-          <>
-            Found{" "}
-            <span className="font-semibold text-cyan-400">
-              {resultCount}
-            </span>{" "}
-            matching command{resultCount === 1 ? "" : "s"}.
-          </>
-        ) : (
-          <>
-            Showing{" "}
-            <span className="font-semibold text-cyan-400">
-              {resultCount}
-            </span>{" "}
-            commands.
-          </>
-        )}
-      </p>
+            <span className="hidden text-sm text-slate-500 sm:block">
+              {sections.length} categories
+            </span>
+          </div>
 
-      {search && filteredSections.length === 0 && (
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {sections.map((section) => (
+              <a
+                key={section.title}
+                href={`#${getSectionId(section.title)}`}
+                className="group rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:border-cyan-500/50 hover:bg-slate-800/70"
+              >
+                <h3 className="font-bold text-white transition group-hover:text-cyan-400">
+                  {section.title}
+                </h3>
+
+                <p className="mt-2 text-sm text-slate-500">
+                  {section.commands.length}{" "}
+                  {section.commands.length === 1
+                    ? "command"
+                    : "commands"}
+                </p>
+
+                <span className="mt-4 inline-block text-sm font-semibold text-cyan-400">
+                  View commands →
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section className="mt-10 rounded-xl border border-slate-800 bg-slate-900 p-5">
+        <label
+          htmlFor="terraform-search"
+          className="text-sm font-semibold text-slate-300"
+        >
+          Search Terraform commands
+        </label>
+
+        <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+          <input
+            id="terraform-search"
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search init, plan, apply, state, module, provider..."
+            className="w-full rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none placeholder:text-slate-500 transition focus:border-cyan-400"
+          />
+
+          {search && (
+            <button
+              type="button"
+              onClick={() => setSearch("")}
+              className="rounded-lg border border-slate-700 px-5 py-3 text-sm font-semibold text-slate-300 transition hover:border-cyan-500 hover:text-cyan-400"
+            >
+              Clear
+            </button>
+          )}
+        </div>
+
+        <p className="mt-3 text-sm text-slate-400">
+          {query ? (
+            <>
+              Found{" "}
+              <span className="font-semibold text-cyan-400">
+                {resultCount}
+              </span>{" "}
+              matching command{resultCount === 1 ? "" : "s"}.
+            </>
+          ) : (
+            <>
+              Showing{" "}
+              <span className="font-semibold text-cyan-400">
+                {totalCommands}
+              </span>{" "}
+              commands across{" "}
+              <span className="font-semibold text-cyan-400">
+                {sections.length}
+              </span>{" "}
+              categories.
+            </>
+          )}
+        </p>
+      </section>
+
+      {query && filteredSections.length === 0 && (
         <div className="mt-6 rounded-lg border border-slate-800 bg-slate-900 p-6 text-center">
           <p className="font-semibold text-white">
             No Terraform commands found
@@ -113,22 +184,43 @@ export default function TerraformCommandSearch({ sections }: Props) {
             Try searching for init, plan, apply, destroy, state,
             import, module, workspace, provider or validate.
           </p>
+
+          <button
+            type="button"
+            onClick={() => setSearch("")}
+            className="mt-5 text-sm font-semibold text-cyan-400 transition hover:text-cyan-300 hover:underline"
+          >
+            Show all Terraform commands
+          </button>
         </div>
       )}
 
       {filteredSections.length > 0 && (
         <div className="mt-8 space-y-10">
           {filteredSections.map((section) => (
-            <section key={section.title}>
-              <h2 className="mb-4 text-2xl font-bold text-white">
-                {section.title}
-              </h2>
+            <section
+              key={section.title}
+              id={getSectionId(section.title)}
+              className="scroll-mt-24"
+            >
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h2 className="mb-4 text-2xl font-bold text-white">
+                  {section.title}
+                </h2>
+
+                <span className="text-sm text-slate-500">
+                  {section.commands.length}{" "}
+                  {section.commands.length === 1
+                    ? "command"
+                    : "commands"}
+                </span>
+              </div>
 
               <div className="space-y-4">
                 {section.commands.map((item) => (
                   <div
                     key={`${section.title}-${item.command}`}
-                    className="rounded-lg border border-slate-800 bg-slate-900 p-5"
+                    className="rounded-lg border border-slate-800 bg-slate-900 p-5 transition hover:border-cyan-500/30"
                   >
                     <code className="break-all text-sm font-semibold text-cyan-400">
                       {item.command}
