@@ -32,6 +32,13 @@ const searchItems: SearchItem[] = [
     category: "Tool",
   },
   {
+    title: "DevOps Scenario Generator",
+    description:
+      "Practice real-world DevOps incidents with a simulated terminal and guided troubleshooting workflow.",
+    href: "/scenarios",
+    category: "Tool",
+  },
+  {
     title: "Kubernetes CrashLoopBackOff",
     description:
       "Troubleshoot Kubernetes CrashLoopBackOff using logs, events, probes, configuration and resource checks.",
@@ -490,6 +497,13 @@ const tools = [
     featured: true,
   },
   {
+    title: "DevOps Scenario Generator",
+    description:
+      "Practice real-world DevOps incidents with a simulated terminal and guided troubleshooting workflow.",
+    href: "/scenarios",
+    featured: true,
+  },
+  {
     title: "YAML Validator",
     description: "Validate YAML syntax instantly.",
     href: "/tools/yaml-validator",
@@ -706,6 +720,12 @@ export default function Home() {
               className="transition hover:text-cyan-400"
             >
               Command Builder
+            </a>
+            <a
+              href="/scenarios"
+              className="transition hover:text-cyan-400"
+            >
+              Scenarios
             </a>
             <a href="#interview" className="transition hover:text-cyan-400">
               Interview
@@ -1113,7 +1133,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {tools.map((tool) => (
               <a
                 key={tool.title}
@@ -1145,9 +1165,11 @@ export default function Home() {
                 </p>
 
                 <p className="mt-4 text-sm font-semibold text-cyan-400">
-                  {tool.featured
+                  {tool.title === "Kubernetes Command Builder"
                     ? "Build command →"
-                    : "Open tool →"}
+                    : tool.title === "DevOps Scenario Generator"
+                      ? "Practice a Scenario →"
+                      : "Open tool →"}
                 </p>
               </a>
             ))}
@@ -1225,6 +1247,13 @@ export default function Home() {
               className="inline-flex rounded-lg bg-cyan-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-400"
             >
               Build a kubectl Command →
+            </a>
+
+            <a
+              href="/scenarios"
+              className="inline-flex rounded-lg border border-cyan-500/40 px-5 py-3 text-sm font-semibold text-cyan-400 transition hover:bg-cyan-500/10"
+            >
+              Practice a DevOps Scenario →
             </a>
 
             <a
