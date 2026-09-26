@@ -4,105 +4,73 @@ import KubectlCommandSearch from "./KubectlCommandSearch";
 export const metadata: Metadata = {
   title: "kubectl Commands Cheat Sheet | Kubernetes CLI Reference",
   description:
-    "Complete kubectl commands cheat sheet for Kubernetes administration, DevOps, SRE and production troubleshooting. Learn kubectl commands for Pods, Deployments, Services, Nodes, logs, networking, RBAC, storage, rollouts and cluster operations.",
+    "Complete kubectl commands cheat sheet for Kubernetes administrators, DevOps engineers and SREs. Includes pods, deployments, services, networking, RBAC, storage, troubleshooting, logs, scaling, rollouts and production workflows.",
   keywords: [
     "kubectl commands",
     "kubectl cheat sheet",
     "Kubernetes commands",
-    "Kubernetes CLI",
     "kubectl command reference",
-    "kubectl examples",
+    "Kubernetes CLI",
     "kubectl troubleshooting",
-    "Kubernetes troubleshooting",
-    "kubectl get pods",
     "kubectl logs",
-    "kubectl exec",
-    "kubectl apply",
-    "kubectl rollout",
-    "kubectl describe",
-    "kubectl delete pod",
-    "kubectl get nodes",
-    "kubectl commands for DevOps",
-    "kubectl commands for SRE",
+    "kubectl pods",
+    "kubectl deployments",
+    "kubectl services",
+    "kubectl networking",
+    "kubectl RBAC",
+    "kubectl storage",
     "Kubernetes DevOps commands",
-    "Kubernetes production troubleshooting",
-    "Kubernetes production commands",
-    "kubectl production troubleshooting",
-    "Kubernetes CLI cheat sheet",
+    "Kubernetes SRE commands",
   ],
   alternates: {
-    canonical: "/kubernetes/kubectl-commands",
+    canonical: "https://www.devopscommands.com/kubernetes/kubectl-commands",
   },
   openGraph: {
-    type: "article",
+    title: "kubectl Commands Cheat Sheet | Kubernetes CLI Reference",
+    description:
+      "Practical kubectl command reference for Kubernetes operations, troubleshooting, deployments, networking, RBAC, storage and production support.",
     url: "https://www.devopscommands.com/kubernetes/kubectl-commands",
-    siteName: "DevOps Commands",
-    title: "kubectl Commands Cheat Sheet | Kubernetes CLI Reference",
-    description:
-      "Practical kubectl command reference for Kubernetes administration, DevOps, SRE, application support and production troubleshooting.",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "kubectl Commands Cheat Sheet | Kubernetes CLI Reference",
-    description:
-      "Practical kubectl commands for Kubernetes administration, DevOps, SRE troubleshooting and cluster management.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
-    },
+    type: "article",
   },
 };
 
-const commandSections = [
+type Command = {
+  command: string;
+  description: string;
+};
+
+type CommandSection = {
+  title: string;
+  commands: Command[];
+};
+
+const commandSections: CommandSection[] = [
   {
     title: "1. Kubernetes Cluster Information",
     commands: [
       {
         command: "kubectl cluster-info",
-        description:
-          "Displays the Kubernetes control plane and cluster service endpoints.",
+        description: "Display Kubernetes control plane and service endpoints.",
       },
       {
         command: "kubectl version",
-        description:
-          "Displays client and server Kubernetes version information.",
-      },
-      {
-        command: "kubectl version --output=yaml",
-        description:
-          "Displays Kubernetes client and server version information in YAML format.",
-      },
-      {
-        command: "kubectl api-versions",
-        description:
-          "Lists API versions available from the Kubernetes API server.",
-      },
-      {
-        command: "kubectl api-resources",
-        description:
-          "Lists supported Kubernetes resource types and their API groups.",
-      },
-      {
-        command: "kubectl get --raw=/healthz",
-        description:
-          "Queries the Kubernetes API health endpoint.",
+        description: "Display client and server Kubernetes versions.",
       },
       {
         command: "kubectl get nodes",
-        description:
-          "Lists all nodes in the current cluster.",
+        description: "List all nodes in the Kubernetes cluster.",
       },
       {
         command: "kubectl get nodes -o wide",
-        description:
-          "Shows additional node information such as IP address, OS and container runtime.",
+        description: "Display nodes with IP addresses, OS, kernel and runtime information.",
+      },
+      {
+        command: "kubectl describe node <node-name>",
+        description: "Show detailed information, conditions, capacity, pods and events for a node.",
+      },
+      {
+        command: "kubectl get componentstatuses",
+        description: "Check legacy Kubernetes component health information.",
       },
     ],
   },
@@ -112,78 +80,39 @@ const commandSections = [
     commands: [
       {
         command: "kubectl get pods",
-        description:
-          "Lists Pods in the current namespace.",
+        description: "List pods in the current namespace.",
       },
       {
         command: "kubectl get pods -A",
-        description:
-          "Lists Pods across all namespaces.",
+        description: "List pods across all namespaces.",
       },
       {
         command: "kubectl get pods -o wide",
-        description:
-          "Shows additional Pod information including IP address and node.",
-      },
-      {
-        command: "kubectl get all",
-        description:
-          "Displays common resources such as Pods, Services, Deployments and ReplicaSets in the current namespace.",
-      },
-      {
-        command: "kubectl get namespaces",
-        description:
-          "Lists all namespaces in the cluster.",
-      },
-      {
-        command: "kubectl get svc",
-        description:
-          "Lists Services in the current namespace.",
+        description: "Show pods with node and IP information.",
       },
       {
         command: "kubectl get deployments",
-        description:
-          "Lists Deployments in the current namespace.",
+        description: "List deployments in the current namespace.",
       },
       {
-        command: "kubectl get replicasets",
-        description:
-          "Lists ReplicaSets in the current namespace.",
+        command: "kubectl get services",
+        description: "List Services in the current namespace.",
       },
       {
-        command: "kubectl get daemonsets",
-        description:
-          "Lists DaemonSets in the current namespace.",
+        command: "kubectl get namespaces",
+        description: "List all Kubernetes namespaces.",
       },
       {
-        command: "kubectl get statefulsets",
-        description:
-          "Lists StatefulSets in the current namespace.",
+        command: "kubectl get all",
+        description: "Display common workload resources in the current namespace.",
       },
       {
-        command: "kubectl get jobs",
-        description:
-          "Lists Jobs in the current namespace.",
+        command: "kubectl get <resource> <name> -o yaml",
+        description: "Display a resource definition in YAML format.",
       },
       {
-        command: "kubectl get cronjobs",
-        description:
-          "Lists CronJobs in the current namespace.",
-      },
-      {
-        command: "kubectl get ingress",
-        description:
-          "Lists Ingress resources.",
-      },
-      {
-        command: "kubectl get pvc",
-        description:
-          "Lists PersistentVolumeClaims.",
-      },
-      {
-        command: "kubectl get pv",
-        description:
-          "Lists PersistentVolumes in the cluster.",
+        command: "kubectl get <resource> <name> -o json",
+        description: "Display a resource definition in JSON format.",
       },
     ],
   },
@@ -192,35 +121,28 @@ const commandSections = [
     title: "3. Namespaces",
     commands: [
       {
-        command: "kubectl get ns",
-        description:
-          "Lists all namespaces.",
-      },
-      {
-        command: "kubectl create namespace <namespace>",
-        description:
-          "Creates a namespace.",
+        command: "kubectl get namespaces",
+        description: "List namespaces.",
       },
       {
         command: "kubectl get pods -n <namespace>",
-        description:
-          "Lists Pods in a specific namespace.",
+        description: "List pods in a specific namespace.",
       },
       {
         command: "kubectl get all -n <namespace>",
-        description:
-          "Lists common resources inside a specific namespace.",
+        description: "List common resources in a namespace.",
       },
       {
-        command:
-          "kubectl config set-context --current --namespace=<namespace>",
-        description:
-          "Sets the default namespace for the current kubectl context.",
+        command: "kubectl create namespace <namespace>",
+        description: "Create a namespace.",
       },
       {
         command: "kubectl delete namespace <namespace>",
-        description:
-          "Deletes a namespace and the resources contained within it. Treat as a destructive production operation.",
+        description: "Delete a namespace and its namespaced resources.",
+      },
+      {
+        command: "kubectl config set-context --current --namespace=<namespace>",
+        description: "Set the default namespace for the current kubectl context.",
       },
     ],
   },
@@ -230,44 +152,27 @@ const commandSections = [
     commands: [
       {
         command: "kubectl describe pod <pod-name>",
-        description:
-          "Shows detailed Pod information including events, containers, volumes and scheduling details.",
-      },
-      {
-        command: "kubectl describe node <node-name>",
-        description:
-          "Shows detailed information about a Kubernetes node.",
+        description: "Inspect pod state, containers, probes, mounts, scheduling and events.",
       },
       {
         command: "kubectl describe deployment <deployment-name>",
-        description:
-          "Shows detailed Deployment configuration, replica status and events.",
+        description: "Inspect deployment configuration, replicas and rollout state.",
       },
       {
-        command: "kubectl describe svc <service-name>",
-        description:
-          "Shows detailed Service configuration, ports and endpoint information.",
+        command: "kubectl describe service <service-name>",
+        description: "Inspect Service type, ports, selectors and endpoints.",
       },
       {
-        command: "kubectl describe ingress <ingress-name>",
-        description:
-          "Displays detailed Ingress configuration and routing information.",
+        command: "kubectl describe node <node-name>",
+        description: "Inspect node capacity, conditions, taints and workloads.",
       },
       {
-        command: "kubectl get pod <pod-name> -o yaml",
-        description:
-          "Displays the complete Kubernetes Pod definition and status as YAML.",
+        command: "kubectl explain pod",
+        description: "Display Kubernetes API documentation for a resource.",
       },
       {
-        command: "kubectl get pod <pod-name> -o json",
-        description:
-          "Displays the complete Kubernetes Pod definition and status as JSON.",
-      },
-      {
-        command:
-          "kubectl get deployment <deployment-name> -o wide",
-        description:
-          "Displays additional Deployment information.",
+        command: "kubectl explain pod.spec.containers",
+        description: "Display documentation for a specific resource field.",
       },
     ],
   },
@@ -277,45 +182,27 @@ const commandSections = [
     commands: [
       {
         command: "kubectl logs <pod-name>",
-        description:
-          "Displays logs from a Pod.",
+        description: "View logs from a pod.",
       },
       {
         command: "kubectl logs -f <pod-name>",
-        description:
-          "Continuously follows Pod logs.",
+        description: "Follow pod logs in real time.",
       },
       {
-        command: "kubectl logs --tail=100 <pod-name>",
-        description:
-          "Displays the last 100 lines of logs.",
+        command: "kubectl logs <pod-name> --previous",
+        description: "View logs from the previous terminated container instance.",
       },
       {
-        command: "kubectl logs --since=1h <pod-name>",
-        description:
-          "Displays logs generated during the specified time period.",
+        command: "kubectl logs <pod-name> -c <container-name>",
+        description: "View logs from a specific container in a multi-container pod.",
       },
       {
-        command: "kubectl logs --timestamps <pod-name>",
-        description:
-          "Includes timestamps in container logs.",
+        command: "kubectl logs deployment/<deployment-name>",
+        description: "View logs from pods managed by a deployment.",
       },
       {
-        command: "kubectl logs --previous <pod-name>",
-        description:
-          "Displays logs from the previous terminated container instance.",
-      },
-      {
-        command:
-          "kubectl logs <pod-name> -c <container-name>",
-        description:
-          "Displays logs from a specific container in a multi-container Pod.",
-      },
-      {
-        command:
-          "kubectl logs -f <pod-name> -c <container-name>",
-        description:
-          "Follows logs from a specific container.",
+        command: "kubectl logs -l app=<label>",
+        description: "View logs from pods matching a label selector.",
       },
     ],
   },
@@ -324,34 +211,28 @@ const commandSections = [
     title: "6. Execute Commands Inside Pods",
     commands: [
       {
-        command:
-          "kubectl exec -it <pod-name> -- /bin/bash",
-        description:
-          "Opens an interactive Bash shell inside a running container.",
+        command: "kubectl exec -it <pod-name> -- /bin/sh",
+        description: "Open an interactive shell inside a pod.",
       },
       {
-        command:
-          "kubectl exec -it <pod-name> -- /bin/sh",
-        description:
-          "Opens a shell when Bash is not available in the container.",
+        command: "kubectl exec -it <pod-name> -- /bin/bash",
+        description: "Open a Bash shell when Bash is available.",
       },
       {
-        command:
-          "kubectl exec <pod-name> -- env",
-        description:
-          "Displays environment variables inside the container.",
+        command: "kubectl exec <pod-name> -- env",
+        description: "Display environment variables inside a container.",
       },
       {
-        command:
-          "kubectl exec <pod-name> -- ls -la",
-        description:
-          "Runs ls inside the container.",
+        command: "kubectl exec <pod-name> -- ps aux",
+        description: "Inspect running processes inside a container.",
       },
       {
-        command:
-          "kubectl exec -it <pod-name> -c <container-name> -- /bin/sh",
-        description:
-          "Opens a shell in a specific container of a multi-container Pod.",
+        command: "kubectl exec <pod-name> -- df -h",
+        description: "Check filesystem usage inside a container.",
+      },
+      {
+        command: "kubectl exec <pod-name> -c <container-name> -- <command>",
+        description: "Run a command in a specific container.",
       },
     ],
   },
@@ -361,43 +242,31 @@ const commandSections = [
     commands: [
       {
         command: "kubectl apply -f deployment.yaml",
-        description:
-          "Creates or updates resources defined in a Kubernetes manifest.",
+        description: "Create or update resources defined in a YAML manifest.",
       },
       {
-        command: "kubectl apply -f ./manifests/",
-        description:
-          "Applies supported Kubernetes manifests from a directory.",
+        command: "kubectl apply -f .",
+        description: "Apply YAML manifests from the current directory.",
       },
       {
-        command:
-          "kubectl apply -f deployment.yaml --dry-run=client",
-        description:
-          "Validates the manifest locally without creating the resource.",
+        command: "kubectl create deployment <name> --image=<image>",
+        description: "Create a deployment from the command line.",
       },
       {
-        command:
-          "kubectl create deployment nginx --image=nginx",
-        description:
-          "Creates a Deployment from the command line.",
+        command: "kubectl create service clusterip <name> --tcp=80:8080",
+        description: "Create a ClusterIP Service.",
       },
       {
-        command:
-          "kubectl create namespace <namespace>",
-        description:
-          "Creates a namespace.",
+        command: "kubectl create namespace <namespace>",
+        description: "Create a namespace.",
       },
       {
-        command:
-          "kubectl create configmap <name> --from-literal=key=value",
-        description:
-          "Creates a ConfigMap from a literal key-value pair.",
+        command: "kubectl create configmap <name> --from-literal=key=value",
+        description: "Create a ConfigMap from a literal value.",
       },
       {
-        command:
-          "kubectl create secret generic <name> --from-literal=key=value",
-        description:
-          "Creates a generic Secret from a literal key-value pair. Avoid exposing sensitive values in shell history.",
+        command: "kubectl create secret generic <name> --from-literal=key=value",
+        description: "Create a generic Secret from a literal value.",
       },
     ],
   },
@@ -406,46 +275,28 @@ const commandSections = [
     title: "8. Delete Resources",
     commands: [
       {
-        command:
-          "kubectl delete pod <pod-name>",
-        description:
-          "Deletes a specific Pod. If it is managed by a Deployment or another controller, Kubernetes may create a replacement.",
+        command: "kubectl delete pod <pod-name>",
+        description: "Delete a pod.",
       },
       {
-        command:
-          "kubectl delete deployment <deployment-name>",
-        description:
-          "Deletes a Deployment and its managed resources. Treat as a destructive operation.",
+        command: "kubectl delete deployment <deployment-name>",
+        description: "Delete a deployment.",
       },
       {
-        command:
-          "kubectl delete svc <service-name>",
-        description:
-          "Deletes a Service and can interrupt application connectivity.",
+        command: "kubectl delete service <service-name>",
+        description: "Delete a Service.",
       },
       {
-        command:
-          "kubectl delete -f deployment.yaml",
-        description:
-          "Deletes resources defined in a Kubernetes manifest.",
+        command: "kubectl delete -f deployment.yaml",
+        description: "Delete resources defined in a YAML manifest.",
       },
       {
-        command:
-          "kubectl delete -f ./manifests/",
-        description:
-          "Deletes resources represented by manifests in a directory.",
+        command: "kubectl delete pods --all",
+        description: "Delete all pods in the current namespace.",
       },
       {
-        command:
-          "kubectl delete pod <pod-name> --grace-period=0 --force",
-        description:
-          "Force deletes a Pod when normal graceful deletion is not completing. Use carefully because it bypasses normal graceful termination.",
-      },
-      {
-        command:
-          "kubectl delete namespace <namespace>",
-        description:
-          "Deletes a namespace and its contained resources. Verify the target context before using this command.",
+        command: "kubectl delete namespace <namespace>",
+        description: "Delete a namespace and its resources.",
       },
     ],
   },
@@ -455,56 +306,43 @@ const commandSections = [
     commands: [
       {
         command: "kubectl get deployments",
-        description:
-          "Lists Deployments.",
+        description: "List deployments and replica status.",
       },
       {
-        command:
-          "kubectl rollout status deployment/<deployment-name>",
-        description:
-          "Checks the rollout status of a Deployment.",
+        command: "kubectl describe deployment <name>",
+        description: "Inspect deployment configuration and events.",
       },
       {
-        command:
-          "kubectl rollout history deployment/<deployment-name>",
-        description:
-          "Displays Deployment rollout history.",
+        command: "kubectl rollout status deployment/<name>",
+        description: "Watch the deployment rollout status.",
       },
       {
-        command:
-          "kubectl rollout history deployment/<deployment-name> --revision=2",
-        description:
-          "Displays details for a specific Deployment revision.",
+        command: "kubectl rollout history deployment/<name>",
+        description: "View deployment revision history.",
       },
       {
-        command:
-          "kubectl rollout undo deployment/<deployment-name>",
-        description:
-          "Rolls a Deployment back to its previous revision.",
+        command: "kubectl rollout undo deployment/<name>",
+        description: "Roll back a deployment to the previous revision.",
       },
       {
-        command:
-          "kubectl rollout undo deployment/<deployment-name> --to-revision=2",
-        description:
-          "Rolls a Deployment back to a specific revision.",
+        command: "kubectl rollout undo deployment/<name> --to-revision=<revision>",
+        description: "Roll back to a specific deployment revision.",
       },
       {
-        command:
-          "kubectl rollout restart deployment/<deployment-name>",
-        description:
-          "Triggers a rolling restart of a Deployment. A restart does not by itself fix an underlying application, configuration or dependency problem.",
+        command: "kubectl rollout restart deployment/<name>",
+        description: "Restart all pods managed by a deployment.",
       },
       {
-        command:
-          "kubectl rollout pause deployment/<deployment-name>",
-        description:
-          "Pauses a Deployment rollout.",
+        command: "kubectl set image deployment/<name> <container>=<image>",
+        description: "Update a deployment container image.",
       },
       {
-        command:
-          "kubectl rollout resume deployment/<deployment-name>",
-        description:
-          "Resumes a paused Deployment rollout.",
+        command: "kubectl pause deployment/<name>",
+        description: "Pause deployment rollouts.",
+      },
+      {
+        command: "kubectl resume deployment/<name>",
+        description: "Resume a paused deployment.",
       },
     ],
   },
@@ -513,28 +351,24 @@ const commandSections = [
     title: "10. Scale Applications",
     commands: [
       {
-        command:
-          "kubectl scale deployment <deployment-name> --replicas=3",
-        description:
-          "Changes the desired number of replicas for a Deployment.",
+        command: "kubectl scale deployment <name> --replicas=3",
+        description: "Scale a deployment to the specified number of replicas.",
       },
       {
-        command:
-          "kubectl scale deployment <deployment-name> --replicas=0",
-        description:
-          "Scales a Deployment down to zero replicas. This stops its Pods and should be treated as a deliberate operational change.",
+        command: "kubectl scale deployment <name> --replicas=0",
+        description: "Scale a deployment down to zero replicas.",
       },
       {
-        command:
-          "kubectl get deployment <deployment-name>",
-        description:
-          "Shows the current and desired replica counts.",
+        command: "kubectl autoscale deployment <name> --min=2 --max=10 --cpu-percent=70",
+        description: "Create a HorizontalPodAutoscaler based on CPU utilization.",
       },
       {
-        command:
-          "kubectl autoscale deployment <deployment-name> --min=2 --max=5 --cpu-percent=70",
-        description:
-          "Creates a HorizontalPodAutoscaler using CPU utilization targets.",
+        command: "kubectl get hpa",
+        description: "List HorizontalPodAutoscalers.",
+      },
+      {
+        command: "kubectl describe hpa <name>",
+        description: "Inspect HPA configuration and current metrics.",
       },
     ],
   },
@@ -543,57 +377,36 @@ const commandSections = [
     title: "11. Services and Networking",
     commands: [
       {
-        command: "kubectl get svc",
-        description:
-          "Lists Kubernetes Services.",
+        command: "kubectl get services",
+        description: "List Services.",
       },
       {
-        command:
-          "kubectl describe svc <service-name>",
-        description:
-          "Displays Service configuration, ports and endpoints.",
+        command: "kubectl get svc -o wide",
+        description: "Display Services with additional information.",
       },
       {
-        command:
-          "kubectl get endpoints",
-        description:
-          "Displays endpoints associated with Services.",
+        command: "kubectl describe service <name>",
+        description: "Inspect Service selectors, ports and endpoints.",
       },
       {
-        command:
-          "kubectl get endpointslices",
-        description:
-          "Lists EndpointSlice resources used for Service endpoint information.",
+        command: "kubectl get endpoints <service-name>",
+        description: "Inspect endpoints associated with a Service.",
       },
       {
-        command:
-          "kubectl expose deployment <deployment-name> --port=80 --type=NodePort",
-        description:
-          "Creates a Service exposing a Deployment.",
+        command: "kubectl get endpointslices",
+        description: "List EndpointSlices used by Services.",
       },
       {
-        command:
-          "kubectl expose deployment <deployment-name> --port=80 --target-port=8080 --type=ClusterIP",
-        description:
-          "Creates a ClusterIP Service and maps the Service port to a container target port.",
+        command: "kubectl expose deployment <name> --port=80 --type=ClusterIP",
+        description: "Expose a deployment through a Service.",
       },
       {
-        command:
-          "kubectl port-forward svc/<service-name> 8080:80",
-        description:
-          "Forwards a local port to a Kubernetes Service for temporary debugging access.",
+        command: "kubectl port-forward service/<service-name> 8080:80",
+        description: "Forward a local port to a Service for troubleshooting.",
       },
       {
-        command:
-          "kubectl port-forward pod/<pod-name> 8080:80",
-        description:
-          "Forwards a local port directly to a Pod for temporary debugging.",
-      },
-      {
-        command:
-          "kubectl get networkpolicies",
-        description:
-          "Lists NetworkPolicy resources in the current namespace.",
+        command: "kubectl get networkpolicies",
+        description: "List NetworkPolicies.",
       },
     ],
   },
@@ -602,46 +415,36 @@ const commandSections = [
     title: "12. ConfigMaps and Secrets",
     commands: [
       {
-        command:
-          "kubectl get configmaps",
-        description:
-          "Lists ConfigMaps.",
+        command: "kubectl get configmaps",
+        description: "List ConfigMaps.",
       },
       {
-        command:
-          "kubectl describe configmap <name>",
-        description:
-          "Displays ConfigMap details.",
+        command: "kubectl describe configmap <name>",
+        description: "Inspect a ConfigMap.",
       },
       {
-        command:
-          "kubectl get configmap <name> -o yaml",
-        description:
-          "Displays a ConfigMap in YAML format.",
+        command: "kubectl get configmap <name> -o yaml",
+        description: "Display a ConfigMap as YAML.",
       },
       {
-        command:
-          "kubectl get secrets",
-        description:
-          "Lists Secrets.",
+        command: "kubectl get secrets",
+        description: "List Secrets.",
       },
       {
-        command:
-          "kubectl describe secret <name>",
-        description:
-          "Displays Secret metadata without directly printing decoded values.",
+        command: "kubectl describe secret <name>",
+        description: "Inspect Secret metadata without directly displaying decoded values.",
       },
       {
-        command:
-          "kubectl get secret <name> -o yaml",
-        description:
-          "Displays a Secret manifest containing encoded data fields. Protect the output and do not treat base64 encoding as encryption.",
+        command: "kubectl get secret <name> -o jsonpath='{.data.<key>}' | base64 --decode",
+        description: "Decode a specific Secret value when authorized to do so.",
       },
       {
-        command:
-          "kubectl create secret docker-registry <name> --docker-server=<registry> --docker-username=<username> --docker-password=<password>",
-        description:
-          "Creates an image-pull Secret for a private container registry. Avoid exposing credentials in shell history or process listings where possible.",
+        command: "kubectl create configmap <name> --from-file=<file>",
+        description: "Create a ConfigMap from a file.",
+      },
+      {
+        command: "kubectl create secret generic <name> --from-file=<file>",
+        description: "Create a generic Secret from a file.",
       },
     ],
   },
@@ -650,34 +453,24 @@ const commandSections = [
     title: "13. Kubernetes Events",
     commands: [
       {
-        command:
-          "kubectl get events",
-        description:
-          "Lists events in the current namespace.",
+        command: "kubectl get events",
+        description: "List events in the current namespace.",
       },
       {
-        command:
-          "kubectl get events -A",
-        description:
-          "Lists events across all namespaces.",
+        command: "kubectl get events --sort-by=.lastTimestamp",
+        description: "Sort events by the latest timestamp.",
       },
       {
-        command:
-          "kubectl get events --sort-by=.lastTimestamp",
-        description:
-          "Sorts events by their latest timestamp.",
+        command: "kubectl get events -A",
+        description: "List events across all namespaces.",
       },
       {
-        command:
-          "kubectl get events --field-selector type=Warning",
-        description:
-          "Shows warning events in the current namespace.",
+        command: "kubectl get events --field-selector type=Warning",
+        description: "Display warning events.",
       },
       {
-        command:
-          "kubectl get events -A --sort-by=.lastTimestamp",
-        description:
-          "Displays cluster-wide events ordered by timestamp.",
+        command: "kubectl describe pod <pod-name>",
+        description: "Inspect pod-specific events at the bottom of the output.",
       },
     ],
   },
@@ -686,34 +479,24 @@ const commandSections = [
     title: "14. Resource Usage and Performance",
     commands: [
       {
-        command:
-          "kubectl top nodes",
-        description:
-          "Displays CPU and memory usage for nodes when Metrics Server is available.",
+        command: "kubectl top nodes",
+        description: "Display CPU and memory usage for nodes.",
       },
       {
-        command:
-          "kubectl top pods",
-        description:
-          "Displays CPU and memory usage for Pods when Metrics Server is available.",
+        command: "kubectl top pods",
+        description: "Display CPU and memory usage for pods.",
       },
       {
-        command:
-          "kubectl top pods -A",
-        description:
-          "Displays Pod resource usage across namespaces.",
+        command: "kubectl top pods -A",
+        description: "Display pod resource usage across namespaces.",
       },
       {
-        command:
-          "kubectl top pod <pod-name> --containers",
-        description:
-          "Displays CPU and memory usage for individual containers.",
+        command: "kubectl top pod <pod-name> --containers",
+        description: "Display resource usage for individual containers.",
       },
       {
-        command:
-          "kubectl top node <node-name>",
-        description:
-          "Displays resource usage for a specific node.",
+        command: "kubectl describe node <node-name>",
+        description: "Inspect node capacity, allocatable resources and conditions.",
       },
     ],
   },
@@ -722,46 +505,24 @@ const commandSections = [
     title: "15. Labels, Selectors and Annotations",
     commands: [
       {
-        command:
-          "kubectl get pods --show-labels",
-        description:
-          "Displays Pod labels.",
+        command: "kubectl get pods --show-labels",
+        description: "Display pods together with their labels.",
       },
       {
-        command:
-          "kubectl get pods -l app=nginx",
-        description:
-          "Lists Pods matching the specified label selector.",
+        command: "kubectl get pods -l app=nginx",
+        description: "Filter pods using a label selector.",
       },
       {
-        command:
-          "kubectl get pods -l 'environment in (production,staging)'",
-        description:
-          "Selects resources using a set-based label selector.",
+        command: "kubectl label pod <pod-name> environment=prod",
+        description: "Add or update a label on a pod.",
       },
       {
-        command:
-          "kubectl label pod <pod-name> environment=production",
-        description:
-          "Adds or updates a label on a Pod.",
+        command: "kubectl label pod <pod-name> environment-",
+        description: "Remove a label from a pod.",
       },
       {
-        command:
-          "kubectl label pod <pod-name> environment-",
-        description:
-          "Removes the specified label from a Pod.",
-      },
-      {
-        command:
-          "kubectl annotate pod <pod-name> description='my pod'",
-        description:
-          "Adds or updates an annotation on a Pod.",
-      },
-      {
-        command:
-          "kubectl get pods -l app=nginx -o name",
-        description:
-          "Returns matching Pod resource names only.",
+        command: "kubectl annotate deployment <name> owner=platform",
+        description: "Add an annotation to a deployment.",
       },
     ],
   },
@@ -770,52 +531,28 @@ const commandSections = [
     title: "16. Context and Kubeconfig",
     commands: [
       {
-        command:
-          "kubectl config get-contexts",
-        description:
-          "Lists available kubectl contexts.",
+        command: "kubectl config get-contexts",
+        description: "List available Kubernetes contexts.",
       },
       {
-        command:
-          "kubectl config current-context",
-        description:
-          "Displays the currently selected context. Check this before production changes.",
+        command: "kubectl config current-context",
+        description: "Display the currently selected context.",
       },
       {
-        command:
-          "kubectl config use-context <context-name>",
-        description:
-          "Switches to another Kubernetes context.",
+        command: "kubectl config use-context <context>",
+        description: "Switch to a different Kubernetes context.",
       },
       {
-        command:
-          "kubectl config view",
-        description:
-          "Displays the current kubeconfig configuration. Protect sensitive credentials if present.",
+        command: "kubectl config view",
+        description: "Display kubeconfig information.",
       },
       {
-        command:
-          "kubectl config view --minify",
-        description:
-          "Displays only the configuration for the current context.",
+        command: "kubectl config set-context --current --namespace=<namespace>",
+        description: "Set the default namespace for the current context.",
       },
       {
-        command:
-          "kubectl config set-context <context-name> --cluster=<cluster> --user=<user>",
-        description:
-          "Creates or updates a kubeconfig context.",
-      },
-      {
-        command:
-          "kubectl config rename-context <old-name> <new-name>",
-        description:
-          "Renames an existing kubeconfig context.",
-      },
-      {
-        command:
-          "kubectl config delete-context <context-name>",
-        description:
-          "Deletes a context from kubeconfig.",
+        command: "kubectl config rename-context <old> <new>",
+        description: "Rename an existing context.",
       },
     ],
   },
@@ -824,40 +561,20 @@ const commandSections = [
     title: "17. Patch and Edit Resources",
     commands: [
       {
-        command:
-          "kubectl edit deployment <deployment-name>",
-        description:
-          "Opens the live Deployment manifest in an editor. Treat direct production edits as controlled changes.",
+        command: "kubectl edit deployment <name>",
+        description: "Open a live deployment definition for editing.",
       },
       {
-        command:
-          "kubectl edit service <service-name>",
-        description:
-          "Opens a Service manifest for live editing.",
+        command: "kubectl edit service <name>",
+        description: "Edit a Service definition.",
       },
       {
-        command:
-          `kubectl patch deployment <deployment-name> -p '{"spec":{"replicas":3}}'`,
-        description:
-          "Applies a targeted patch to a Kubernetes resource.",
+        command: "kubectl patch deployment <name> -p '{...}'",
+        description: "Apply a targeted patch to a resource.",
       },
       {
-        command:
-          "kubectl set image deployment/<deployment-name> <container-name>=<image>:<tag>",
-        description:
-          "Updates the container image used by a Deployment and normally triggers a rollout.",
-      },
-      {
-        command:
-          "kubectl set env deployment/<deployment-name> ENV=production",
-        description:
-          "Adds or updates an environment variable on a Deployment.",
-      },
-      {
-        command:
-          "kubectl set resources deployment/<deployment-name> -c <container-name> --requests=cpu=100m,memory=128Mi --limits=cpu=500m,memory=512Mi",
-        description:
-          "Updates resource requests and limits for a Deployment container.",
+        command: "kubectl patch deployment <name> --type=json -p='[...]'",
+        description: "Apply a JSON patch to a resource.",
       },
     ],
   },
@@ -866,46 +583,28 @@ const commandSections = [
     title: "18. Jobs and CronJobs",
     commands: [
       {
-        command:
-          "kubectl get jobs",
-        description:
-          "Lists Jobs.",
+        command: "kubectl get jobs",
+        description: "List Jobs.",
       },
       {
-        command:
-          "kubectl describe job <job-name>",
-        description:
-          "Displays detailed Job status, Pod information and events.",
+        command: "kubectl describe job <name>",
+        description: "Inspect Job execution status and events.",
       },
       {
-        command:
-          "kubectl create job <job-name> --image=busybox -- echo hello",
-        description:
-          "Creates a Job that runs a command.",
+        command: "kubectl get cronjobs",
+        description: "List CronJobs.",
       },
       {
-        command:
-          "kubectl get cronjobs",
-        description:
-          "Lists CronJobs.",
+        command: "kubectl describe cronjob <name>",
+        description: "Inspect CronJob schedule and configuration.",
       },
       {
-        command:
-          "kubectl describe cronjob <cronjob-name>",
-        description:
-          "Displays CronJob schedule and execution information.",
+        command: "kubectl create job <job-name> --image=<image>",
+        description: "Create a Job from the command line.",
       },
       {
-        command:
-          "kubectl create job --from=cronjob/<cronjob-name> <job-name>",
-        description:
-          "Creates an immediate Job from an existing CronJob template.",
-      },
-      {
-        command:
-          "kubectl delete job <job-name>",
-        description:
-          "Deletes a Kubernetes Job.",
+        command: "kubectl create job --from=cronjob/<cronjob-name> <job-name>",
+        description: "Create an immediate Job from a CronJob.",
       },
     ],
   },
@@ -914,40 +613,28 @@ const commandSections = [
     title: "19. StatefulSets and DaemonSets",
     commands: [
       {
-        command:
-          "kubectl get statefulsets",
-        description:
-          "Lists StatefulSets.",
+        command: "kubectl get statefulsets",
+        description: "List StatefulSets.",
       },
       {
-        command:
-          "kubectl rollout status statefulset/<name>",
-        description:
-          "Checks the rollout status of a StatefulSet.",
+        command: "kubectl describe statefulset <name>",
+        description: "Inspect StatefulSet configuration and status.",
       },
       {
-        command:
-          "kubectl rollout restart statefulset/<name>",
-        description:
-          "Restarts Pods managed by a StatefulSet.",
+        command: "kubectl get daemonsets",
+        description: "List DaemonSets.",
       },
       {
-        command:
-          "kubectl get daemonsets",
-        description:
-          "Lists DaemonSets.",
+        command: "kubectl describe daemonset <name>",
+        description: "Inspect DaemonSet configuration and pod scheduling.",
       },
       {
-        command:
-          "kubectl rollout status daemonset/<name>",
-        description:
-          "Checks the rollout status of a DaemonSet.",
+        command: "kubectl rollout status statefulset/<name>",
+        description: "Check StatefulSet rollout status.",
       },
       {
-        command:
-          "kubectl rollout restart daemonset/<name>",
-        description:
-          "Restarts Pods managed by a DaemonSet.",
+        command: "kubectl rollout status daemonset/<name>",
+        description: "Check DaemonSet rollout status.",
       },
     ],
   },
@@ -956,40 +643,28 @@ const commandSections = [
     title: "20. Storage",
     commands: [
       {
-        command:
-          "kubectl get pv",
-        description:
-          "Lists PersistentVolumes in the cluster.",
+        command: "kubectl get pv",
+        description: "List PersistentVolumes.",
       },
       {
-        command:
-          "kubectl get pvc",
-        description:
-          "Lists PersistentVolumeClaims in the current namespace.",
+        command: "kubectl get pvc",
+        description: "List PersistentVolumeClaims.",
       },
       {
-        command:
-          "kubectl describe pv <pv-name>",
-        description:
-          "Displays detailed PersistentVolume information.",
+        command: "kubectl get storageclass",
+        description: "List StorageClasses.",
       },
       {
-        command:
-          "kubectl describe pvc <pvc-name>",
-        description:
-          "Displays detailed PersistentVolumeClaim information.",
+        command: "kubectl describe pv <pv-name>",
+        description: "Inspect PersistentVolume configuration and status.",
       },
       {
-        command:
-          "kubectl get storageclass",
-        description:
-          "Lists available StorageClasses.",
+        command: "kubectl describe pvc <pvc-name>",
+        description: "Inspect PersistentVolumeClaim status and events.",
       },
       {
-        command:
-          "kubectl get storageclass -o wide",
-        description:
-          "Displays additional StorageClass information.",
+        command: "kubectl get pvc -o wide",
+        description: "Display PVC information with additional details.",
       },
     ],
   },
@@ -998,34 +673,24 @@ const commandSections = [
     title: "21. Ingress and Network Policies",
     commands: [
       {
-        command:
-          "kubectl get ingress",
-        description:
-          "Lists Ingress resources.",
+        command: "kubectl get ingress",
+        description: "List Ingress resources.",
       },
       {
-        command:
-          "kubectl describe ingress <ingress-name>",
-        description:
-          "Displays Ingress rules, backend Services and events.",
+        command: "kubectl describe ingress <name>",
+        description: "Inspect Ingress rules, backend services and events.",
       },
       {
-        command:
-          "kubectl get networkpolicy",
-        description:
-          "Lists NetworkPolicy resources.",
+        command: "kubectl get networkpolicies",
+        description: "List NetworkPolicies.",
       },
       {
-        command:
-          "kubectl describe networkpolicy <policy-name>",
-        description:
-          "Displays NetworkPolicy selectors and ingress or egress rules.",
+        command: "kubectl describe networkpolicy <name>",
+        description: "Inspect NetworkPolicy rules and selectors.",
       },
       {
-        command:
-          "kubectl get ingressclass",
-        description:
-          "Lists available IngressClass resources.",
+        command: "kubectl get endpointslices",
+        description: "Inspect Service endpoint discovery.",
       },
     ],
   },
@@ -1034,52 +699,36 @@ const commandSections = [
     title: "22. RBAC and Security",
     commands: [
       {
-        command:
-          "kubectl get serviceaccounts",
-        description:
-          "Lists ServiceAccounts in the current namespace.",
+        command: "kubectl get serviceaccounts",
+        description: "List ServiceAccounts.",
       },
       {
-        command:
-          "kubectl get roles",
-        description:
-          "Lists namespace-scoped Roles.",
+        command: "kubectl get roles",
+        description: "List namespace-scoped Roles.",
       },
       {
-        command:
-          "kubectl get rolebindings",
-        description:
-          "Lists namespace-scoped RoleBindings.",
+        command: "kubectl get rolebindings",
+        description: "List RoleBindings.",
       },
       {
-        command:
-          "kubectl get clusterroles",
-        description:
-          "Lists cluster-scoped ClusterRoles.",
+        command: "kubectl get clusterroles",
+        description: "List ClusterRoles.",
       },
       {
-        command:
-          "kubectl get clusterrolebindings",
-        description:
-          "Lists ClusterRoleBindings.",
+        command: "kubectl get clusterrolebindings",
+        description: "List ClusterRoleBindings.",
       },
       {
-        command:
-          "kubectl auth can-i get pods",
-        description:
-          "Checks whether the current identity can perform an action.",
+        command: "kubectl auth can-i get pods",
+        description: "Check whether the current identity can perform an action.",
       },
       {
-        command:
-          "kubectl auth can-i create deployments -n <namespace>",
-        description:
-          "Checks whether the current identity can create Deployments in a namespace.",
+        command: "kubectl auth can-i create deployments -n <namespace>",
+        description: "Check whether the current identity can create deployments.",
       },
       {
-        command:
-          "kubectl auth can-i --list",
-        description:
-          "Lists the actions permitted for the current identity.",
+        command: "kubectl auth can-i --list",
+        description: "List permissions available to the current identity.",
       },
     ],
   },
@@ -1088,64 +737,40 @@ const commandSections = [
     title: "23. Kubernetes Debugging and Troubleshooting",
     commands: [
       {
-        command:
-          "kubectl get pods -o wide",
-        description:
-          "Checks Pod placement, IP addresses and node assignment.",
+        command: "kubectl get pods -A",
+        description: "Quickly identify pods across the cluster.",
       },
       {
-        command:
-          "kubectl describe pod <pod-name>",
-        description:
-          "Inspects scheduling, container state and Kubernetes events.",
+        command: "kubectl get pods -o wide",
+        description: "Check pod placement and networking information.",
       },
       {
-        command:
-          "kubectl logs <pod-name>",
-        description:
-          "Inspects application output from the container.",
+        command: "kubectl describe pod <pod-name>",
+        description: "Inspect pod events, scheduling and container state.",
       },
       {
-        command:
-          "kubectl logs --previous <pod-name>",
-        description:
-          "Checks logs from a previous crashed container.",
+        command: "kubectl logs <pod-name>",
+        description: "Inspect application logs.",
       },
       {
-        command:
-          "kubectl get events --sort-by=.lastTimestamp",
-        description:
-          "Reviews recent Kubernetes events for failures and warnings.",
+        command: "kubectl logs <pod-name> --previous",
+        description: "Inspect logs from a previously crashed container.",
       },
       {
-        command:
-          "kubectl get pod <pod-name> -o yaml",
-        description:
-          "Displays the complete Pod specification and status.",
+        command: "kubectl get events --sort-by=.lastTimestamp",
+        description: "Review recent cluster events.",
       },
       {
-        command:
-          "kubectl get pods --field-selector=status.phase=Failed",
-        description:
-          "Lists Pods currently in the Failed phase.",
+        command: "kubectl top pod <pod-name>",
+        description: "Check pod CPU and memory consumption.",
       },
       {
-        command:
-          "kubectl get pods --field-selector=status.phase=Pending",
-        description:
-          "Lists Pods currently in the Pending phase.",
+        command: "kubectl get endpoints <service-name>",
+        description: "Check whether a Service has backend endpoints.",
       },
       {
-        command:
-          "kubectl get pods --field-selector=status.phase=Running",
-        description:
-          "Lists Pods currently in the Running phase.",
-      },
-      {
-        command:
-          "kubectl get pods -A | grep -v Running",
-        description:
-          "On environments with grep available, helps identify Pods that are not Running.",
+        command: "kubectl rollout status deployment/<name>",
+        description: "Check whether a deployment rollout is progressing.",
       },
     ],
   },
@@ -1154,34 +779,20 @@ const commandSections = [
     title: "24. Debug Containers and Temporary Troubleshooting Pods",
     commands: [
       {
-        command:
-          "kubectl debug pod/<pod-name> -it --image=busybox",
-        description:
-          "Starts an ephemeral debugging container when the cluster supports ephemeral containers.",
+        command: "kubectl debug pod/<pod-name> -it --image=busybox",
+        description: "Create a temporary debugging container for troubleshooting.",
       },
       {
-        command:
-          "kubectl run debug --rm -it --image=busybox -- /bin/sh",
-        description:
-          "Creates a temporary interactive Pod for network or application troubleshooting.",
+        command: "kubectl run debug --rm -it --image=busybox -- sh",
+        description: "Launch a temporary interactive troubleshooting pod.",
       },
       {
-        command:
-          "kubectl run curl --rm -it --image=curlimages/curl -- sh",
-        description:
-          "Starts a temporary curl-capable container for HTTP and network diagnostics.",
+        command: "kubectl run curl --rm -it --image=curlimages/curl -- sh",
+        description: "Launch a temporary pod for HTTP and network testing.",
       },
       {
-        command:
-          "kubectl exec -it <pod-name> -- nslookup <service-name>",
-        description:
-          "Tests DNS resolution from inside a running Pod when the required utility exists.",
-      },
-      {
-        command:
-          "kubectl exec -it <pod-name> -- wget -qO- http://<service-name>:<port>",
-        description:
-          "Tests HTTP connectivity from inside a Pod when wget is available.",
+        command: "kubectl run dns-test --rm -it --image=busybox -- nslookup kubernetes.default",
+        description: "Test Kubernetes DNS resolution.",
       },
     ],
   },
@@ -1190,52 +801,32 @@ const commandSections = [
     title: "25. Output, Formatting and Filtering",
     commands: [
       {
-        command:
-          "kubectl get pods -o name",
-        description:
-          "Displays resource names only.",
+        command: "kubectl get pods -o wide",
+        description: "Display additional resource information.",
       },
       {
-        command:
-          "kubectl get pods -o wide",
-        description:
-          "Displays additional columns such as Pod IP and node.",
+        command: "kubectl get pods -o yaml",
+        description: "Output resources as YAML.",
       },
       {
-        command:
-          "kubectl get pods -o yaml",
-        description:
-          "Displays matching resources as YAML.",
+        command: "kubectl get pods -o json",
+        description: "Output resources as JSON.",
       },
       {
-        command:
-          "kubectl get pods -o json",
-        description:
-          "Displays matching resources as JSON.",
+        command: "kubectl get pods -o name",
+        description: "Output only resource names.",
       },
       {
-        command:
-          "kubectl get pods -o custom-columns=NAME:.metadata.name,STATUS:.status.phase",
-        description:
-          "Displays selected fields using custom columns.",
+        command: "kubectl get pods --sort-by=.status.startTime",
+        description: "Sort resources by a JSONPath field.",
       },
       {
-        command:
-          "kubectl get pods -o jsonpath='{.items[*].metadata.name}'",
-        description:
-          "Extracts specific values using JSONPath.",
+        command: "kubectl get pods -l app=nginx",
+        description: "Filter resources by label selector.",
       },
       {
-        command:
-          "kubectl get pods --sort-by=.metadata.creationTimestamp",
-        description:
-          "Sorts resources by creation timestamp.",
-      },
-      {
-        command:
-          "kubectl get pods -l app=nginx --no-headers",
-        description:
-          "Lists matching resources without the table header.",
+        command: "kubectl get pods -o custom-columns=NAME:.metadata.name,STATUS:.status.phase",
+        description: "Display selected fields using custom columns.",
       },
     ],
   },
@@ -1244,28 +835,20 @@ const commandSections = [
     title: "26. Server-Side and Client-Side Validation",
     commands: [
       {
-        command:
-          "kubectl apply -f deployment.yaml --dry-run=client",
-        description:
-          "Performs client-side dry-run validation without creating the object.",
+        command: "kubectl apply --dry-run=client -f deployment.yaml",
+        description: "Validate a manifest locally without sending it to the API server.",
       },
       {
-        command:
-          "kubectl apply -f deployment.yaml --dry-run=server",
-        description:
-          "Sends the request to the API server for server-side dry-run validation.",
+        command: "kubectl apply --dry-run=server -f deployment.yaml",
+        description: "Validate a manifest against the Kubernetes API server.",
       },
       {
-        command:
-          "kubectl create deployment nginx --image=nginx --dry-run=client -o yaml",
-        description:
-          "Generates a Deployment manifest without creating it.",
+        command: "kubectl create deployment nginx --image=nginx --dry-run=client -o yaml",
+        description: "Generate a deployment YAML without creating it.",
       },
       {
-        command:
-          "kubectl create service clusterip nginx --tcp=80:80 --dry-run=client -o yaml",
-        description:
-          "Generates a Service manifest without creating it.",
+        command: "kubectl explain deployment.spec",
+        description: "Review Kubernetes API documentation for deployment fields.",
       },
     ],
   },
@@ -1274,858 +857,481 @@ const commandSections = [
     title: "27. Recommended Kubernetes DevOps Workflow",
     commands: [
       {
-        command:
-          "kubectl config current-context",
-        description:
-          "Confirms the active cluster context before making changes.",
+        command: "kubectl config current-context",
+        description: "Confirm the target Kubernetes cluster before making changes.",
       },
       {
-        command:
-          "kubectl get nodes",
-        description:
-          "Verifies that cluster nodes are available.",
+        command: "kubectl get nodes",
+        description: "Verify cluster/node health before deployment.",
       },
       {
-        command:
-          "kubectl get pods -A",
-        description:
-          "Checks overall Pod health across namespaces.",
+        command: "kubectl apply --dry-run=server -f manifest.yaml",
+        description: "Validate a manifest against the API server before applying it.",
       },
       {
-        command:
-          "kubectl apply -f ./manifests/",
-        description:
-          "Applies application manifests.",
+        command: "kubectl apply -f manifest.yaml",
+        description: "Apply the approved Kubernetes configuration.",
       },
       {
-        command:
-          "kubectl rollout status deployment/<deployment-name>",
-        description:
-          "Waits for a Deployment rollout to complete.",
+        command: "kubectl rollout status deployment/<name>",
+        description: "Verify rollout progress.",
       },
       {
-        command:
-          "kubectl get pods -o wide",
-        description:
-          "Verifies Pod placement, status and IP information.",
+        command: "kubectl get pods -o wide",
+        description: "Verify pod placement and readiness.",
       },
       {
-        command:
-          "kubectl get svc",
-        description:
-          "Verifies application Services.",
+        command: "kubectl get events --sort-by=.lastTimestamp",
+        description: "Check recent warnings and operational events.",
       },
       {
-        command:
-          "kubectl get ingress",
-        description:
-          "Verifies external routing when Ingress is used.",
-      },
-      {
-        command:
-          "kubectl get events --sort-by=.lastTimestamp",
-        description:
-          "Reviews recent warnings and operational events.",
+        command: "kubectl rollout history deployment/<name>",
+        description: "Review deployment revision history.",
       },
     ],
   },
 ];
 
 const popularCommands = [
-  "kubectl get pods",
   "kubectl get pods -A",
-  "kubectl get nodes",
   "kubectl describe pod <pod-name>",
   "kubectl logs <pod-name>",
-  "kubectl logs --previous <pod-name>",
+  "kubectl logs <pod-name> --previous",
   "kubectl exec -it <pod-name> -- /bin/sh",
-  "kubectl apply -f deployment.yaml",
-  "kubectl get svc",
-  "kubectl get deployments",
+  "kubectl get events --sort-by=.lastTimestamp",
   "kubectl rollout status deployment/<name>",
   "kubectl rollout undo deployment/<name>",
-  "kubectl get events --sort-by=.lastTimestamp",
+  "kubectl get svc",
+  "kubectl get ingress",
   "kubectl top pods",
-  "kubectl config current-context",
   "kubectl auth can-i --list",
+];
+
+const quickStartSteps = [
+  {
+    title: "1. Confirm the cluster",
+    description:
+      "Before running commands against a production cluster, confirm the active context and namespace.",
+    command: "kubectl config current-context",
+  },
+  {
+    title: "2. Check cluster health",
+    description:
+      "Verify nodes and basic cluster connectivity before investigating workloads.",
+    command: "kubectl get nodes",
+  },
+  {
+    title: "3. Find the workload",
+    description:
+      "Identify pods, their status, namespace and node placement.",
+    command: "kubectl get pods -A -o wide",
+  },
+  {
+    title: "4. Inspect before changing",
+    description:
+      "Use describe, logs and events to understand the failure before restarting or deleting anything.",
+    command: "kubectl describe pod <pod-name>",
+  },
+  {
+    title: "5. Apply safely",
+    description:
+      "Validate manifests against the API server before making changes.",
+    command: "kubectl apply --dry-run=server -f manifest.yaml",
+  },
+];
+
+const productionSafetyRules = [
+  "Always confirm kubectl context before running production commands.",
+  "Use the correct namespace explicitly when working outside your default namespace.",
+  "Prefer read-only commands such as get, describe, logs and events during initial investigation.",
+  "Use dry-run validation before applying unfamiliar manifests.",
+  "Avoid deleting pods, deployments, namespaces or persistent resources until the impact is understood.",
+  "Record the reason for production changes and verify rollout status afterward.",
+];
+
+const troubleshootingLinks = [
+  {
+    title: "CrashLoopBackOff",
+    description:
+      "Investigate containers that repeatedly start and terminate.",
+    href: "/kubernetes/troubleshooting/crashloopbackoff",
+  },
+  {
+    title: "Pending Pods",
+    description:
+      "Troubleshoot scheduling failures, insufficient resources, taints and PVC issues.",
+    href: "/kubernetes/troubleshooting/pending-pods",
+  },
+];
+
+const problemWorkflows = [
+  {
+    problem: "Pod is CrashLoopBackOff",
+    steps: [
+      "kubectl get pod <pod-name>",
+      "kubectl describe pod <pod-name>",
+      "kubectl logs <pod-name>",
+      "kubectl logs <pod-name> --previous",
+      "kubectl get events --sort-by=.lastTimestamp",
+    ],
+  },
+  {
+    problem: "Pod is Pending",
+    steps: [
+      "kubectl get pod <pod-name>",
+      "kubectl describe pod <pod-name>",
+      "kubectl get nodes",
+      "kubectl get events --sort-by=.lastTimestamp",
+      "kubectl get pvc",
+    ],
+  },
+  {
+    problem: "Service is not reachable",
+    steps: [
+      "kubectl get svc <service-name>",
+      "kubectl describe svc <service-name>",
+      "kubectl get endpoints <service-name>",
+      "kubectl get endpointslices",
+      "kubectl get pods --show-labels",
+    ],
+  },
+];
+
+const categoryLinks = [
+  {
+    title: "Pods",
+    description: "Get Pods, inspect status, logs and execute commands.",
+    href: "#kubectl-get-kubernetes-resources",
+  },
+  {
+    title: "Deployments",
+    description: "Manage replicas, images, rollouts and revisions.",
+    href: "#kubectl-deployments-and-rollouts",
+  },
+  {
+    title: "Services",
+    description: "Inspect Services, ports, endpoints and connectivity.",
+    href: "#kubectl-services-and-networking",
+  },
+  {
+    title: "Troubleshooting",
+    description:
+      "Investigate events, crashes, scheduling and application errors.",
+    href: "#kubectl-kubernetes-debugging-and-troubleshooting",
+  },
+  {
+    title: "Networking",
+    description:
+      "Work with Services, Ingress, EndpointSlices and NetworkPolicies.",
+    href: "#kubectl-ingress-and-network-policies",
+  },
+  {
+    title: "RBAC",
+    description:
+      "Check permissions, Roles, ClusterRoles and ServiceAccounts.",
+    href: "#kubectl-rbac-and-security",
+  },
+  {
+    title: "Storage",
+    description:
+      "Inspect PersistentVolumes, PersistentVolumeClaims and StorageClasses.",
+    href: "#kubectl-storage",
+  },
+  {
+    title: "Configuration",
+    description:
+      "Work with ConfigMaps, Secrets and environment variables.",
+    href: "#kubectl-configmaps-and-secrets",
+  },
+  {
+    title: "Cluster Operations",
+    description:
+      "Inspect Nodes, contexts, namespaces and cluster resources.",
+    href: "#kubectl-kubernetes-cluster-information",
+  },
 ];
 
 const faqItems = [
   {
-    question: "What is kubectl?",
+    question: "What is kubectl used for?",
     answer:
-      "kubectl is the Kubernetes command-line interface used to communicate with the Kubernetes API server and manage Kubernetes resources such as Pods, Deployments, Services, Nodes, ConfigMaps and Secrets.",
+      "kubectl is the command-line interface used to communicate with the Kubernetes API server. It is commonly used to inspect resources, deploy workloads, view logs, troubleshoot applications, manage configuration and perform cluster operations.",
   },
   {
-    question: "What is the most commonly used kubectl command?",
+    question: "What are the most important kubectl commands for troubleshooting?",
     answer:
-      "kubectl get pods is one of the most commonly used commands because it quickly shows Pod status in the current namespace. kubectl get pods -A can be used to inspect Pods across all namespaces.",
+      "A practical troubleshooting sequence is kubectl get, kubectl describe, kubectl logs, kubectl logs --previous, kubectl get events and kubectl get endpoints. These commands help identify workload state, container failures, scheduling problems and Service connectivity issues.",
   },
   {
-    question: "How do I check why a Kubernetes Pod is failing?",
+    question: "How do I check why a Kubernetes pod is not starting?",
     answer:
-      "Start with kubectl config current-context to confirm the target cluster, then use kubectl get pods, kubectl describe pod <pod-name>, kubectl logs <pod-name>, kubectl logs --previous <pod-name> and kubectl get events --sort-by=.lastTimestamp to investigate status, events and application logs.",
+      "Start with kubectl get pod <pod-name>, then use kubectl describe pod <pod-name> to inspect events and container state. If the container started and crashed, check kubectl logs and kubectl logs --previous.",
   },
   {
-    question: "How do I troubleshoot CrashLoopBackOff?",
+    question: "How do I check Kubernetes resource usage?",
     answer:
-      "Start with kubectl get pod <pod-name>, then inspect kubectl describe pod <pod-name>, kubectl logs <pod-name>, kubectl logs --previous <pod-name> and recent events. CrashLoopBackOff can result from application failures, configuration problems, failed probes, missing dependencies or resource issues.",
+      "Use kubectl top nodes for node CPU and memory usage and kubectl top pods for pod usage. The metrics-server or an equivalent metrics provider must be available for these commands to return metrics.",
   },
   {
-    question: "How do I troubleshoot ImagePullBackOff?",
+    question: "How do I roll back a Kubernetes deployment?",
     answer:
-      "Inspect the Pod events with kubectl describe pod <pod-name> and verify the image name, tag, registry authentication and imagePullSecrets. Registry DNS, network, TLS and authorization failures can also prevent Kubernetes from pulling an image.",
+      "Use kubectl rollout history deployment/<name> to inspect revisions and kubectl rollout undo deployment/<name> to return to the previous revision. A specific revision can be selected with --to-revision.",
   },
   {
-    question: "How do I check Kubernetes Deployment rollout status?",
+    question: "How do I safely apply Kubernetes YAML?",
     answer:
-      "Use kubectl rollout status deployment/<deployment-name>. This shows whether the Deployment is progressing toward its desired state.",
-  },
-  {
-    question: "How do I rollback a Kubernetes Deployment?",
-    answer:
-      "Use kubectl rollout undo deployment/<deployment-name> to roll back to the previous revision, or use --to-revision=<revision> to target a specific revision. In production, first confirm the current context, revision history and impact of the rollback.",
-  },
-  {
-    question: "How do I check CPU and memory usage in Kubernetes?",
-    answer:
-      "Use kubectl top nodes and kubectl top pods when Metrics Server is available in the cluster.",
-  },
-  {
-    question: "How do I check which Kubernetes context is active?",
-    answer:
-      "Run kubectl config current-context. This is especially important before executing commands against production or another critical cluster.",
-  },
-  {
-    question: "What should I check before running a destructive kubectl command?",
-    answer:
-      "Confirm the active context and namespace, identify the exact resource, review its current state and understand whether a controller will recreate or modify dependent resources. For production changes, follow the applicable change-management and approval process.",
+      "A useful workflow is to inspect the manifest, validate it with kubectl apply --dry-run=server -f manifest.yaml, apply it, then verify rollout status, pod readiness and recent events.",
   },
 ];
 
-export default function KubectlCommands() {
-  const commandCount = commandSections.reduce(
-    (total, section) => total + section.commands.length,
-    0,
-  );
-
-  const categoryLinks = [
-    {
-      title: "Pods",
-      description:
-        "Get Pods, inspect status, logs and execute commands.",
-      href: "#kubectl-pod-logs",
-    },
-    {
-      title: "Deployments",
-      description:
-        "Manage replicas, images, rollouts and revisions.",
-      href: "#kubectl-deployments-and-rollouts",
-    },
-    {
-      title: "Services",
-      description:
-        "Inspect Services, ports, endpoints and connectivity.",
-      href: "#kubectl-services-and-networking",
-    },
-    {
-      title: "Troubleshooting",
-      description:
-        "Investigate events, crashes, scheduling and application errors.",
-      href: "#kubectl-kubernetes-debugging-and-troubleshooting",
-    },
-    {
-      title: "Networking",
-      description:
-        "Work with Services, Ingress, EndpointSlices and NetworkPolicies.",
-      href: "#kubectl-services-and-networking",
-    },
-    {
-      title: "RBAC",
-      description:
-        "Check permissions, Roles, ClusterRoles and ServiceAccounts.",
-      href: "#kubectl-rbac-and-security",
-    },
-    {
-      title: "Storage",
-      description:
-        "Inspect PersistentVolumes, PersistentVolumeClaims and StorageClasses.",
-      href: "#kubectl-storage",
-    },
-    {
-      title: "Configuration",
-      description:
-        "Work with ConfigMaps, Secrets and environment variables.",
-      href: "#kubectl-configmaps-and-secrets",
-    },
-    {
-      title: "Cluster Operations",
-      description:
-        "Inspect Nodes, contexts, namespaces and cluster resources.",
-      href: "#kubectl-kubernetes-cluster-information",
-    },
-  ];
-
-  const quickStartSteps = [
-    [
-      "1",
-      "Confirm the cluster",
-      "kubectl config current-context",
-      "Always confirm where kubectl is connected before production changes.",
-    ],
-    [
-      "2",
-      "Check nodes",
-      "kubectl get nodes",
-      "Verify that the cluster has healthy and schedulable nodes.",
-    ],
-    [
-      "3",
-      "Check workloads",
-      "kubectl get pods -A",
-      "Get a quick view of workload health across namespaces.",
-    ],
-    [
-      "4",
-      "Inspect the failure",
-      "kubectl describe pod <pod-name>",
-      "Review container state, scheduling details and Kubernetes events.",
-    ],
-    [
-      "5",
-      "Check application logs",
-      "kubectl logs <pod-name>",
-      "Use current or previous container logs to identify application failures.",
-    ],
-    [
-      "6",
-      "Check recent events",
-      "kubectl get events -A --sort-by=.lastTimestamp",
-      "Correlate warnings, scheduling failures and recent cluster activity.",
-    ],
-  ];
-
-  const productionSafetyRules = [
-    {
-      title: "Verify context first",
-      description:
-        "Run kubectl config current-context before operational changes. A correct command against the wrong cluster is still an incident.",
-    },
-    {
-      title: "Prefer evidence before changes",
-      description:
-        "Collect status, events, logs and resource definitions before restarting, deleting or modifying workloads.",
-    },
-    {
-      title: "Understand controllers",
-      description:
-        "Deleting a Pod managed by a Deployment, StatefulSet or DaemonSet can cause Kubernetes to create a replacement. Know what owns the resource.",
-    },
-    {
-      title: "Treat direct edits carefully",
-      description:
-        "kubectl edit, patch, set image and scale can change live workloads. Use the appropriate change-management process for production.",
-    },
-    {
-      title: "Protect secrets",
-      description:
-        "Avoid exposing credentials in shell history, command output, screenshots, tickets or shared logs.",
-    },
-    {
-      title: "Verify after changes",
-      description:
-        "Use rollout status, Pod status, events, logs and application checks to confirm that the intended state was actually reached.",
-    },
-  ];
-
-  const troubleshootingLinks = [
-    {
-      title: "CrashLoopBackOff",
-      description:
-        "Investigate repeated container restarts, previous logs, probes, configuration and resource failures.",
-      href: "/kubernetes/troubleshooting/crashloopbackoff",
-    },
-    {
-      title: "ImagePullBackOff / ErrImagePull",
-      description:
-        "Troubleshoot image names, tags, private registries, imagePullSecrets, authentication, DNS and network errors.",
-      href: "/kubernetes/troubleshooting/imagepullbackoff",
-    },
-  ];
-
-  const problemWorkflows = [
-    {
-      title: "Pod is stuck in Pending",
-      commands:
-        "kubectl get pod <pod-name> -o wide\nkubectl describe pod <pod-name>\nkubectl get events --sort-by=.lastTimestamp",
-      explanation:
-        "Look for scheduling constraints, insufficient resources, taints, affinity rules, volume binding and other scheduler events.",
-    },
-    {
-      title: "Pod is in CrashLoopBackOff",
-      commands:
-        "kubectl get pod <pod-name>\nkubectl describe pod <pod-name>\nkubectl logs <pod-name>\nkubectl logs --previous <pod-name>",
-      explanation:
-        "Compare the current and previous container state and logs before deciding whether the issue is application code, configuration, probes, dependencies or resources.",
-    },
-    {
-      title: "Pod is in ImagePullBackOff",
-      commands:
-        "kubectl get pod <pod-name>\nkubectl describe pod <pod-name>\nkubectl get events --sort-by=.lastTimestamp",
-      explanation:
-        "Check the exact image reference and Pod events for authentication, authorization, DNS, TLS, network or missing-image errors.",
-    },
-    {
-      title: "Deployment rollout is failing",
-      commands:
-        "kubectl get deployment <deployment-name>\nkubectl rollout status deployment/<deployment-name>\nkubectl rollout history deployment/<deployment-name>\nkubectl describe deployment <deployment-name>",
-      explanation:
-        "Check replica availability, rollout progress, revision history and the condition that is preventing the desired state from being reached.",
-    },
-    {
-      title: "Service is not reachable",
-      commands:
-        "kubectl get svc\nkubectl describe svc <service-name>\nkubectl get endpoints\nkubectl get endpointslices\nkubectl get pods -o wide",
-      explanation:
-        "Verify Service selectors, ports, target ports and whether healthy Pods are actually registered as endpoints.",
-    },
-    {
-      title: "Check node health",
-      commands:
-        "kubectl get nodes\nkubectl get nodes -o wide\nkubectl describe node <node-name>\nkubectl top nodes",
-      explanation:
-        "Inspect node conditions, capacity, allocatable resources, scheduling state and current resource usage.",
-    },
-  ];
-
+export default function KubectlCommandsPage() {
   return (
-    <main className="min-h-screen bg-slate-950 px-6 py-12 text-white">
-      <div className="mx-auto max-w-6xl">
-        <a
-          href="/"
-          className="text-sm text-cyan-400 hover:underline"
-        >
-          ← Back to DevOps Commands
-        </a>
+    <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <header className="max-w-4xl">
+        <p className="text-sm font-semibold uppercase tracking-wide text-cyan-400">
+          Kubernetes CLI Reference
+        </p>
 
-        <header className="mt-8">
-          <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400">
-            Kubernetes CLI Reference
-          </p>
+        <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+          kubectl Commands Cheat Sheet
+        </h1>
 
-          <h1 className="mt-3 text-4xl font-bold md:text-5xl">
-            kubectl Commands Cheat Sheet
-          </h1>
+        <p className="mt-5 text-lg leading-8 text-slate-300">
+          A practical kubectl command reference for Kubernetes administrators,
+          DevOps engineers and SREs. Use this guide to inspect workloads,
+          troubleshoot pods, manage deployments, work with Services and
+          networking, investigate events, manage RBAC and storage, and operate
+          Kubernetes environments safely.
+        </p>
+      </header>
 
-          <p className="mt-5 max-w-4xl text-lg leading-8 text-slate-400">
-            Complete kubectl commands cheat sheet for Kubernetes
-            administration, DevOps, SRE, application support and production
-            troubleshooting. Find practical commands for Pods, Deployments,
-            Services, Nodes, namespaces, logs, networking, RBAC, storage,
-            rollouts, debugging and cluster operations.
-          </p>
-
-          <div className="mt-6 flex flex-wrap gap-2">
-            {[
-              "kubectl commands",
-              "Kubernetes CLI",
-              "kubectl cheat sheet",
-              "Kubernetes troubleshooting",
-              "DevOps commands",
-              "SRE commands",
-            ].map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-sm text-slate-300"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <div className="mt-8 grid gap-4 sm:grid-cols-3">
-            <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-              <div className="text-3xl font-bold text-cyan-400">
-                {commandCount}
-              </div>
-              <p className="mt-2 text-sm text-slate-400">
-                practical kubectl commands
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-              <div className="text-3xl font-bold text-cyan-400">
-                {commandSections.length}
-              </div>
-              <p className="mt-2 text-sm text-slate-400">
-                command categories
-              </p>
-            </div>
-
-            <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-              <div className="text-3xl font-bold text-cyan-400">
-                L3 / SRE
-              </div>
-              <p className="mt-2 text-sm text-slate-400">
-                production troubleshooting focus
-              </p>
-            </div>
-          </div>
-        </header>
-
-        <section className="mt-10 rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-6">
-          <h2 className="text-2xl font-bold">
-            30-Second kubectl Quick Start
-          </h2>
-
-          <p className="mt-3 max-w-4xl leading-7 text-slate-400">
-            If you are troubleshooting a Kubernetes application, start with
-            read-only inspection commands. Confirm the cluster first, then
-            move from cluster health to workload status, Pod details, logs and
-            events before making a change.
-          </p>
-
-          <div className="mt-6 space-y-3">
-            {quickStartSteps.map(
-              ([number, title, command, description]) => (
-                <div
-                  key={number}
-                  className="grid gap-4 rounded-xl border border-slate-800 bg-slate-950 p-4 md:grid-cols-[auto_1fr_2fr]"
-                >
-                  <div className="text-2xl font-bold text-cyan-400">
-                    {number}
-                  </div>
-
-                  <div>
-                    <h3 className="font-bold text-white">
-                      {title}
-                    </h3>
-                    <p className="mt-1 text-sm text-slate-500">
-                      {description}
-                    </p>
-                  </div>
-
-                  <code className="overflow-x-auto rounded-lg bg-slate-900 px-4 py-3 text-sm text-cyan-400">
-                    {command}
-                  </code>
-                </div>
-              ),
-            )}
-          </div>
-        </section>
-
-        <section className="mt-10 rounded-xl border border-amber-500/30 bg-amber-500/5 p-6">
-          <h2 className="text-2xl font-bold">
-            Production kubectl Safety Guide
-          </h2>
-
-          <p className="mt-3 leading-7 text-slate-400">
-            kubectl can make immediate changes to live Kubernetes resources.
-            In production, use an evidence-first workflow and verify the target
-            cluster, namespace and resource before executing a change.
-          </p>
-
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {productionSafetyRules.map((rule) => (
-              <div
-                key={rule.title}
-                className="rounded-xl border border-slate-800 bg-slate-950 p-5"
-              >
-                <h3 className="font-bold text-white">
-                  {rule.title}
-                </h3>
-
-                <p className="mt-2 text-sm leading-6 text-slate-400">
-                  {rule.description}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 rounded-lg border border-amber-500/20 bg-slate-950 p-4">
-            <p className="text-sm leading-6 text-slate-400">
-              <span className="font-semibold text-amber-400">
-                Production habit:
-              </span>{" "}
-              before a destructive or mutating command, run{" "}
-              <code className="text-cyan-400">
-                kubectl config current-context
-              </code>{" "}
-              and confirm the namespace and resource you intend to change.
+      <section className="mt-10 rounded-2xl border border-cyan-500/20 bg-slate-900/70 p-6">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <h2 className="text-2xl font-semibold text-white">
+              Quick Start: Kubernetes Troubleshooting Workflow
+            </h2>
+            <p className="mt-2 text-slate-400">
+              Use this sequence when investigating a production Kubernetes
+              issue. Start with read-only commands before making changes.
             </p>
           </div>
-        </section>
 
-        <section className="mt-10 rounded-xl border border-slate-800 bg-slate-900 p-6">
-          <h2 className="text-2xl font-bold">
-            What is kubectl?
-          </h2>
-
-          <p className="mt-4 leading-8 text-slate-400">
-            kubectl is the Kubernetes command-line interface used to
-            communicate with Kubernetes clusters through the Kubernetes API
-            server. DevOps engineers, SREs and application support teams use
-            kubectl to inspect workloads, deploy applications, troubleshoot
-            Pods, manage Services and monitor cluster resources.
-          </p>
-
-          <p className="mt-4 leading-8 text-slate-400">
-            kubectl works against Kubernetes API resources, so the same
-            command patterns can be used across managed Kubernetes platforms
-            such as AKS, EKS and GKE as well as self-managed or on-premises
-            Kubernetes environments, subject to the cluster configuration,
-            authentication and installed resources.
-          </p>
-        </section>
-
-        <section className="mt-10 rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-6">
-          <h2 className="text-2xl font-bold">
-            kubectl Syntax
-          </h2>
-
-          <div className="mt-4 overflow-x-auto rounded-lg bg-slate-950 p-4">
-            <code className="text-cyan-400">
-              kubectl [command] [TYPE] [NAME] [flags]
-            </code>
+          <div className="rounded-lg border border-slate-700 bg-slate-950 px-4 py-3 text-sm text-slate-300">
+            <span className="font-semibold text-cyan-400">Tip:</span>{" "}
+            Confirm your context before every production investigation.
           </div>
+        </div>
 
-          <p className="mt-4 leading-7 text-slate-400">
-            A typical kubectl command contains an operation such as get,
-            describe, apply, delete or logs, followed by the Kubernetes
-            resource type, resource name and optional flags.
-          </p>
-
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
-            <div className="rounded-lg border border-slate-800 bg-slate-950 p-4">
-              <code className="text-cyan-400">
-                kubectl get pods
-              </code>
-              <p className="mt-2 text-sm text-slate-400">
-                Lists Pods in the current namespace.
-              </p>
-            </div>
-
-            <div className="rounded-lg border border-slate-800 bg-slate-950 p-4">
-              <code className="text-cyan-400">
-                kubectl get pods -n production
-              </code>
-              <p className="mt-2 text-sm text-slate-400">
-                Lists Pods in the production namespace.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-10">
-          <h2 className="text-2xl font-bold">
-            Quick kubectl Command Reference
-          </h2>
-
-          <p className="mt-3 text-slate-400">
-            These are some of the most frequently used kubectl commands for
-            Kubernetes administration, DevOps operations, SRE work and
-            application support.
-          </p>
-
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            {popularCommands.map((command) => (
-              <div
-                key={command}
-                className="rounded-lg border border-slate-800 bg-slate-900 p-4"
-              >
-                <code className="break-all text-sm text-cyan-400">
-                  {command}
-                </code>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-12" id="kubectl-category-navigation">
-          <h2 className="text-2xl font-bold">
-            kubectl Commands by Category
-          </h2>
-
-          <p className="mt-3 leading-7 text-slate-400">
-            Use the command search below to find Kubernetes CLI commands by
-            task. This reference covers commands commonly used during
-            Kubernetes administration, DevOps operations, application support
-            and production troubleshooting.
-          </p>
-
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {categoryLinks.map((category) => (
-              <a
-                key={category.title}
-                href={category.href}
-                className="group rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:border-cyan-500/50 hover:bg-slate-800/70"
-              >
-                <h3 className="font-bold text-white transition group-hover:text-cyan-400">
-                  {category.title}
-                </h3>
-
-                <p className="mt-2 text-sm leading-6 text-slate-400">
-                  {category.description}
-                </p>
-
-                <span className="mt-4 inline-block text-sm font-semibold text-cyan-400">
-                  View commands →
-                </span>
-              </a>
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-12">
-          <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-5">
-            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Kubernetes Command Reference
-            </p>
-
-            <p className="mt-2 text-slate-300">
-              {commandCount} commands across {commandSections.length} categories
-            </p>
-          </div>
-        </section>
-
-        <KubectlCommandSearch sections={commandSections} />
-
-        <section className="mt-12">
-          <h2 className="text-2xl font-bold">
-            Most Useful kubectl Commands for Troubleshooting
-          </h2>
-
-          <p className="mt-3 leading-7 text-slate-400">
-            When a Kubernetes application is not working, start with
-            non-destructive inspection commands. Confirm the active context,
-            then check Pod status, events, logs, Deployment state, Services
-            and endpoints before making changes.
-          </p>
-
-          <div className="mt-5 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900 p-6">
-            <pre className="text-sm leading-8 text-slate-300">
-{`kubectl config current-context
-kubectl get nodes
-kubectl get pods -A
-kubectl get pods -o wide
-kubectl describe pod <pod-name>
-kubectl logs <pod-name>
-kubectl logs --previous <pod-name>
-kubectl get events --sort-by=.lastTimestamp
-kubectl get deployment
-kubectl rollout status deployment/<deployment-name>
-kubectl get svc
-kubectl get endpoints
-kubectl describe node <node-name>`}
-            </pre>
-          </div>
-        </section>
-
-        <section className="mt-12">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <h2 className="text-2xl font-bold">
-                Kubernetes Troubleshooting Workflows
-              </h2>
-
-              <p className="mt-3 max-w-4xl leading-7 text-slate-400">
-                Use the symptom to choose the first diagnostic commands. The
-                goal is to collect evidence before changing the workload.
-              </p>
-            </div>
-
-            <a
-              href="/kubernetes/troubleshooting/crashloopbackoff"
-              className="text-sm font-semibold text-cyan-400 hover:underline"
+        <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+          {quickStartSteps.map((step) => (
+            <div
+              key={step.title}
+              className="rounded-xl border border-slate-800 bg-slate-950 p-4"
             >
-              View Kubernetes troubleshooting guides →
+              <h3 className="font-semibold text-white">{step.title}</h3>
+
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                {step.description}
+              </p>
+
+              <code className="mt-4 block overflow-x-auto rounded-lg bg-slate-900 p-3 text-xs text-cyan-300">
+                {step.command}
+              </code>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-12" id="kubectl-category-navigation">
+        <div>
+          <h2 className="text-2xl font-bold text-white">
+            Browse kubectl Commands by Category
+          </h2>
+
+          <p className="mt-2 max-w-3xl text-slate-400">
+            Jump directly to the Kubernetes command group you need for
+            day-to-day operations, troubleshooting and production support.
+          </p>
+        </div>
+
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {categoryLinks.map((category) => (
+            <a
+              key={category.title}
+              href={category.href}
+              className="group rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:border-cyan-500/50 hover:bg-slate-800/70"
+            >
+              <h3 className="font-semibold text-white group-hover:text-cyan-300">
+                {category.title}
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                {category.description}
+              </p>
+
+              <span className="mt-4 inline-block text-sm font-semibold text-cyan-400">
+                View commands →
+              </span>
             </a>
-          </div>
+          ))}
+        </div>
+      </section>
 
-          <div className="mt-6 space-y-4">
-            {problemWorkflows.map((problem) => (
-              <div
-                key={problem.title}
-                className="rounded-xl border border-slate-800 bg-slate-900 p-5"
-              >
-                <h3 className="font-bold text-white">
-                  {problem.title}
-                </h3>
+      <section className="mt-12 rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
+        <h2 className="text-2xl font-bold text-white">
+          Most Used kubectl Commands
+        </h2>
 
-                <pre className="mt-4 overflow-x-auto rounded-lg bg-slate-950 p-4 text-sm leading-7 text-cyan-400">
-                  {problem.commands}
-                </pre>
+        <p className="mt-2 text-slate-400">
+          These commands are useful for everyday Kubernetes administration and
+          first-level production troubleshooting.
+        </p>
 
-                <p className="mt-4 leading-7 text-slate-400">
-                  {problem.explanation}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
+        <div className="mt-6 grid gap-3 md:grid-cols-2">
+          {popularCommands.map((command) => (
+            <code
+              key={command}
+              className="block overflow-x-auto rounded-lg border border-slate-800 bg-slate-950 p-4 text-sm text-cyan-300"
+            >
+              {command}
+            </code>
+          ))}
+        </div>
+      </section>
 
-        <section className="mt-12">
-          <h2 className="text-2xl font-bold">
+      <KubectlCommandSearch sections={commandSections} />
+
+      <section className="mt-16 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-6">
+        <h2 className="text-2xl font-bold text-white">
+          Production Safety Guide
+        </h2>
+
+        <p className="mt-2 text-slate-400">
+          kubectl can make immediate changes to running workloads. Treat
+          production commands as operational changes, not just CLI commands.
+        </p>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {productionSafetyRules.map((rule) => (
+            <div
+              key={rule}
+              className="rounded-xl border border-slate-800 bg-slate-950 p-4"
+            >
+              <p className="text-sm leading-6 text-slate-300">{rule}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-16">
+        <div>
+          <h2 className="text-2xl font-bold text-white">
             Kubernetes Troubleshooting Guides
           </h2>
 
-          <p className="mt-3 leading-7 text-slate-400">
-            For common Kubernetes failure states, use the dedicated
-            troubleshooting workflows after collecting the initial Pod,
-            events and log evidence.
+          <p className="mt-2 text-slate-400">
+            Use these focused troubleshooting workflows when a Kubernetes
+            workload enters an unhealthy state.
           </p>
+        </div>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {troubleshootingLinks.map((item) => (
-              <a
-                key={item.title}
-                href={item.href}
-                className="group rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:border-cyan-500/40 hover:bg-slate-800/70"
-              >
-                <h3 className="font-bold text-white transition group-hover:text-cyan-400">
-                  {item.title}
-                </h3>
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {troubleshootingLinks.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:border-cyan-500/50 hover:bg-slate-800/70"
+            >
+              <h3 className="font-semibold text-white">{item.title}</h3>
 
-                <p className="mt-2 leading-7 text-slate-400">
-                  {item.description}
-                </p>
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                {item.description}
+              </p>
 
-                <span className="mt-4 inline-block text-sm font-semibold text-cyan-400">
-                  Open troubleshooting guide →
-                </span>
-              </a>
-            ))}
-          </div>
-        </section>
+              <span className="mt-4 inline-block text-sm font-semibold text-cyan-400">
+                Open troubleshooting guide →
+              </span>
+            </a>
+          ))}
+        </div>
+      </section>
 
-        <section className="mt-12">
-          <h2 className="text-2xl font-bold">
-            Kubernetes Production Troubleshooting Workflow
-          </h2>
+      <section className="mt-16">
+        <h2 className="text-2xl font-bold text-white">
+          Real-World Kubernetes Troubleshooting Workflows
+        </h2>
 
-          <p className="mt-3 leading-7 text-slate-400">
-            A repeatable troubleshooting workflow helps separate symptoms from
-            causes and reduces unnecessary production changes.
-          </p>
+        <p className="mt-2 text-slate-400">
+          Instead of running random commands, follow a structured investigation
+          sequence based on the symptom.
+        </p>
 
-          <div className="mt-5 grid gap-4 md:grid-cols-5">
-            {[
-              ["1", "Context", "Confirm the cluster and namespace."],
-              ["2", "Status", "Check Nodes, Pods and Deployments."],
-              ["3", "Events", "Look for scheduling and Kubernetes warnings."],
-              ["4", "Logs", "Check current and previous container logs."],
-              ["5", "Network", "Check Services, endpoints and routing."],
-            ].map(([number, title, description]) => (
-              <div
-                key={number}
-                className="rounded-xl border border-slate-800 bg-slate-900 p-5"
-              >
-                <div className="text-2xl font-bold text-cyan-400">
-                  {number}
-                </div>
+        <div className="mt-6 space-y-6">
+          {problemWorkflows.map((workflow) => (
+            <div
+              key={workflow.problem}
+              className="rounded-xl border border-slate-800 bg-slate-900 p-6"
+            >
+              <h3 className="text-lg font-semibold text-white">
+                {workflow.problem}
+              </h3>
 
-                <h3 className="mt-3 font-bold">
-                  {title}
-                </h3>
+              <div className="mt-4 space-y-2">
+                {workflow.steps.map((step, index) => (
+                  <div
+                    key={step}
+                    className="flex gap-3 rounded-lg bg-slate-950 p-3"
+                  >
+                    <span className="font-mono text-sm text-slate-500">
+                      {index + 1}.
+                    </span>
 
-                <p className="mt-2 text-sm leading-6 text-slate-400">
-                  {description}
-                </p>
+                    <code className="overflow-x-auto text-sm text-cyan-300">
+                      {step}
+                    </code>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-12 rounded-xl border border-slate-800 bg-slate-900 p-6">
-          <h2 className="text-2xl font-bold">
-            Read-Only vs Change Commands
-          </h2>
-
-          <p className="mt-3 leading-7 text-slate-400">
-            During an incident, start with commands that collect evidence.
-            Move to mutating commands only after the failure mode is
-            understood and the intended change is clear.
-          </p>
-
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            <div className="rounded-xl border border-slate-800 bg-slate-950 p-5">
-              <h3 className="font-bold text-cyan-400">
-                Inspect
-              </h3>
-
-              <p className="mt-2 text-sm leading-6 text-slate-400">
-                Examples: get, describe, logs, events, top, auth can-i and
-                config current-context.
-              </p>
             </div>
+          ))}
+        </div>
+      </section>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-950 p-5">
-              <h3 className="font-bold text-cyan-400">
-                Change
-              </h3>
+      <section className="mt-16">
+        <h2 className="text-2xl font-bold text-white">
+          kubectl Frequently Asked Questions
+        </h2>
 
-              <p className="mt-2 text-sm leading-6 text-slate-400">
-                Examples: apply, set image, scale, patch, edit and rollout
-                restart.
-              </p>
-            </div>
+        <div className="mt-6 space-y-4">
+          {faqItems.map((item) => (
+            <details
+              key={item.question}
+              className="group rounded-xl border border-slate-800 bg-slate-900 p-5"
+            >
+              <summary className="cursor-pointer list-none font-semibold text-white">
+                <span className="flex items-center justify-between gap-4">
+                  {item.question}
+                  <span className="text-cyan-400 transition group-open:rotate-45">
+                    +
+                  </span>
+                </span>
+              </summary>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-950 p-5">
-              <h3 className="font-bold text-amber-400">
-                Destructive
-              </h3>
+              <p className="mt-4 leading-7 text-slate-400">{item.answer}</p>
+            </details>
+          ))}
+        </div>
+      </section>
 
-              <p className="mt-2 text-sm leading-6 text-slate-400">
-                Examples: delete resources, force-delete Pods and delete
-                namespaces. Confirm scope and impact before execution.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-12">
-          <h2 className="text-2xl font-bold">
-            kubectl FAQ
-          </h2>
-
-          <div className="mt-5 space-y-4">
-            {faqItems.map((faq) => (
-              <details
-                key={faq.question}
-                className="rounded-xl border border-slate-800 bg-slate-900 p-5"
-              >
-                <summary className="cursor-pointer font-semibold text-white">
-                  {faq.question}
-                </summary>
-
-                <p className="mt-4 leading-7 text-slate-400">
-                  {faq.answer}
-                </p>
-              </details>
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-12 rounded-xl border border-cyan-500/30 bg-cyan-500/5 p-6">
-          <h2 className="text-xl font-bold">
-            DevOps Commands Tip
-          </h2>
-
-          <p className="mt-3 leading-7 text-slate-400">
-            Before running a destructive kubectl command, confirm the active
-            context and namespace. During incidents, collect status, events,
-            logs and resource definitions first. This preserves useful
-            diagnostic information and makes troubleshooting more systematic.
-          </p>
-        </section>
-
-        <footer className="mt-12 border-t border-slate-800 pt-6">
-          <p className="text-sm text-slate-500">
-            Kubernetes kubectl command reference for DevOps, SRE,
-            application support and production troubleshooting workflows.
-          </p>
-        </footer>
-      </div>
+      <section className="mt-16 border-t border-slate-800 pt-8">
+        <p className="text-sm leading-6 text-slate-500">
+          This kubectl reference is designed for Kubernetes administration,
+          DevOps, SRE and production support workflows. Always verify commands
+          against your Kubernetes version and environment before using them in
+          production.
+        </p>
+      </section>
     </main>
   );
 }
