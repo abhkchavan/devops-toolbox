@@ -1,883 +1,695 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Kubernetes ImagePullBackOff Troubleshooting Guide | kubectl",
+  title: "Kubernetes ImagePullBackOff Troubleshooting | ErrImagePull Guide",
   description:
-    "Production-focused Kubernetes ImagePullBackOff and ErrImagePull troubleshooting guide covering image names, tags, registries, imagePullSecrets, authentication, DNS, network errors, events, fixes, rollback, verification, and SRE incident workflow.",
+    "Troubleshoot Kubernetes ImagePullBackOff and ErrImagePull errors with kubectl. Diagnose incorrect image names, registry authentication, private registries, image tags, network issues, pull secrets and container runtime failures.",
   keywords: [
     "Kubernetes ImagePullBackOff",
-    "ImagePullBackOff troubleshooting",
     "ErrImagePull Kubernetes",
-    "kubectl ImagePullBackOff",
+    "ImagePullBackOff troubleshooting",
     "Kubernetes image pull error",
-    "Kubernetes imagePullSecrets",
+    "kubectl ImagePullBackOff",
     "Kubernetes private registry",
-    "kubectl describe pod image pull",
-    "Kubernetes Docker registry authentication",
-    "Kubernetes image troubleshooting",
-    "Kubernetes pod troubleshooting",
-    "Kubernetes troubleshooting commands",
+    "Kubernetes imagePullSecrets",
+    "Kubernetes container image troubleshooting",
+    "Kubernetes Docker image error",
+    "Kubernetes registry authentication",
+    "Kubernetes pod image error",
   ],
   alternates: {
     canonical:
       "https://www.devopscommands.com/kubernetes/troubleshooting/imagepullbackoff",
   },
   openGraph: {
-    title: "Kubernetes ImagePullBackOff Troubleshooting Guide",
+    title: "Kubernetes ImagePullBackOff Troubleshooting | ErrImagePull Guide",
     description:
-      "A practical production/SRE workflow to diagnose and fix Kubernetes ImagePullBackOff and ErrImagePull errors.",
+      "Production-focused troubleshooting guide for Kubernetes ImagePullBackOff and ErrImagePull errors.",
     url: "https://www.devopscommands.com/kubernetes/troubleshooting/imagepullbackoff",
     type: "article",
   },
 };
 
-const investigationFlow = [
+const diagnosticSteps = [
   {
-    step: "1",
-    title: "Confirm the pod status",
-    command: "kubectl get pods -n <namespace>",
-    question:
-      "Is the pod showing ImagePullBackOff or ErrImagePull, and are restarts or readiness affected?",
+    number: "01",
+    title: "Check Pod status",
+    description:
+      "Confirm the Pod is reporting ImagePullBackOff or ErrImagePull and identify the affected container.",
+    command: "kubectl get pod <pod-name> -n <namespace>",
   },
   {
-    step: "2",
-    title: "Inspect pod events",
+    number: "02",
+    title: "Describe the Pod",
+    description:
+      "Inspect the Events section for the actual image-pull failure returned by the kubelet or container runtime.",
     command: "kubectl describe pod <pod-name> -n <namespace>",
-    question:
-      "What exact image-pull error is reported by the kubelet?",
   },
   {
-    step: "3",
-    title: "Verify the image reference",
+    number: "03",
+    title: "Check the image",
+    description:
+      "Verify the exact registry, repository and tag configured for the container.",
     command:
-      "kubectl get pod <pod-name> -n <namespace> -o jsonpath='{.spec.containers[*].image}'",
-    question:
-      "Is the registry, repository, image name, and tag exactly correct?",
+      "kubectl get pod <pod-name> -o jsonpath='{.spec.containers[*].image}'",
   },
   {
-    step: "4",
-    title: "Check registry authentication",
-    command:
-      "kubectl get pod <pod-name> -n <namespace> -o yaml",
-    question:
-      "Does the workload reference the expected imagePullSecrets or ServiceAccount?",
+    number: "04",
+    title: "Check registry access",
+    description:
+      "Determine whether the node can reach the registry and whether authentication is required.",
+    command: "kubectl get pod <pod-name> -o yaml",
   },
   {
-    step: "5",
-    title: "Classify the failure",
-    command:
-      "kubectl get events -n <namespace> --sort-by=.lastTimestamp",
-    question:
-      "Is this a missing image, authentication, authorization, DNS, network, TLS, or runtime problem?",
-  },
-  {
-    step: "6",
-    title: "Apply the smallest safe fix",
-    command:
-      "kubectl rollout status deployment/<deployment-name> -n <namespace>",
-    question:
-      "Can the image or registry configuration be corrected without unrelated production changes?",
-  },
-  {
-    step: "7",
-    title: "Verify recovery",
-    command: "kubectl get pods -n <namespace>",
-    question:
-      "Does the pod pull the image successfully, become Ready, and remain stable?",
+    number: "05",
+    title: "Check imagePullSecrets",
+    description:
+      "For private registries, verify that the correct image pull secret is configured and available in the namespace.",
+    command: "kubectl get secrets -n <namespace>",
   },
 ];
 
 const commonCauses = [
   {
-    title: "Incorrect image name",
+    title: "Incorrect Image Name",
     description:
-      "The Deployment references a repository or image name that does not exist in the target registry.",
-    evidence:
-      "kubectl describe pod commonly reports that the repository or image cannot be found.",
+      "The image repository or registry hostname is incorrect, so the container runtime cannot locate the requested image.",
+    command:
+      "kubectl get pod <pod-name> -o jsonpath='{.spec.containers[*].image}'",
   },
   {
-    title: "Incorrect image tag",
+    title: "Invalid or Missing Tag",
     description:
-      "The repository exists, but the requested tag has not been pushed or is spelled incorrectly.",
-    evidence:
-      "Pod events usually contain a registry response indicating that the requested manifest or tag was not found.",
+      "The specified image tag does not exist in the registry. This commonly happens after a deployment references a newly expected tag that was never pushed.",
+    command: "kubectl describe pod <pod-name>",
   },
   {
-    title: "Private registry authentication",
+    title: "Private Registry Authentication",
     description:
-      "The cluster can reach the registry but does not have valid credentials to pull the image.",
-    evidence:
-      "Events may contain authentication or unauthorized errors. Check imagePullSecrets and the ServiceAccount configuration.",
+      "The registry requires credentials but the Pod does not have a valid imagePullSecret or equivalent workload identity configuration.",
+    command: "kubectl get pod <pod-name> -o yaml",
   },
   {
-    title: "Registry authorization",
+    title: "Image Does Not Exist",
     description:
-      "Credentials may be valid but do not have permission to pull the requested repository.",
-    evidence:
-      "Registry responses can indicate access denied or insufficient permissions.",
+      "The repository or tag may not have been pushed to the registry at all.",
+    command: "kubectl describe pod <pod-name>",
   },
   {
-    title: "Registry DNS or network problem",
+    title: "Registry Network Problem",
     description:
-      "The node cannot resolve or reach the registry endpoint.",
-    evidence:
-      "Events may show DNS resolution failures, connection timeouts, connection refused errors, or network-related messages.",
+      "The node may be unable to reach the registry because of DNS, firewall, proxy, routing or outbound network restrictions.",
+    command: "kubectl describe pod <pod-name>",
   },
   {
-    title: "TLS or certificate problem",
+    title: "Registry Rate Limiting",
     description:
-      "The node reaches the registry but cannot establish a trusted TLS connection.",
-    evidence:
-      "Pod events may contain certificate, x509, or TLS handshake errors.",
+      "Public registries may throttle anonymous or high-volume image pulls.",
+    command: "kubectl describe pod <pod-name>",
   },
   {
-    title: "Registry rate limiting or availability",
+    title: "TLS or Certificate Error",
     description:
-      "The registry may temporarily reject requests because of rate limits, service disruption, or capacity issues.",
-    evidence:
-      "Events and registry-side monitoring can show HTTP errors or rate-limit responses.",
+      "The container runtime may reject the registry connection because of certificate or TLS configuration problems.",
+    command: "kubectl describe pod <pod-name>",
   },
   {
-    title: "Architecture mismatch",
+    title: "Container Runtime Problem",
     description:
-      "The image reference exists, but the image manifest does not provide a compatible architecture for the node.",
-    evidence:
-      "Events or container runtime messages may indicate that no matching manifest exists for the node architecture.",
+      "The node's container runtime may have its own image-pull, disk, credential or connectivity issue.",
+    command: "kubectl get nodes -o wide",
   },
 ];
 
-const diagnosticCommands = [
+const eventExamples = [
   {
-    title: "1. Find the affected pod",
-    command: "kubectl get pods -n <namespace>",
-    explanation:
-      "Confirm the affected pod and determine whether it is waiting for the image or whether other containers are also affected.",
-    whatToLookFor:
-      "STATUS=ImagePullBackOff or ErrImagePull and a pod that is not Ready.",
+    message:
+      'Failed to pull image "nginx:invalid-tag": manifest unknown',
+    meaning:
+      "The requested image tag does not exist in the registry.",
   },
   {
-    title: "2. Inspect pod events",
-    command: "kubectl describe pod <pod-name> -n <namespace>",
-    explanation:
-      "This is usually the most valuable command because kubelet events contain the detailed reason the image pull failed.",
-    whatToLookFor:
-      "Failed to pull image, unauthorized, not found, timeout, DNS, TLS, rate limit, or manifest errors.",
+    message:
+      'pull access denied for private-repo/app, repository does not exist or may require authorization',
+    meaning:
+      "The registry may require authentication or the repository reference may be incorrect.",
   },
   {
-    title: "3. Check the image reference",
-    command:
-      "kubectl get pod <pod-name> -n <namespace> -o jsonpath='{.spec.containers[*].image}'",
-    explanation:
-      "Extract the exact image reference Kubernetes is attempting to pull.",
-    whatToLookFor:
-      "Registry hostname, repository, image name, and tag.",
+    message:
+      "Back-off pulling image",
+    meaning:
+      "Kubernetes is backing off and retrying image pulls after repeated failures.",
   },
   {
-    title: "4. Inspect the workload definition",
-    command:
-      "kubectl get deployment <deployment-name> -n <namespace> -o yaml",
-    explanation:
-      "Check the Deployment or workload configuration that created the pod.",
-    whatToLookFor:
-      "Image reference, imagePullPolicy, imagePullSecrets, ServiceAccount, and recent configuration changes.",
+    message:
+      "dial tcp: lookup registry.example.com: no such host",
+    meaning:
+      "The node cannot resolve the registry hostname through DNS.",
   },
   {
-    title: "5. Inspect image pull secrets",
-    command:
+    message:
+      "x509: certificate signed by unknown authority",
+    meaning:
+      "The node's container runtime does not trust the registry certificate.",
+  },
+];
+
+const troubleshootingScenarios = [
+  {
+    title: "Scenario 1: Wrong image tag",
+    steps: [
+      "kubectl get pod <pod-name>",
+      "kubectl describe pod <pod-name>",
+      "kubectl get deployment <deployment-name> -o yaml",
+      "kubectl get pod <pod-name> -o jsonpath='{.spec.containers[*].image}'",
+    ],
+    explanation:
+      "Start with the Pod events. If the registry reports that the manifest or tag does not exist, verify the deployment image against the image tags actually available in the registry.",
+  },
+  {
+    title: "Scenario 2: Private registry authentication failure",
+    steps: [
+      "kubectl describe pod <pod-name>",
       "kubectl get secret -n <namespace>",
+      "kubectl get serviceaccount <service-account> -o yaml",
+      "kubectl get deployment <deployment-name> -o yaml",
+    ],
     explanation:
-      "Confirm that the expected registry credential Secret exists in the same namespace as the workload.",
-    whatToLookFor:
-      "Expected docker-registry Secret and correct namespace.",
+      "Check whether the workload references the expected imagePullSecret or uses another supported registry authentication mechanism. Verify the secret exists in the same namespace as the Pod.",
   },
   {
-    title: "6. Inspect recent events",
-    command:
-      "kubectl get events -n <namespace> --sort-by=.lastTimestamp",
+    title: "Scenario 3: Registry DNS or network failure",
+    steps: [
+      "kubectl describe pod <pod-name>",
+      "kubectl get nodes -o wide",
+      "kubectl run registry-test --rm -it --image=curlimages/curl -- sh",
+      "nslookup <registry-hostname>",
+    ],
     explanation:
-      "Events help correlate image-pull failures with deployment changes and other Kubernetes activity.",
-    whatToLookFor:
-      "Warning events related to pulling, authentication, DNS, networking, TLS, or registry availability.",
+      "If events show DNS, timeout or connection errors, investigate node-level DNS, routing, firewall, proxy and outbound network configuration rather than changing the application image.",
+  },
+  {
+    title: "Scenario 4: Image exists but pull still fails",
+    steps: [
+      "kubectl describe pod <pod-name>",
+      "kubectl get pod <pod-name> -o yaml",
+      "kubectl get nodes -o wide",
+      "kubectl describe node <node-name>",
+    ],
+    explanation:
+      "When the image reference is correct, inspect the detailed runtime error and the affected node. Disk pressure, runtime configuration, certificate trust and registry connectivity can all affect image pulls.",
   },
 ];
 
-const registryChecks = [
+const safeActions = [
+  "Start with kubectl get and kubectl describe before changing the workload.",
+  "Confirm the exact image registry, repository and tag.",
+  "Check the Pod Events section before assuming the application image is broken.",
+  "For private registries, verify credentials and imagePullSecrets in the correct namespace.",
+  "Do not expose registry passwords or Secret values in tickets, logs or screenshots.",
+  "Avoid repeatedly deleting Pods without understanding why the image pull is failing.",
+  "Check whether the problem affects one node or multiple nodes.",
+  "After correcting the configuration, verify the rollout and Pod readiness.",
+];
+
+const preventionItems = [
+  "Use immutable image tags or digests for production deployments where appropriate.",
+  "Validate that images are successfully pushed before deploying a new version.",
+  "Use approved private registries for production workloads.",
+  "Configure registry authentication through supported Kubernetes mechanisms.",
+  "Monitor registry availability and authentication failures.",
+  "Keep node DNS and outbound connectivity healthy.",
+  "Monitor node disk pressure and container runtime health.",
+  "Avoid relying on mutable tags such as latest for controlled production releases.",
+];
+
+const relatedLinks = [
   {
-    title: "Image reference",
-    command:
-      "kubectl get deployment <deployment-name> -n <namespace> -o jsonpath='{.spec.template.spec.containers[*].image}'",
+    title: "kubectl Commands Cheat Sheet",
     description:
-      "Verify the exact registry, repository, image name, and tag configured by the workload.",
+      "Use the complete kubectl reference for Pods, deployments, logs, events, nodes and troubleshooting.",
+    href: "/kubernetes/kubectl-commands",
   },
   {
-    title: "Image pull secrets",
-    command:
-      "kubectl get deployment <deployment-name> -n <namespace> -o jsonpath='{.spec.template.spec.imagePullSecrets}'",
+    title: "Pending Pods Troubleshooting",
     description:
-      "Check whether the workload explicitly references an imagePullSecret.",
+      "Troubleshoot Pods that cannot be scheduled because of resources, taints, affinity, storage or node constraints.",
+    href: "/kubernetes/troubleshooting/pending-pods",
   },
   {
-    title: "ServiceAccount",
-    command:
-      "kubectl get pod <pod-name> -n <namespace> -o jsonpath='{.spec.serviceAccountName}'",
+    title: "CrashLoopBackOff Troubleshooting",
     description:
-      "Identify the ServiceAccount used by the pod when registry credentials are inherited through workload configuration.",
+      "Investigate containers that start but repeatedly terminate and restart.",
+    href: "/kubernetes/troubleshooting/crashloopbackoff",
   },
 ];
 
-const errorPatterns = [
+const faqItems = [
   {
-    error: "manifest unknown",
-    meaning:
-      "The registry could not find the requested image manifest. Verify repository and tag.",
-    action:
-      "Check the exact image reference and confirm that the tag exists in the registry.",
+    question: "What does ImagePullBackOff mean in Kubernetes?",
+    answer:
+      "ImagePullBackOff means Kubernetes was unable to pull a container image and is backing off before retrying. The underlying reason is normally visible in the Pod Events section returned by kubectl describe pod.",
   },
-  {
-    error: "unauthorized",
-    meaning:
-      "The registry rejected the authentication attempt.",
-    action:
-      "Verify credentials, imagePullSecrets, namespace, ServiceAccount, and registry permissions.",
-  },
-  {
-    error: "denied",
-    meaning:
-      "The request reached the registry but access to the repository was rejected.",
-    action:
-      "Check repository-level permissions and the identity used by the workload.",
-  },
-  {
-    error: "no such host",
-    meaning:
-      "The node or runtime could not resolve the registry hostname.",
-    action:
-      "Investigate DNS resolution, node networking, private DNS, and registry endpoint configuration.",
-  },
-  {
-    error: "i/o timeout",
-    meaning:
-      "The node could not complete network communication with the registry in time.",
-    action:
-      "Investigate firewall rules, proxy configuration, routing, private endpoints, and registry availability.",
-  },
-  {
-    error: "x509",
-    meaning:
-      "The container runtime encountered a certificate trust or TLS problem.",
-    action:
-      "Check registry certificates, trust configuration, endpoint correctness, and node runtime configuration.",
-  },
-  {
-    error: "no matching manifest",
-    meaning:
-      "The registry does not provide an image variant compatible with the node architecture.",
-    action:
-      "Verify the image manifest and supported node architecture.",
-  },
-];
-
-const productionChecks = [
-  "Record the affected namespace, workload, pod, image reference, start time, and customer impact.",
-  "Capture kubectl describe pod output and recent events before repeatedly deleting or recreating pods.",
-  "Verify the exact image repository and tag instead of assuming the image exists.",
-  "Confirm registry credentials and imagePullSecrets exist in the workload's namespace.",
-  "Check whether the problem affects one workload, multiple workloads, or the entire cluster.",
-  "Differentiate authentication errors from authorization, DNS, network, TLS, and image-not-found errors.",
-  "Check recent deployment or registry changes before changing cluster-wide configuration.",
-  "After the fix, verify image pull success, pod readiness, rollout completion, and application health.",
-];
-
-const verificationCommands = [
-  "kubectl get pods -n <namespace>",
-  "kubectl describe pod <pod-name> -n <namespace>",
-  "kubectl get events -n <namespace> --sort-by=.lastTimestamp",
-  "kubectl rollout status deployment/<deployment-name> -n <namespace>",
-  "kubectl get deployment <deployment-name> -n <namespace>",
-];
-
-const fixes = [
-  "Correct an invalid registry, repository, image name, or image tag.",
-  "Push the expected image tag to the registry when the workload references a tag that does not exist.",
-  "Create or correct the required imagePullSecret in the same namespace as the workload.",
-  "Attach the correct imagePullSecret to the Deployment or appropriate ServiceAccount.",
-  "Fix registry permissions when credentials are valid but unauthorized for the repository.",
-  "Resolve node-to-registry DNS, routing, firewall, proxy, private endpoint, or TLS issues.",
-  "Use an image manifest that supports the architecture of the Kubernetes nodes.",
-  "Roll back a workload revision when evidence shows that a recent deployment introduced the invalid image reference.",
-];
-
-const faqs = [
   {
     question: "What is the difference between ErrImagePull and ImagePullBackOff?",
     answer:
-      "ErrImagePull indicates that Kubernetes failed to pull the container image. ImagePullBackOff means Kubernetes continues to encounter the pull failure and is backing off before retrying.",
+      "ErrImagePull indicates that Kubernetes encountered an error while attempting to pull the image. ImagePullBackOff indicates that the pull has repeatedly failed and Kubernetes is delaying subsequent retry attempts.",
   },
   {
-    question: "What command should I run first for ImagePullBackOff?",
+    question: "How do I find the image that Kubernetes is trying to pull?",
     answer:
-      "Start with kubectl get pods -n <namespace> to confirm the affected pod, then run kubectl describe pod <pod-name> -n <namespace>. The Events section usually contains the most useful explanation.",
+      "You can inspect the Pod specification with kubectl get pod <pod-name> -o yaml or use a JSONPath expression such as kubectl get pod <pod-name> -o jsonpath='{.spec.containers[*].image}'.",
   },
   {
-    question: "Why does my imagePullSecret not work?",
+    question: "How do I fix ImagePullBackOff for a private Docker registry?",
     answer:
-      "Common causes include the Secret being in a different namespace, an incorrect Secret type, invalid or expired registry credentials, the Secret not being referenced by the workload or ServiceAccount, or insufficient repository permissions.",
+      "First verify the image name and tag. Then verify that the required registry credentials are available through the supported authentication mechanism, such as an imagePullSecret, and that the credential is accessible in the Pod's namespace.",
   },
   {
-    question: "Does ImagePullBackOff always mean the image does not exist?",
+    question: "Why does an image pull work on my laptop but fail in Kubernetes?",
     answer:
-      "No. The image may exist but the node could still fail to pull it because of authentication, authorization, DNS, networking, TLS, registry availability, rate limits, or architecture compatibility.",
+      "Your laptop and Kubernetes nodes may have different network access, DNS configuration, registry credentials, certificate trust or proxy settings. Kubernetes pulls images from the node environment, not from your local workstation.",
   },
   {
-    question: "Can I fix ImagePullBackOff by restarting the pod?",
+    question: "Should I use latest in production Kubernetes deployments?",
     answer:
-      "Restarting the pod does not correct the underlying image-pull problem. Capture the event evidence first and correct the image, registry, authentication, networking, or configuration issue causing the pull failure.",
+      "Using mutable tags such as latest makes deployments harder to reproduce because the tag can point to different image content over time. Controlled release processes commonly use versioned tags and, where appropriate, immutable image digests.",
   },
 ];
 
-export default function ImagePullBackOffPage() {
+export default function ImagePullBackOffTroubleshootingPage() {
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-100">
-      <div className="mx-auto max-w-5xl px-6 py-12">
-        <a
-          href="/kubernetes/kubectl-commands"
-          className="mb-8 inline-flex text-sm font-medium text-cyan-400 transition hover:text-cyan-300"
-        >
-          ← Back to Kubernetes Commands
-        </a>
+    <main className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+      <header className="max-w-4xl">
+        <p className="text-sm font-semibold uppercase tracking-wide text-cyan-400">
+          Kubernetes Troubleshooting
+        </p>
 
-        <header className="mb-12">
-          <div className="mb-4 inline-flex rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-sm font-medium text-amber-300">
-            Kubernetes Troubleshooting
-          </div>
+        <h1 className="mt-3 text-4xl font-bold tracking-tight text-white sm:text-5xl">
+          Kubernetes ImagePullBackOff &amp; ErrImagePull Troubleshooting
+        </h1>
 
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-            Kubernetes ImagePullBackOff Troubleshooting
-          </h1>
+        <p className="mt-5 text-lg leading-8 text-slate-300">
+          Learn how to troubleshoot Kubernetes{" "}
+          <code className="rounded bg-slate-800 px-2 py-1 text-cyan-300">
+            ImagePullBackOff
+          </code>{" "}
+          and{" "}
+          <code className="rounded bg-slate-800 px-2 py-1 text-cyan-300">
+            ErrImagePull
+          </code>{" "}
+          errors. Diagnose incorrect image names, missing tags, private
+          registry authentication, imagePullSecrets, DNS and network failures,
+          TLS errors and container runtime problems.
+        </p>
+      </header>
 
-          <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-300">
-            A production-focused workflow for diagnosing Kubernetes image pull
-            failures. Trace the problem from Pod events and image references to
-            registry authentication, permissions, DNS, networking, TLS,
-            architecture, fixes, rollback, and verification.
+      <section className="mt-10 rounded-2xl border border-cyan-500/20 bg-slate-900/70 p-6">
+        <h2 className="text-2xl font-bold text-white">
+          Quick Diagnosis
+        </h2>
+
+        <p className="mt-2 text-slate-400">
+          The fastest way to troubleshoot ImagePullBackOff is to inspect the
+          Pod Events before changing the deployment.
+        </p>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {diagnosticSteps.map((step) => (
+            <div
+              key={step.number}
+              className="rounded-xl border border-slate-800 bg-slate-950 p-5"
+            >
+              <div className="text-sm font-bold text-cyan-400">
+                {step.number}
+              </div>
+
+              <h3 className="mt-2 font-semibold text-white">
+                {step.title}
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                {step.description}
+              </p>
+
+              <code className="mt-4 block overflow-x-auto rounded-lg bg-slate-900 p-3 text-xs text-cyan-300">
+                {step.command}
+              </code>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-2xl font-bold text-white">
+          What Does ImagePullBackOff Mean?
+        </h2>
+
+        <div className="mt-4 space-y-4 text-slate-300">
+          <p className="leading-7">
+            Kubernetes needs to pull the container image from a registry before
+            the container can start. If the image cannot be downloaded,
+            Kubernetes reports an image-pull failure.
           </p>
-        </header>
 
-        <section className="mb-12 rounded-2xl border border-amber-400/20 bg-amber-400/5 p-6">
-          <h2 className="text-2xl font-semibold">
-            What is ImagePullBackOff?
-          </h2>
-
-          <p className="mt-4 leading-7 text-slate-300">
-            ImagePullBackOff is a Kubernetes container status that means the
-            kubelet could not pull the required container image and is backing
-            off before retrying.
+          <p className="leading-7">
+            <code className="rounded bg-slate-800 px-2 py-1 text-cyan-300">
+              ErrImagePull
+            </code>{" "}
+            indicates that an image pull attempt failed.{" "}
+            <code className="rounded bg-slate-800 px-2 py-1 text-cyan-300">
+              ImagePullBackOff
+            </code>{" "}
+            indicates that Kubernetes has repeatedly failed to pull the image
+            and is backing off before retrying.
           </p>
 
-          <p className="mt-4 leading-7 text-slate-300">
-            The important troubleshooting principle is:
-            <strong className="text-white">
-              {" "}
-              ImagePullBackOff is a symptom, not necessarily the root cause.
-            </strong>{" "}
-            The actual failure may be an incorrect image reference,
-            authentication problem, authorization issue, registry connectivity
-            problem, TLS failure, rate limit, or architecture mismatch.
-          </p>
+          <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
+            <p className="font-semibold text-white">
+              First command to remember:
+            </p>
 
-          <div className="mt-6 rounded-xl border border-amber-400/20 bg-slate-950/60 p-5">
-            <p className="font-semibold text-white">Think like an SRE</p>
-            <p className="mt-2 leading-7 text-slate-300">
-              Do not immediately delete the pod or repeatedly restart the
-              workload. First capture the exact image-pull error from Events,
-              classify the failure, make the smallest safe correction, and then
-              verify that the workload can pull and run the expected image.
+            <code className="mt-3 block overflow-x-auto rounded-lg bg-slate-950 p-4 text-cyan-300">
+              kubectl describe pod &lt;pod-name&gt; -n &lt;namespace&gt;
+            </code>
+
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Look at the Events section. It normally contains the registry or
+              container-runtime error that explains why the image could not be
+              pulled.
             </p>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold">
-            Production Troubleshooting Flow
-          </h2>
+      <section className="mt-12">
+        <h2 className="text-2xl font-bold text-white">
+          Common Causes of ImagePullBackOff
+        </h2>
 
-          <p className="mt-3 leading-7 text-slate-300">
-            Follow this sequence during an incident. It moves from symptom to
-            evidence, then from evidence to a targeted fix.
-          </p>
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {commonCauses.map((cause) => (
+            <div
+              key={cause.title}
+              className="rounded-xl border border-slate-800 bg-slate-900 p-5"
+            >
+              <h3 className="text-lg font-semibold text-white">
+                {cause.title}
+              </h3>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            {investigationFlow.map((item) => (
-              <article
-                key={item.step}
-                className="rounded-xl border border-slate-800 bg-slate-900 p-5"
-              >
-                <div className="flex items-start gap-4">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-cyan-400/10 text-sm font-bold text-cyan-300">
-                    {item.step}
-                  </span>
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                {cause.description}
+              </p>
 
-                  <div>
-                    <h3 className="text-lg font-semibold text-white">
-                      {item.title}
-                    </h3>
+              <code className="mt-4 block overflow-x-auto rounded-lg bg-slate-950 p-3 text-xs text-cyan-300">
+                {cause.command}
+              </code>
+            </div>
+          ))}
+        </div>
+      </section>
 
-                    <pre className="mt-3 overflow-x-auto rounded-lg bg-slate-950 p-3 text-sm text-cyan-300">
-                      <code>{item.command}</code>
-                    </pre>
+      <section className="mt-12 rounded-2xl border border-slate-800 bg-slate-900/60 p-6">
+        <h2 className="text-2xl font-bold text-white">
+          Kubernetes Image Pull Errors to Watch
+        </h2>
 
-                    <p className="mt-3 leading-6 text-slate-400">
-                      {item.question}
-                    </p>
+        <p className="mt-2 text-slate-400">
+          The exact error message matters. Different registry errors require
+          different fixes.
+        </p>
+
+        <div className="mt-6 space-y-4">
+          {eventExamples.map((event) => (
+            <div
+              key={event.message}
+              className="rounded-xl border border-slate-800 bg-slate-950 p-5"
+            >
+              <code className="block overflow-x-auto text-sm text-amber-300">
+                {event.message}
+              </code>
+
+              <p className="mt-3 text-sm leading-6 text-slate-400">
+                {event.meaning}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <code className="mt-6 block overflow-x-auto rounded-lg bg-slate-950 p-4 text-sm text-cyan-300">
+          kubectl get events -A --sort-by=.lastTimestamp
+        </code>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-2xl font-bold text-white">
+          Real-World ImagePullBackOff Troubleshooting
+        </h2>
+
+        <div className="mt-6 space-y-6">
+          {troubleshootingScenarios.map((scenario) => (
+            <div
+              key={scenario.title}
+              className="rounded-xl border border-slate-800 bg-slate-900 p-6"
+            >
+              <h3 className="text-xl font-semibold text-white">
+                {scenario.title}
+              </h3>
+
+              <p className="mt-3 text-sm leading-6 text-slate-400">
+                {scenario.explanation}
+              </p>
+
+              <div className="mt-5 space-y-2">
+                {scenario.steps.map((step, index) => (
+                  <div
+                    key={step}
+                    className="flex gap-3 rounded-lg bg-slate-950 p-3"
+                  >
+                    <span className="font-mono text-sm text-slate-500">
+                      {index + 1}.
+                    </span>
+
+                    <code className="overflow-x-auto text-sm text-cyan-300">
+                      {step}
+                    </code>
                   </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold">
-            Step 1: Confirm the Pod Status
-          </h2>
+      <section className="mt-12">
+        <h2 className="text-2xl font-bold text-white">
+          Troubleshooting Private Container Registries
+        </h2>
 
-          <p className="mt-3 leading-7 text-slate-300">
-            Start by identifying the affected pod and confirming whether the
-            failure is ImagePullBackOff or ErrImagePull.
-          </p>
+        <p className="mt-3 leading-7 text-slate-300">
+          Private registries require Kubernetes workloads to authenticate
+          before the node can pull protected images. The authentication method
+          depends on the registry and Kubernetes platform.
+        </p>
 
-          <pre className="mt-5 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900 p-5 text-sm text-cyan-300">
-            <code>kubectl get pods -n &lt;namespace&gt;</code>
-          </pre>
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
+            <h3 className="font-semibold text-white">
+              Check imagePullSecrets
+            </h3>
 
-          <pre className="mt-4 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900 p-5 text-sm text-slate-300">
-            <code>{`NAME                         READY   STATUS             RESTARTS
-my-app-7d8f9c6b7d-abc12     0/1     ImagePullBackOff   0`}</code>
-          </pre>
-
-          <p className="mt-4 leading-7 text-slate-300">
-            At this point, do not assume the image is missing. The status only
-            tells you that Kubernetes is unable to obtain the image
-            successfully. The Events section is where the specific failure
-            normally becomes visible.
-          </p>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold">
-            Step 2: Inspect Pod Events
-          </h2>
-
-          <p className="mt-3 leading-7 text-slate-300">
-            For ImagePullBackOff, this is usually the most important
-            investigation step.
-          </p>
-
-          <pre className="mt-5 overflow-x-auto rounded-xl border border-cyan-400/20 bg-slate-900 p-5 text-sm text-cyan-300">
-            <code>kubectl describe pod &lt;pod-name&gt; -n &lt;namespace&gt;</code>
-          </pre>
-
-          <p className="mt-4 leading-7 text-slate-300">
-            Scroll to the Events section and look for messages such as:
-          </p>
-
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            {errorPatterns.map((item) => (
-              <article
-                key={item.error}
-                className="rounded-xl border border-slate-800 bg-slate-900 p-5"
-              >
-                <code className="rounded bg-slate-950 px-2 py-1 text-sm text-amber-300">
-                  {item.error}
-                </code>
-
-                <p className="mt-4 leading-6 text-slate-400">
-                  {item.meaning}
-                </p>
-
-                <div className="mt-4 rounded-lg bg-slate-950 p-3">
-                  <p className="text-sm font-semibold text-cyan-300">
-                    Next action
-                  </p>
-                  <p className="mt-1 text-sm leading-6 text-slate-400">
-                    {item.action}
-                  </p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold">
-            Step 3: Verify the Image Reference
-          </h2>
-
-          <p className="mt-3 leading-7 text-slate-300">
-            Verify exactly what image Kubernetes is trying to pull. A single
-            character difference in the registry, repository, image name, or
-            tag can cause the pull to fail.
-          </p>
-
-          <pre className="mt-5 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900 p-5 text-sm text-cyan-300">
-            <code>
-              kubectl get pod &lt;pod-name&gt; -n &lt;namespace&gt; -o
-              jsonpath=&apos;{`{.spec.containers[*].image}`}&apos;
+            <code className="mt-4 block overflow-x-auto rounded-lg bg-slate-950 p-4 text-sm text-cyan-300">
+              kubectl get pod &lt;pod-name&gt; -o yaml
             </code>
-          </pre>
 
-          <div className="mt-6 rounded-xl border border-slate-800 bg-slate-900 p-5">
-            <h3 className="text-lg font-semibold text-white">
-              Validate all four parts
-            </h3>
-
-            <ul className="mt-4 space-y-2 text-slate-400">
-              <li>• Registry hostname</li>
-              <li>• Repository path</li>
-              <li>• Image name</li>
-              <li>• Image tag</li>
-            </ul>
-          </div>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold">
-            Step 4: Check Registry Authentication
-          </h2>
-
-          <p className="mt-3 leading-7 text-slate-300">
-            Private registries require credentials that allow the Kubernetes
-            node or runtime to pull the image. The credentials must be
-            available to the workload through the appropriate Kubernetes
-            configuration.
-          </p>
-
-          <div className="mt-6 space-y-4">
-            {registryChecks.map((item) => (
-              <article
-                key={item.title}
-                className="rounded-xl border border-slate-800 bg-slate-900 p-5"
-              >
-                <h3 className="text-lg font-semibold text-white">
-                  {item.title}
-                </h3>
-
-                <pre className="mt-3 overflow-x-auto rounded-lg bg-slate-950 p-4 text-sm text-cyan-300">
-                  <code>{item.command}</code>
-                </pre>
-
-                <p className="mt-3 leading-6 text-slate-400">
-                  {item.description}
-                </p>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-6 rounded-xl border border-amber-400/20 bg-amber-400/5 p-6">
-            <h3 className="text-lg font-semibold text-amber-200">
-              Important namespace rule
-            </h3>
-
-            <p className="mt-2 leading-7 text-slate-300">
-              Kubernetes Secrets are namespace-scoped. A registry Secret in
-              another namespace does not automatically become available to the
-              workload you are troubleshooting.
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              Look for the imagePullSecrets configuration in the Pod
+              specification or its associated ServiceAccount.
             </p>
           </div>
-        </section>
 
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold">
-            Step 5: Check Recent Kubernetes Events
-          </h2>
-
-          <p className="mt-3 leading-7 text-slate-300">
-            Use events to establish whether the failure is isolated to one
-            workload or part of a wider platform or registry problem.
-          </p>
-
-          <pre className="mt-5 overflow-x-auto rounded-xl border border-slate-800 bg-slate-900 p-5 text-sm text-cyan-300">
-            <code>
-              kubectl get events -n &lt;namespace&gt; --sort-by=.lastTimestamp
-            </code>
-          </pre>
-
-          <p className="mt-4 leading-7 text-slate-300">
-            If several workloads suddenly begin reporting image-pull failures,
-            investigate shared dependencies such as registry availability,
-            DNS, network routing, firewall rules, proxy configuration, or
-            credentials rather than changing each Deployment independently.
-          </p>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold">
-            Common ImagePullBackOff Causes
-          </h2>
-
-          <div className="mt-6 grid gap-4 sm:grid-cols-2">
-            {commonCauses.map((cause) => (
-              <article
-                key={cause.title}
-                className="rounded-xl border border-slate-800 bg-slate-900 p-5"
-              >
-                <h3 className="text-lg font-semibold text-white">
-                  {cause.title}
-                </h3>
-
-                <p className="mt-2 leading-6 text-slate-400">
-                  {cause.description}
-                </p>
-
-                <div className="mt-4 rounded-lg bg-slate-950 p-3">
-                  <p className="text-sm text-cyan-300">Evidence</p>
-
-                  <p className="mt-1 text-sm leading-6 text-slate-400">
-                    {cause.evidence}
-                  </p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold">
-            Private Registry Troubleshooting
-          </h2>
-
-          <p className="mt-3 leading-7 text-slate-300">
-            For private registries, troubleshoot authentication and
-            authorization separately. Valid credentials do not automatically
-            mean the identity has permission to pull every repository.
-          </p>
-
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            <article className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-              <h3 className="text-lg font-semibold text-white">
-                Authentication
-              </h3>
-              <p className="mt-2 leading-6 text-slate-400">
-                Can the registry identify the credential being presented?
-              </p>
-            </article>
-
-            <article className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-              <h3 className="text-lg font-semibold text-white">
-                Authorization
-              </h3>
-              <p className="mt-2 leading-6 text-slate-400">
-                Does that identity have permission to pull this repository?
-              </p>
-            </article>
-
-            <article className="rounded-xl border border-slate-800 bg-slate-900 p-5">
-              <h3 className="text-lg font-semibold text-white">
-                Connectivity
-              </h3>
-              <p className="mt-2 leading-6 text-slate-400">
-                Can the Kubernetes node reach the registry endpoint?
-              </p>
-            </article>
-          </div>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold">
-            What Not to Do in Production
-          </h2>
-
-          <div className="mt-6 rounded-xl border border-red-400/20 bg-red-400/5 p-6">
-            <ul className="space-y-3 text-slate-300">
-              <li>
-                <span className="text-red-300">✕</span>{" "}
-                Do not repeatedly delete pods without first capturing Events.
-              </li>
-              <li>
-                <span className="text-red-300">✕</span>{" "}
-                Do not change cluster-wide registry configuration for a
-                single-workload image typo.
-              </li>
-              <li>
-                <span className="text-red-300">✕</span>{" "}
-                Do not expose registry credentials or Secret contents in
-                incident tickets.
-              </li>
-              <li>
-                <span className="text-red-300">✕</span>{" "}
-                Do not assume an authentication error when the actual issue is
-                DNS, networking, TLS, or an incorrect image tag.
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold">
-            Common Fixes — Based on Evidence
-          </h2>
-
-          <div className="mt-6 rounded-xl border border-slate-800 bg-slate-900 p-6">
-            <ul className="space-y-3 text-slate-300">
-              {fixes.map((fix) => (
-                <li key={fix} className="flex gap-3">
-                  <span className="text-emerald-400">✓</span>
-                  <span>{fix}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="mt-6 rounded-xl border border-amber-400/20 bg-amber-400/5 p-6">
-            <h3 className="text-lg font-semibold text-amber-200">
-              Production warning
+          <div className="rounded-xl border border-slate-800 bg-slate-900 p-5">
+            <h3 className="font-semibold text-white">
+              Verify Secret exists
             </h3>
 
-            <p className="mt-2 leading-7 text-slate-300">
-              Fix the dependency causing the image pull failure rather than
-              repeatedly restarting the pod. A restart may simply reproduce
-              the same failed image pull while delaying diagnosis.
+            <code className="mt-4 block overflow-x-auto rounded-lg bg-slate-950 p-4 text-sm text-cyan-300">
+              kubectl get secrets -n &lt;namespace&gt;
+            </code>
+
+            <p className="mt-3 text-sm leading-6 text-slate-400">
+              The registry credential must be available in the namespace where
+              the workload is running.
             </p>
           </div>
-        </section>
+        </div>
 
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold">
-            Verify the Fix
-          </h2>
-
-          <p className="mt-3 leading-7 text-slate-300">
-            Recovery is not complete simply because ImagePullBackOff disappears.
-            Verify that the image was actually pulled, the pod became Ready,
-            the rollout completed, and the workload remains stable.
+        <div className="mt-5 rounded-xl border border-amber-500/20 bg-amber-500/5 p-5">
+          <p className="text-sm leading-6 text-slate-300">
+            <strong className="text-amber-300">Security caution:</strong>{" "}
+            Never paste registry passwords, decoded Secret values or long-lived
+            credentials into tickets, logs, source code or public documentation.
           </p>
+        </div>
+      </section>
 
-          <div className="mt-6 space-y-4">
-            {verificationCommands.map((command) => (
-              <pre
-                key={command}
-                className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900 p-4 text-sm text-cyan-300"
-              >
-                <code>{command}</code>
-              </pre>
-            ))}
-          </div>
+      <section className="mt-12">
+        <h2 className="text-2xl font-bold text-white">
+          Verify the Container Image
+        </h2>
 
-          <div className="mt-6 rounded-xl border border-emerald-400/20 bg-emerald-400/5 p-6">
-            <h3 className="text-lg font-semibold text-emerald-300">
-              Recovery criteria
-            </h3>
+        <p className="mt-3 leading-7 text-slate-300">
+          Before troubleshooting networking or credentials, make sure the
+          workload is requesting the image you actually intended to deploy.
+        </p>
 
-            <ul className="mt-4 space-y-2 text-slate-300">
-              <li>✓ Image pull succeeds.</li>
-              <li>✓ Pod reaches Ready state.</li>
-              <li>✓ ImagePullBackOff and ErrImagePull stop recurring.</li>
-              <li>✓ Deployment rollout completes successfully.</li>
-              <li>✓ Application health checks pass.</li>
-              <li>✓ Recent warning events no longer show the same failure.</li>
-            </ul>
-          </div>
-        </section>
+        <div className="mt-6 space-y-3">
+          {[
+            "kubectl get pod <pod-name> -o jsonpath='{.spec.containers[*].image}'",
+            "kubectl get deployment <deployment-name> -o yaml",
+            "kubectl describe pod <pod-name>",
+          ].map((command) => (
+            <code
+              key={command}
+              className="block overflow-x-auto rounded-lg bg-slate-950 p-4 text-sm text-cyan-300"
+            >
+              {command}
+            </code>
+          ))}
+        </div>
+      </section>
 
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold">
-            SRE Incident Checklist
-          </h2>
+      <section className="mt-12">
+        <h2 className="text-2xl font-bold text-white">
+          Debugging Registry DNS and Network Connectivity
+        </h2>
 
-          <div className="mt-6 rounded-xl border border-slate-800 bg-slate-900 p-6">
-            <ul className="space-y-3 text-slate-300">
-              {productionChecks.map((check) => (
-                <li key={check} className="flex gap-3">
-                  <span className="text-cyan-400">□</span>
-                  <span>{check}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
+        <p className="mt-3 leading-7 text-slate-300">
+          Kubernetes image pulls happen from the node's container runtime.
+          Therefore, connectivity from your laptop does not prove that the
+          Kubernetes node can reach the registry.
+        </p>
 
-        <section className="mb-12 rounded-2xl border border-cyan-400/20 bg-cyan-400/5 p-6">
-          <h2 className="text-2xl font-semibold">
-            Quick ImagePullBackOff Checklist
-          </h2>
+        <div className="mt-6 rounded-xl border border-slate-800 bg-slate-900 p-5">
+          <h3 className="font-semibold text-white">
+            Temporary network test
+          </h3>
 
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-lg bg-slate-950/60 p-4">
-              <p className="font-semibold text-white">1. Confirm</p>
-              <p className="mt-1 text-sm text-slate-400">
-                kubectl get pods
-              </p>
+          <code className="mt-4 block overflow-x-auto rounded-lg bg-slate-950 p-4 text-sm text-cyan-300">
+            kubectl run registry-test --rm -it --image=curlimages/curl -- sh
+          </code>
+
+          <p className="mt-4 text-sm leading-6 text-slate-400">
+            From the temporary troubleshooting environment, test DNS and HTTP
+            connectivity to the relevant registry endpoint where appropriate.
+          </p>
+        </div>
+      </section>
+
+      <section className="mt-12 rounded-2xl border border-amber-500/20 bg-amber-500/5 p-6">
+        <h2 className="text-2xl font-bold text-white">
+          Production-Safe Troubleshooting
+        </h2>
+
+        <p className="mt-2 text-slate-400">
+          Image-pull failures can affect application availability, so diagnose
+          the exact failure before changing production configuration.
+        </p>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {safeActions.map((action) => (
+            <div
+              key={action}
+              className="rounded-xl border border-slate-800 bg-slate-950 p-4"
+            >
+              <p className="text-sm leading-6 text-slate-300">{action}</p>
             </div>
+          ))}
+        </div>
+      </section>
 
-            <div className="rounded-lg bg-slate-950/60 p-4">
-              <p className="font-semibold text-white">2. Describe</p>
-              <p className="mt-1 text-sm text-slate-400">
-                Check Events for the exact pull error
-              </p>
+      <section className="mt-12">
+        <h2 className="text-2xl font-bold text-white">
+          How to Prevent ImagePullBackOff
+        </h2>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {preventionItems.map((item) => (
+            <div
+              key={item}
+              className="rounded-xl border border-slate-800 bg-slate-900 p-4"
+            >
+              <p className="text-sm leading-6 text-slate-300">{item}</p>
             </div>
+          ))}
+        </div>
+      </section>
 
-            <div className="rounded-lg bg-slate-950/60 p-4">
-              <p className="font-semibold text-white">3. Verify image</p>
-              <p className="mt-1 text-sm text-slate-400">
-                Registry + repository + image + tag
+      <section className="mt-12">
+        <h2 className="text-2xl font-bold text-white">
+          Related Kubernetes Guides
+        </h2>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          {relatedLinks.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="group rounded-xl border border-slate-800 bg-slate-900 p-5 transition hover:border-cyan-500/50 hover:bg-slate-800/70"
+            >
+              <h3 className="font-semibold text-white group-hover:text-cyan-300">
+                {link.title}
+              </h3>
+
+              <p className="mt-2 text-sm leading-6 text-slate-400">
+                {link.description}
               </p>
-            </div>
 
-            <div className="rounded-lg bg-slate-950/60 p-4">
-              <p className="font-semibold text-white">4. Check access</p>
-              <p className="mt-1 text-sm text-slate-400">
-                imagePullSecrets + ServiceAccount + registry permissions
+              <span className="mt-4 inline-block text-sm font-semibold text-cyan-400">
+                Read guide →
+              </span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-12">
+        <h2 className="text-2xl font-bold text-white">
+          ImagePullBackOff FAQ
+        </h2>
+
+        <div className="mt-6 space-y-4">
+          {faqItems.map((item) => (
+            <details
+              key={item.question}
+              className="group rounded-xl border border-slate-800 bg-slate-900 p-5"
+            >
+              <summary className="cursor-pointer list-none font-semibold text-white">
+                <span className="flex items-center justify-between gap-4">
+                  {item.question}
+                  <span className="text-cyan-400 transition group-open:rotate-45">
+                    +
+                  </span>
+                </span>
+              </summary>
+
+              <p className="mt-4 leading-7 text-slate-400">
+                {item.answer}
               </p>
-            </div>
+            </details>
+          ))}
+        </div>
+      </section>
 
-            <div className="rounded-lg bg-slate-950/60 p-4">
-              <p className="font-semibold text-white">5. Classify</p>
-              <p className="mt-1 text-sm text-slate-400">
-                Image / Auth / Access / DNS / Network / TLS / Architecture
-              </p>
-            </div>
-
-            <div className="rounded-lg bg-slate-950/60 p-4">
-              <p className="font-semibold text-white">6. Verify</p>
-              <p className="mt-1 text-sm text-slate-400">
-                Pull succeeds + Ready + rollout healthy
-              </p>
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold">
-            Frequently Asked Questions
-          </h2>
-
-          <div className="mt-6 space-y-4">
-            {faqs.map((faq) => (
-              <article
-                key={faq.question}
-                className="rounded-xl border border-slate-800 bg-slate-900 p-5"
-              >
-                <h3 className="text-lg font-semibold text-white">
-                  {faq.question}
-                </h3>
-
-                <p className="mt-2 leading-7 text-slate-400">
-                  {faq.answer}
-                </p>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <footer className="border-t border-slate-800 pt-8">
-          <a
-            href="/kubernetes/kubectl-commands"
-            className="text-sm font-medium text-cyan-400 transition hover:text-cyan-300"
-          >
-            ← Explore Kubernetes Commands
-          </a>
-        </footer>
-      </div>
+      <section className="mt-16 border-t border-slate-800 pt-8">
+        <p className="text-sm leading-6 text-slate-500">
+          This Kubernetes ImagePullBackOff troubleshooting guide is intended
+          for Kubernetes administrators, DevOps engineers, SREs and production
+          support teams. Always verify commands and registry configuration
+          against your Kubernetes platform and environment before making
+          production changes.
+        </p>
+      </section>
     </main>
   );
 }
