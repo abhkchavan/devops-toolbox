@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 type SearchResult = {
@@ -446,7 +446,7 @@ const searchData: SearchResult[] = [
   },
 ];
 
-export default function SearchPage() {
+function SearchPageContent() {
   const searchParams = useSearchParams();
 
   const initialQuery = searchParams.get("q") ?? "";
@@ -523,7 +523,6 @@ export default function SearchPage() {
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
-      {/* Navigation */}
       <nav className="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6">
           <a
@@ -542,7 +541,6 @@ export default function SearchPage() {
         </div>
       </nav>
 
-      {/* Header */}
       <section className="border-b border-slate-800">
         <div className="mx-auto max-w-5xl px-5 py-16 sm:px-6">
           <p className="text-sm font-semibold uppercase tracking-widest text-cyan-400">
@@ -593,7 +591,6 @@ export default function SearchPage() {
         </div>
       </section>
 
-      {/* Results */}
       <section className="mx-auto max-w-7xl px-5 py-12 sm:px-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
@@ -701,7 +698,6 @@ export default function SearchPage() {
         )}
       </section>
 
-      {/* Search by problem */}
       <section className="border-t border-slate-800 bg-slate-900/40">
         <div className="mx-auto max-w-7xl px-5 py-12 sm:px-6">
           <h2 className="text-xl font-bold">
@@ -758,7 +754,6 @@ export default function SearchPage() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="border-t border-slate-800 px-5 py-8 text-center text-sm text-slate-500">
         <a
           href="/"
@@ -769,5 +764,25 @@ export default function SearchPage() {
         — Search commands, troubleshooting and DevOps resources.
       </footer>
     </main>
+  );
+}
+
+function SearchPageFallback() {
+  return (
+    <main className="min-h-screen bg-slate-950 text-white">
+      <div className="mx-auto flex min-h-screen max-w-5xl items-center justify-center px-5">
+        <p className="text-sm text-slate-400">
+          Loading search...
+        </p>
+      </div>
+    </main>
+  );
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<SearchPageFallback />}>
+      <SearchPageContent />
+    </Suspense>
   );
 }
