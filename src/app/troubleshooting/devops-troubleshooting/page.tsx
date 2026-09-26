@@ -4,7 +4,7 @@ export const metadata = {
   title:
     "DevOps Troubleshooting Guide | Linux, Kubernetes, Docker, Jenkins & SRE",
   description:
-    "Solve common DevOps and production issues with practical troubleshooting workflows for Linux, Kubernetes, Docker, Jenkins, Terraform, networking, monitoring and SRE.",
+    "Troubleshoot common DevOps and production issues with practical commands and evidence-first workflows for Linux, Kubernetes, Docker, Jenkins, Terraform, networking, monitoring and SRE.",
 };
 
 const sections = [
@@ -21,7 +21,7 @@ const sections = [
       },
       {
         command: "uptime",
-        description: "Check system load averages.",
+        description: "Check system load averages and system pressure.",
       },
       {
         command: "pidstat 1",
@@ -244,7 +244,7 @@ const sections = [
     commands: [
       {
         command: "kubectl describe pod <pod>",
-        description: "Check image pull errors and events.",
+        description: "Check image pull errors and related events.",
       },
       {
         command: "kubectl get secret",
@@ -426,50 +426,42 @@ const categories = [
   {
     name: "Kubernetes",
     description:
-      "Pods, scheduling, services, nodes, images and cluster failures.",
-    problems: "5 troubleshooting areas",
+      "Investigate pods, scheduling, services, images, nodes, events and cluster failures.",
   },
   {
     name: "Linux",
     description:
-      "CPU, memory, disk, services, ports, SSH and system problems.",
-    problems: "6 troubleshooting areas",
+      "Troubleshoot CPU, memory, disk, services, ports, SSH and operating-system problems.",
   },
   {
     name: "Docker",
     description:
-      "Containers, images, logs, resources and runtime problems.",
-    problems: "2 troubleshooting areas",
+      "Investigate containers, images, logs, resources, runtime state and startup failures.",
   },
   {
     name: "Jenkins",
     description:
-      "Build failures, agents, Java, disk and CI/CD problems.",
-    problems: "1 troubleshooting area",
+      "Investigate CI/CD build failures, Java compatibility, agents, workspace and host resources.",
   },
   {
     name: "Terraform",
     description:
-      "State, planning, infrastructure drift and deployment issues.",
-    problems: "1 troubleshooting area",
+      "Investigate state, plans, infrastructure drift and infrastructure deployment problems.",
   },
   {
     name: "Networking",
     description:
-      "DNS, ports, connectivity, routes and SSH investigation.",
-    problems: "4 troubleshooting areas",
+      "Trace DNS, ports, routes, connectivity, SSH and HTTP communication problems.",
   },
   {
     name: "Monitoring",
     description:
-      "Prometheus health, targets, exporters and monitoring checks.",
-    problems: "1 troubleshooting area",
+      "Investigate Prometheus health, targets, exporters and monitoring signal failures.",
   },
   {
     name: "Production Support",
     description:
-      "A structured first-response workflow for production incidents.",
-    problems: "Incident workflow",
+      "Follow an evidence-first workflow for incidents affecting applications and infrastructure.",
   },
 ];
 
@@ -477,13 +469,13 @@ const popularProblems = [
   {
     title: "Kubernetes CrashLoopBackOff",
     description:
-      "Check logs, previous container logs, events, probes, configuration and resources.",
+      "Check container logs, previous logs, events, probes, configuration and resource limits.",
     category: "Kubernetes",
   },
   {
     title: "Kubernetes Pod Pending",
     description:
-      "Investigate scheduling, resources, taints, node availability and events.",
+      "Investigate scheduling constraints, resources, taints, node availability and events.",
     category: "Kubernetes",
   },
   {
@@ -495,34 +487,117 @@ const popularProblems = [
   {
     title: "Linux High CPU",
     description:
-      "Identify CPU-heavy processes and investigate application behaviour.",
+      "Identify CPU-heavy processes, system load and application behaviour.",
     category: "Linux",
   },
   {
     title: "Docker Container Not Starting",
     description:
-      "Inspect container state, logs, images, configuration, ports and volumes.",
+      "Inspect container state, logs, images, configuration, ports and runtime resources.",
     category: "Docker",
   },
   {
     title: "Jenkins Build Failure",
     description:
-      "Check console output, Java, workspace, disk, memory and build environment.",
+      "Check build output, Java, workspace, disk, memory and the build environment.",
     category: "Jenkins",
   },
   {
     title: "Terraform State Problems",
     description:
-      "Inspect state, identify drift and investigate state-related failures safely.",
+      "Inspect state and plan output and investigate drift without making uncontrolled changes.",
     category: "Terraform",
   },
   {
     title: "Application Port Not Responding",
     description:
-      "Check listeners, processes, firewall rules, routes and network connectivity.",
+      "Check listeners, processes, firewall rules, routes, DNS and network connectivity.",
     category: "Networking",
   },
 ];
+
+const incidentSteps = [
+  {
+    number: "1",
+    title: "Confirm the symptom",
+    description:
+      "Define exactly what is failing, when it started and which users, services or hosts are affected.",
+  },
+  {
+    number: "2",
+    title: "Scope the impact",
+    description:
+      "Determine whether the problem affects one process, host, pod, service, region or the wider platform.",
+  },
+  {
+    number: "3",
+    title: "Check recent changes",
+    description:
+      "Review deployments, configuration changes, infrastructure updates, patches and scheduled jobs.",
+  },
+  {
+    number: "4",
+    title: "Collect evidence",
+    description:
+      "Use logs, metrics, events, process state, network checks and configuration inspection.",
+  },
+  {
+    number: "5",
+    title: "Form a hypothesis",
+    description:
+      "Connect the observed evidence to a likely failure domain before changing the environment.",
+  },
+  {
+    number: "6",
+    title: "Apply a controlled fix",
+    description:
+      "Choose the smallest safe remediation and understand its expected impact before execution.",
+  },
+  {
+    number: "7",
+    title: "Verify recovery",
+    description:
+      "Confirm service health, application behaviour, error rates and dependent systems after the change.",
+  },
+  {
+    number: "8",
+    title: "Prevent recurrence",
+    description:
+      "Document the root cause, improve monitoring or automation and capture the permanent corrective action.",
+  },
+];
+
+const troubleshootingPrinciples = [
+  {
+    title: "Evidence before action",
+    description:
+      "Capture useful logs, metrics, events and system state before restarting, deleting or changing configuration.",
+  },
+  {
+    title: "Separate symptom from cause",
+    description:
+      "A restart may restore service without explaining why the application failed. Treat recovery and root-cause analysis as separate steps.",
+  },
+  {
+    title: "Check recent changes",
+    description:
+      "Deployment, configuration, infrastructure and dependency changes are important signals during incident investigation.",
+  },
+  {
+    title: "Change one thing at a time",
+    description:
+      "Controlled changes make it easier to determine which action affected the system and reduce troubleshooting noise.",
+  },
+];
+
+const totalCommands = sections.reduce(
+  (total, section) => total + section.commands.length,
+  0,
+);
+
+const totalAreas = sections.filter(
+  (section) => section.title !== "Production Incident Workflow",
+).length;
 
 export default function DevopsTroubleshootingPage() {
   return (
@@ -540,9 +615,10 @@ export default function DevopsTroubleshootingPage() {
             </h1>
 
             <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
-              Find the right commands, understand common failure symptoms and
-              follow practical investigation workflows for DevOps,
-              application support, SRE and production environments.
+              Troubleshoot common DevOps and production problems using
+              practical commands, evidence-first investigation and structured
+              incident workflows across Linux, Kubernetes, Docker, Jenkins,
+              Terraform, networking and monitoring.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-3 text-sm">
@@ -564,6 +640,24 @@ export default function DevopsTroubleshootingPage() {
                 </span>
               ))}
             </div>
+
+            <div className="mt-10 grid max-w-2xl grid-cols-2 gap-4 sm:grid-cols-3">
+              {[
+                [String(totalAreas), "Troubleshooting areas"],
+                [String(totalCommands), "Practical commands"],
+                ["8", "Incident investigation steps"],
+              ].map(([value, label]) => (
+                <div
+                  key={label}
+                  className="rounded-xl border border-slate-800 bg-slate-900/70 p-4"
+                >
+                  <div className="text-2xl font-bold text-cyan-400">
+                    {value}
+                  </div>
+                  <div className="mt-1 text-xs text-slate-400">{label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -572,10 +666,12 @@ export default function DevopsTroubleshootingPage() {
       <section className="mx-auto max-w-6xl px-6 py-10">
         <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-6">
           <div className="mb-5">
-            <h2 className="text-2xl font-bold">What are you troubleshooting?</h2>
+            <h2 className="text-2xl font-bold">
+              What are you troubleshooting?
+            </h2>
 
             <p className="mt-2 text-sm text-slate-400">
-              Search for a symptom, technology, command or production issue.
+              Search by symptom, technology, command or production problem.
             </p>
           </div>
 
@@ -583,47 +679,81 @@ export default function DevopsTroubleshootingPage() {
         </div>
       </section>
 
-      {/* Quick incident workflow */}
-      <section className="mx-auto max-w-6xl px-6 pb-14">
+      {/* Investigation methodology */}
+      <section className="mx-auto max-w-6xl px-6 pb-16">
         <div className="rounded-2xl border border-cyan-900/50 bg-cyan-950/20 p-6 sm:p-8">
           <div className="max-w-3xl">
             <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Production Incident
+              Production Troubleshooting Method
             </p>
 
-            <h2 className="mt-2 text-2xl font-bold">
-              Where should you start?
+            <h2 className="mt-2 text-3xl font-bold">
+              Troubleshoot from symptom to verified recovery
             </h2>
 
-            <p className="mt-3 text-slate-300">
-              When an application or server is failing, start broad and narrow
-              the investigation instead of immediately changing configuration.
+            <p className="mt-3 leading-7 text-slate-300">
+              Production troubleshooting is more than finding a command that
+              returns an error. First establish the symptom and impact, then
+              collect evidence, isolate the failure domain, apply a controlled
+              remediation and verify the result.
             </p>
           </div>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              ["1", "Confirm the symptom", "What exactly is failing?"],
-              ["2", "Check recent changes", "Deployment, config, code or infrastructure?"],
-              ["3", "Check health signals", "CPU, memory, disk, logs and network."],
-              ["4", "Isolate the cause", "Use targeted commands before applying a fix."],
-            ].map(([number, title, description]) => (
+            {incidentSteps.map((step) => (
               <div
-                key={number}
+                key={step.number}
                 className="rounded-xl border border-slate-800 bg-slate-950 p-5"
               >
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-cyan-500/10 text-sm font-bold text-cyan-400">
-                  {number}
+                  {step.number}
                 </div>
 
-                <h3 className="mt-4 font-semibold text-white">{title}</h3>
+                <h3 className="mt-4 font-semibold text-white">
+                  {step.title}
+                </h3>
 
                 <p className="mt-2 text-sm leading-6 text-slate-400">
-                  {description}
+                  {step.description}
                 </p>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Troubleshooting principles */}
+      <section className="mx-auto max-w-6xl px-6 pb-16">
+        <div className="mb-8">
+          <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+            SRE Mindset
+          </p>
+
+          <h2 className="mt-2 text-3xl font-bold">
+            Principles for safer production troubleshooting
+          </h2>
+
+          <p className="mt-3 max-w-3xl text-slate-400">
+            Good incident investigation reduces uncertainty before making
+            changes to a live system.
+          </p>
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-2">
+          {troubleshootingPrinciples.map((principle) => (
+            <article
+              key={principle.title}
+              className="rounded-2xl border border-slate-800 bg-slate-900 p-6"
+            >
+              <h3 className="text-xl font-bold text-white">
+                {principle.title}
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-slate-400">
+                {principle.description}
+              </p>
+            </article>
+          ))}
         </div>
       </section>
 
@@ -646,7 +776,7 @@ export default function DevopsTroubleshootingPage() {
 
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {categories.map((category) => (
-            <div
+            <article
               key={category.name}
               className="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:-translate-y-1 hover:border-cyan-700"
             >
@@ -659,9 +789,9 @@ export default function DevopsTroubleshootingPage() {
               </p>
 
               <p className="mt-5 text-xs font-semibold uppercase tracking-wide text-cyan-400">
-                {category.problems}
+                Troubleshooting reference
               </p>
-            </div>
+            </article>
           ))}
         </div>
       </section>
@@ -671,16 +801,16 @@ export default function DevopsTroubleshootingPage() {
         <div className="mx-auto max-w-6xl px-6 py-16">
           <div className="mb-8">
             <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
-              Popular Problems
+              Common Production Problems
             </p>
 
             <h2 className="mt-2 text-3xl font-bold">
-              Start with a Common Production Issue
+              Start with a Common Failure Symptom
             </h2>
 
             <p className="mt-3 max-w-2xl text-slate-400">
-              These are common symptoms that DevOps, SRE and application
-              support engineers investigate during incidents.
+              Use these problem areas to quickly locate commands and
+              investigation checks relevant to an incident.
             </p>
           </div>
 
@@ -690,11 +820,9 @@ export default function DevopsTroubleshootingPage() {
                 key={problem.title}
                 className="rounded-2xl border border-slate-800 bg-slate-950 p-6 transition hover:border-cyan-700"
               >
-                <div className="flex items-center justify-between gap-4">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
-                    {problem.category}
-                  </span>
-                </div>
+                <span className="text-xs font-semibold uppercase tracking-wider text-cyan-400">
+                  {problem.category}
+                </span>
 
                 <h3 className="mt-3 text-xl font-bold text-white">
                   {problem.title}
@@ -705,35 +833,171 @@ export default function DevopsTroubleshootingPage() {
                 </p>
 
                 <a
-  href="#troubleshooting-commands"
-  className="mt-5 inline-block text-sm font-semibold text-cyan-400 transition hover:text-cyan-300"
->
-  Find troubleshooting commands →
-</a>
+                  href="#troubleshooting-commands"
+                  className="mt-5 inline-block text-sm font-semibold text-cyan-400 transition hover:text-cyan-300"
+                >
+                  Find troubleshooting commands →
+                </a>
               </article>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Command reference */}
+      {/* Evidence collection */}
       <section className="mx-auto max-w-6xl px-6 py-16">
+        <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 sm:p-8">
+          <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+            Evidence Collection
+          </p>
+
+          <h2 className="mt-2 text-3xl font-bold">
+            What evidence should you collect during an incident?
+          </h2>
+
+          <p className="mt-4 max-w-3xl leading-7 text-slate-400">
+            Before changing a production system, capture enough information to
+            understand the failure and preserve useful evidence for later root
+            cause analysis.
+          </p>
+
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              [
+                "Logs",
+                "Application, system, container and platform logs around the failure window.",
+              ],
+              [
+                "Metrics",
+                "CPU, memory, disk, latency, throughput, errors and saturation signals.",
+              ],
+              [
+                "Events",
+                "Kubernetes events, deployment events, alerts and infrastructure changes.",
+              ],
+              [
+                "Changes",
+                "Deployments, configuration updates, patches, releases and scheduled jobs.",
+              ],
+            ].map(([title, description]) => (
+              <div
+                key={title}
+                className="rounded-xl border border-slate-800 bg-slate-950 p-5"
+              >
+                <h3 className="font-semibold text-white">{title}</h3>
+
+                <p className="mt-2 text-sm leading-6 text-slate-400">
+                  {description}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 rounded-xl border border-amber-900/50 bg-amber-950/20 p-5">
+            <h3 className="font-semibold text-amber-300">
+              Avoid blind remediation
+            </h3>
+
+            <p className="mt-2 text-sm leading-6 text-slate-300">
+              Restarting a service, deleting a pod, increasing resources or
+              rolling back a deployment may restore availability, but those
+              actions can also remove evidence. Capture the relevant state
+              first whenever the incident allows it.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Command reference */}
+      <section
+        id="troubleshooting-commands"
+        className="mx-auto max-w-6xl scroll-mt-8 px-6 py-16"
+      >
         <div className="mb-8">
           <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
             Command Reference
           </p>
 
           <h2 className="mt-2 text-3xl font-bold">
-            Practical Troubleshooting Commands
+            Practical DevOps Troubleshooting Commands
           </h2>
 
-          <p className="mt-3 max-w-2xl text-slate-400">
+          <p className="mt-3 max-w-3xl text-slate-400">
             Searchable commands grouped by the production problems they help
-            investigate.
+            investigate. Use the commands to collect evidence and narrow the
+            failure domain before applying remediation.
           </p>
         </div>
 
         <DevopsTroubleshootingSearch sections={sections} />
+      </section>
+
+      {/* FAQ / SEO content */}
+      <section className="border-t border-slate-800 bg-slate-900/40">
+        <div className="mx-auto max-w-6xl px-6 py-16">
+          <div className="mb-8">
+            <p className="text-sm font-semibold uppercase tracking-wider text-cyan-400">
+              Troubleshooting Guide
+            </p>
+
+            <h2 className="mt-2 text-3xl font-bold">
+              Common DevOps troubleshooting questions
+            </h2>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            <article className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
+              <h3 className="text-lg font-bold">
+                How should I troubleshoot a production issue?
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-slate-400">
+                Start by confirming the symptom and impact, check recent
+                changes, collect logs and metrics, isolate the failure domain,
+                apply a controlled remediation and verify that the service has
+                recovered.
+              </p>
+            </article>
+
+            <article className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
+              <h3 className="text-lg font-bold">
+                What should I check first when a server is slow?
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-slate-400">
+                Check CPU, load average, memory, disk usage, I/O, processes and
+                network activity. Then correlate those signals with application
+                logs and recent changes.
+              </p>
+            </article>
+
+            <article className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
+              <h3 className="text-lg font-bold">
+                How do I troubleshoot Kubernetes pod failures?
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-slate-400">
+                Start with pod status, describe the pod, inspect current and
+                previous container logs, review Kubernetes events and then
+                investigate configuration, probes, resources, scheduling and
+                dependencies.
+              </p>
+            </article>
+
+            <article className="rounded-2xl border border-slate-800 bg-slate-950 p-6">
+              <h3 className="text-lg font-bold">
+                What is the difference between troubleshooting and RCA?
+              </h3>
+
+              <p className="mt-3 text-sm leading-7 text-slate-400">
+                Troubleshooting focuses on identifying and resolving the
+                immediate failure. Root cause analysis goes further by
+                establishing why the failure occurred and what permanent
+                corrective or preventive actions are required.
+              </p>
+            </article>
+          </div>
+        </div>
       </section>
 
       {/* CTA */}
